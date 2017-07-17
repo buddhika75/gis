@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Upload Excel File
+            </ui:define>
+
+            <ui:define name="body">
+
+                <p:panel header="Upload Excel File" >
+
+
+                    <h:form enctype="multipart/form-data" >
+                        <p:fileUpload value="#{notificationController.file}" mode="simple"/>
+                        <p:commandButton ajax="false" id="btnSave" value="Upload" action="#{notificationController.uploadNotificationExcelFile()}"/>
+                    </h:form>
+
+
+                </p:panel>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -33,6 +33,7 @@ public class Area implements Serializable {
     String code;
     @ManyToOne
     Area parentArea;
+
     @ManyToOne
     WebUser creater;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -47,6 +48,15 @@ public class Area implements Serializable {
     String officialAddress;
     String officialEmail;
     String personalEmail;
+
+    @ManyToOne
+    Area pdhsArea;
+    @ManyToOne
+    Area rdhsArea;
+    @ManyToOne
+    Area mohArea;
+    @ManyToOne
+    Area phiArea;
 
     public String getOfficialPhone() {
         return officialPhone;
@@ -103,10 +113,7 @@ public class Area implements Serializable {
     public void setPersonalEmail(String personalEmail) {
         this.personalEmail = personalEmail;
     }
-    
 
-    
-    
     public double getCentreLongitude() {
         return centreLongitude;
     }
@@ -130,10 +137,6 @@ public class Area implements Serializable {
     public void setZoomLavel(double zoomLavel) {
         this.zoomLavel = zoomLavel;
     }
-    
-    
-    
-    
 
     public Long getId() {
         return id;
@@ -190,9 +193,41 @@ public class Area implements Serializable {
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
-    
-    
 
+    public Area getPdhsArea() {
+        return pdhsArea;
+    }
+
+    public void setPdhsArea(Area pdhsArea) {
+        this.pdhsArea = pdhsArea;
+    }
+
+    public Area getRdhsArea() {
+        return rdhsArea;
+    }
+
+    public void setRdhsArea(Area rdhsArea) {
+        this.rdhsArea = rdhsArea;
+    }
+
+    public Area getMohArea() {
+        return mohArea;
+    }
+
+    public void setMohArea(Area mohArea) {
+        this.mohArea = mohArea;
+    }
+
+    public Area getPhiArea() {
+        return phiArea;
+    }
+
+    public void setPhiArea(Area phiArea) {
+        this.phiArea = phiArea;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -217,5 +252,5 @@ public class Area implements Serializable {
     public String toString() {
         return "lk.gov.health.schoolhealth.Area[ id=" + id + " ]";
     }
-    
+
 }

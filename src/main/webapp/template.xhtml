@@ -22,21 +22,12 @@
                 <h:form id="menuForm">
                     <p:menubar rendered="#{webUserController.logged}">
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="MOH" rendered="#{webUserController.mohStaff}">
-                            <p:menuitem ajax="false" value="Submit New Return" action="#{returnSubmissionController.toSubmitNewReport()}" />
-                            <p:menuitem ajax="false" value="Submission Status" action="#{returnSubmissionController.toCheckSubmissionStatus()}" />
-                            <p:menuitem ajax="false" value="Return Formats" action="#{returnSubmissionController.listReturnFormatLastSubmissions()}" />
-
+                        <p:submenu label="MOH" >
+                            <p:menuitem ajax="false" value="Upload Excel File" action="#{notificationController.toUploadExcelFile()}" />
                         </p:submenu>
 
-                        <p:submenu label="RDHS" rendered="#{webUserController.rdhsStaff}">
-                            <p:menuitem ajax="false" value="Receive My Returns" action="#{returnSubmissionController.toReceiveReturns()}" />
-                            <p:menuitem ajax="false" value="Check My Returns" action="#{returnSubmissionController.toCheckReturns()}" />
-                            <p:menuitem ajax="false" value="Check All Returns" action="#{returnSubmissionController.toCheckReturnsAll()}" disabled="#{!webUserController.rdhs}" />
-                        </p:submenu>
-
-                        <p:submenu label="PDHS"  rendered="#{webUserController.pdhsStaff}">
-                            <p:menuitem ajax="false" value="Check Returns" action="#{returnSubmissionController.toCheckReturns()}" />
+                        <p:submenu label="Analysis" >
+                            <p:menuitem ajax="false" value="GN Area Analysis by MOH" action="#{notificationController.toAnalyzeGnByMoh}" />
                         </p:submenu>
 
                         <p:submenu label="User">
@@ -44,14 +35,11 @@
                             <p:menuitem ajax="false" value="Change my password" action="#{webUserController.toEditMyPassword()}" />
                         </p:submenu>
 
-                        <p:submenu label="Administration"  rendered="#{webUserController.admin}">
-                            <p:menuitem ajax="false" value="Submit New Return" action="#{returnSubmissionController.toSubmitNewReportFull()}" />
+                        <p:submenu label="Administration"  rendered="#{webUserController.admin or webUserController.developmentStage}">
                             <p:menuitem  ajax="false" value="Manage Areas" action="/area/add_area_index"   rendered="#{webUserController.admin}"/>
                             <p:menuitem  ajax="false" value="Manage Users" action="/webUser/add_webuser_index" />
                             <p:menuitem  ajax="false" action="/item/List" value="Manage Items"   rendered="#{webUserController.admin}"/>
-                            <p:menuitem  ajax="false" action="/returnFormat/List" value="Manage Return Formats"   rendered="#{webUserController.admin}"/>
-                            <p:menuitem  ajax="false" action="/returnSubmission/List" value="Manage Return Submissions"   rendered="#{webUserController.admin}"/>
-                            <p:menuitem  ajax="false" action="/notification/List" value="Manage All Notifications"   rendered="#{webUserController.admin}"/>
+                            <p:menuitem  ajax="false" action="/notification/List" value="Manage Notifications"   rendered="#{webUserController.admin}"/>
 
                         </p:submenu>
                     </p:menubar>

@@ -16,17 +16,48 @@
                         <p:selectOneMenu id="type" value="#{areaController.selected.type}" > \
                             <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
                         </p:selectOneMenu>
-                        
+
                         <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="name" />
                         <p:inputText id="name" value="#{areaController.selected.name}" title="#{bundle.CreateAreaTitle_name}" />
                         <p:outputLabel value="#{bundle.CreateAreaLabel_code}" for="code" />
                         <p:inputText id="code" value="#{areaController.selected.code}" title="#{bundle.CreateAreaTitle_code}" />
+
+
                         <p:outputLabel value="#{bundle.CreateAreaLabel_parentArea}" for="parentArea" />
                         <p:selectOneMenu id="parentArea" value="#{areaController.selected.parentArea}" >
                             <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
                                            var="parentAreaItem" itemLabel="#{parentAreaItem.name}"
                                            itemValue="#{parentAreaItem}"/>
                         </p:selectOneMenu>
+
+                        <p:outputLabel value="PDHS"  />
+                        <p:selectOneMenu  value="#{areaController.selected.pdhsArea}" >
+                            <f:selectItems value="#{areaController.pdhsAreas}"
+                                           var="p" itemLabel="#{p.name}"
+                                           itemValue="#{p}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="RDHS"  />
+                        <p:selectOneMenu  value="#{areaController.selected.rdhsArea}" >
+                            <f:selectItems value="#{areaController.rdhsAreas}"
+                                           var="r" itemLabel="#{r.name}"
+                                           itemValue="#{r}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="MOH"  />
+                        <p:selectOneMenu  value="#{areaController.selected.mohArea}" >
+                            <f:selectItems value="#{areaController.mohAreas}"
+                                           var="m" itemLabel="#{m.name}"
+                                           itemValue="#{m}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="PHI"  />
+                        <p:selectOneMenu  value="#{areaController.selected.phiArea}" >
+                            <f:selectItems value="#{areaController.phiAreas}"
+                                           var="ph" itemLabel="#{ph.name}"
+                                           itemValue="#{ph}"/>
+                        </p:selectOneMenu>
+
                         <p:outputLabel value="#{bundle.CreateAreaLabel_creater}" for="creater" />
                         <p:selectOneMenu id="creater" value="#{areaController.selected.creater}" >
                             <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"

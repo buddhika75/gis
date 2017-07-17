@@ -8,11 +8,12 @@ package lk.gov.health.dengue;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -36,6 +37,7 @@ public class Notification implements Serializable {
     private String bht;
     private String patientsName;
     private int age;
+    @Enumerated(EnumType.STRING)
     private Sex gender;
     @ManyToOne
     private Area phiArea;

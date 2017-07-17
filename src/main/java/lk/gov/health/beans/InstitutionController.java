@@ -72,6 +72,17 @@ public class InstitutionController implements Serializable {
         return getFacade().findBySQL(j, m);
     }
 
+    
+    public Institution getInstitutionsByName(String name) {
+        String j;
+        Map m = new HashMap();
+        j = "select i from "
+                + " Institution i "
+                + " where upper(i.name) =:n ";
+        m.put("n", name.toUpperCase());
+        return getFacade().findFirstBySQL(j, m);
+    }
+    
     public InstitutionController() {
     }
 

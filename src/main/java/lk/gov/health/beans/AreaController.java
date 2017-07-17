@@ -49,12 +49,80 @@ public class AreaController implements Serializable {
     @EJB
     CoordinateFacade coordinateFacade;
     private List<Area> items = null;
+    List<Area> mohAreas = null;
+    List<Area> phiAreas = null;
+    List<Area> rdhsAreas = null;
+    List<Area> pdhsAreas = null;
     private Area selected;
 
     @Inject
     WebUserController webUserController;
 
     private MapModel polygonModel;
+
+    public List<Area> getMohAreas() {
+        if (mohAreas == null) {
+            mohAreas = getAreas(AreaType.MOH, null);
+        }
+        return mohAreas;
+    }
+
+    public void setMohAreas(List<Area> mohAreas) {
+        this.mohAreas = mohAreas;
+    }
+
+    public List<Area> getPhiAreas() {
+        if (phiAreas == null) {
+            phiAreas = getAreas(AreaType.PHI, null);
+        }
+        return phiAreas;
+    }
+
+    public void setPhiAreas(List<Area> phiAreas) {
+        this.phiAreas = phiAreas;
+    }
+
+    public List<Area> getRdhsAreas() {
+        if (rdhsAreas == null) {
+            rdhsAreas = getAreas(AreaType.District, null);
+        }
+        return rdhsAreas;
+    }
+
+    public void setRdhsAreas(List<Area> rdhsAreas) {
+        this.rdhsAreas = rdhsAreas;
+    }
+
+    public List<Area> getPdhsAreas() {
+        if (pdhsAreas == null) {
+            pdhsAreas = getAreas(AreaType.Province, null);
+        }
+        return pdhsAreas;
+    }
+
+    public void setPdhsAreas(List<Area> pdhsAreas) {
+        this.pdhsAreas = pdhsAreas;
+    }
+
+    public List<Area> getGnAreasOfMoh(Area mohArea) {
+        String j;
+        Map m = new HashMap();
+        j = "select a "
+                + " from Area a "
+                + " where a.name is not null ";
+
+        j += " and a.type=:t";
+        m.put("t", AreaType.GN);
+
+        j += " and a.mohArea=:moh ";
+        m.put("moh", mohArea);
+        j += " order by a.name";
+        System.out.println("m = " + m);
+        System.out.println("j = " + j);
+        List<Area> areas = getFacade().findBySQL(j, m);
+        System.out.println("areas = " + areas);
+        return areas;
+    }
 
     public String drawArea() {
         polygonModel = new DefaultMapModel();
@@ -339,15 +407,11 @@ public class AreaController implements Serializable {
         j = "select a "
                 + " from Area a "
                 + " where a.name is not null ";
-//        if (areaType == null) {
-//            areaType = AreaType.MOH;
-//        }
         if (areaType != null) {
             j += " and a.type=:t";
             m.put("t", areaType);
         }
         if (superArea != null) {
-//            j += " and (a=:pa or a.parentArea=:pa or a.parentArea.parentArea=:pa or a.parentArea.parentArea.parentArea=:pa  or a.parentArea.parentArea.parentArea.parentArea=:pa) ";
             j += " and a.parentArea=:pa ";
             m.put("pa", superArea);
         }
@@ -357,6 +421,23 @@ public class AreaController implements Serializable {
         List<Area> areas = getFacade().findBySQL(j, m);
         System.out.println("areas = " + areas);
         return areas;
+    }
+
+    public Area getArea(String nameOrCode, AreaType areaType) {
+        String j;
+        Map m = new HashMap();
+        j = "select a "
+                + " from Area a "
+                + " where (upper(a.name) =:n or upper(a.code) =:n)  ";
+        m.put("n", nameOrCode.toUpperCase());
+        if (areaType != null) {
+            j += " and a.type=:t";
+            m.put("t", areaType);
+        }
+        j += " order by a.code";
+        System.out.println("m = " + m);
+        System.out.println("j = " + j);
+        return getFacade().findFirstBySQL(j, m);
     }
 
     public AreaController() {

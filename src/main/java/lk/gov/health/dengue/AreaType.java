@@ -10,6 +10,7 @@ package lk.gov.health.dengue;
  * @author User
  */
 public enum AreaType {
+    GN,
     PHM,
     PHI,
     MOH,
