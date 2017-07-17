@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Receive Returns
+            </ui:define>
+
+            <ui:define name="body">
+                <h:form>
+                    <p:panel header="Receive Returns" >
+                        <p:outputLabel value="Return" ></p:outputLabel>
+                        <p:selectOneMenu value="#{returnSubmissionController.returnFormat}" var="f"  >
+                            <f:selectItem itemLabel="Select a Return" ></f:selectItem>
+                            <f:selectItems value="#{returnFormatController.returnsToReceive}" var="f1" itemValue="#{f1}"  itemLabel="#{f1.name}"></f:selectItems>
+                            <p:column headerText="Name" >
+                                <p:outputLabel value="#{f.name}" ></p:outputLabel>
+                            </p:column>
+                            <p:column headerText="Code" >
+                                <p:outputLabel value="#{f.code}" ></p:outputLabel>
+                            </p:column>
+                        </p:selectOneMenu>
+                        <p:commandButton ajax="false" value="List Pending Returns" action="#{returnSubmissionController.listPendingRetunrsToReceive()}" ></p:commandButton>
+                    </p:panel>
+
+
+                    <p:dataTable value="#{returnSubmissionController.items}" var="item">
+                        <p:column  rendered="#{returnSubmissionController.returnFormat.needYear}">
+                            <f:facet name="header">
+                                <h:outputText value="Year" />
+                            </f:facet>
+                            <h:outputText value="#{item.returnYear}"/>
+                        </p:column>
+                        <p:column  rendered="#{returnSubmissionController.returnFormat.needQuarter}">
+                            <f:facet name="header">
+                                <h:outputText value="Quarter"/>
+                            </f:facet>
+                            <h:outputText value="#{item.quarter}"/>
+                        </p:column>
+                        <p:column  rendered="#{returnSubmissionController.returnFormat.needMonth}">
+                            <f:facet name="header">
+                                <h:outputText value="Month" />
+                            </f:facet>
+                            <h:outputText value="#{item.returnMonth}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Sent Date"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentDate}">
+                                <f:convertDateTime pattern="dd MMMM yyyy"  timeZone="Asia/Colombo" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Area"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentArea.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Sent By"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentBy.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Sent Comments"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentComments}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ReceiveComments"/>
+                            </f:facet>
+                            <p:inputTextarea value="#{item.receiveComments}"/>
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputText value="ReceiveComments"/>
+                            </f:facet>
+                            <p:commandButton ajax="false" value="Mark as Received"
+                                             action="#{returnSubmissionController.markAsReceived()}">
+                                <f:setPropertyActionListener value="#{item}" target="#{returnSubmissionController.selected}" ></f:setPropertyActionListener>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

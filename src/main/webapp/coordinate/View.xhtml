@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CoordinateViewDlg" widgetVar="CoordinateViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle2.ViewCoordinateTitle}">
+            <h:form id="CoordinateViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{coordinateController.selected != null}">
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_area}"/>
+                        <h:outputText value="#{coordinateController.selected.area}" title="#{bundle2.ViewCoordinateTitle_area}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_institution}"/>
+                        <h:outputText value="#{coordinateController.selected.institution}" title="#{bundle2.ViewCoordinateTitle_institution}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_webUser}"/>
+                        <h:outputText value="#{coordinateController.selected.webUser}" title="#{bundle2.ViewCoordinateTitle_webUser}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_longitude}"/>
+                        <h:outputText value="#{coordinateController.selected.longitude}" title="#{bundle2.ViewCoordinateTitle_longitude}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_latitude}"/>
+                        <h:outputText value="#{coordinateController.selected.latitude}" title="#{bundle2.ViewCoordinateTitle_latitude}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_elevation}"/>
+                        <h:outputText value="#{coordinateController.selected.elevation}" title="#{bundle2.ViewCoordinateTitle_elevation}"/>
+                        <h:outputText value="#{bundle2.ViewCoordinateLabel_id}"/>
+                        <h:outputText value="#{coordinateController.selected.id}" title="#{bundle2.ViewCoordinateTitle_id}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle2.Close}" onclick="CoordinateViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

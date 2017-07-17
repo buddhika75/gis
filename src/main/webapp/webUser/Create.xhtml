@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="WebUserCreateDlg" widgetVar="WebUserCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateWebUserTitle}">
+            <h:form id="WebUserCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{webUserController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateWebUserLabel_type}" for="type" />
+                        <p:selectOneMenu id="type" value="#{webUserController.selected.type}" >
+                            <f:selectItems value="#{enumController.privilegeTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateWebUserLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{webUserController.selected.name}" title="#{bundle.CreateWebUserTitle_name}" />
+                        <p:outputLabel value="#{bundle.CreateWebUserLabel_userName}" for="userName" />
+                        <p:inputText id="userName" value="#{webUserController.selected.userName}" title="#{bundle.CreateWebUserTitle_userName}" />
+                        <p:outputLabel value="#{bundle.CreateWebUserLabel_password}" for="password" />
+                        <p:inputText id="password" value="#{webUserController.selected.password}" title="#{bundle.CreateWebUserTitle_password}" />
+                        <p:outputLabel value="#{bundle.CreateWebUserLabel_area}" for="area" />
+                        <p:selectOneMenu id="area" value="#{webUserController.selected.area}" >
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="areaItem"
+                                           itemValue="#{areaItem}"
+                                           itemLabel="#{areaItem.name}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Activated"  />
+                        <p:selectBooleanCheckbox value="#{webUserController.selected.active}" ></p:selectBooleanCheckbox>
+
+                    </p:panelGrid>
+
+                    <p:commandButton actionListener="#{webUserController.create}" value="#{bundle.Save}" update="display,:WebUserListForm:datalist,:growl" oncomplete="handleSubmit(args,'WebUserCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="WebUserCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

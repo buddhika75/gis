@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Submit a new Return
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+
+                    <p:panel header="Submit a new Return - Step 2" >
+                        <p:panelGrid columns="2" >
+                            <p:outputLabel value="Return" ></p:outputLabel>
+                            <p:outputLabel value="#{returnSubmissionController.selected.returnFormat.name} - #{returnSubmissionController.selected.returnFormat.code}" ></p:outputLabel>
+
+                            <p:outputLabel value="Year" rendered="#{returnSubmissionController.selected.returnFormat.needYear}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.selected.returnYear}" rendered="#{returnSubmissionController.selected.returnFormat.needYear}">
+                                <f:selectItems value="#{webUserController.recentYears}" ></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Month" rendered="#{returnSubmissionController.selected.returnFormat.needMonth}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.selected.returnMonth}"  rendered="#{returnSubmissionController.selected.returnFormat.needMonth}">
+                                <f:selectItems value="#{enumController.months}" ></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Quarter" rendered="#{returnSubmissionController.selected.returnFormat.needQuarter}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.selected.quarter}"  rendered="#{returnSubmissionController.selected.returnFormat.needQuarter}">
+                                <f:selectItems value="#{enumController.quarters}" ></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Area" ></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.selected.sentArea}">
+                                <f:selectItems value="#{webUserController.myMohAreas}" var="sa" itemValue="#{sa}" itemLabel="#{sa.name}" ></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Sending To" ></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.selected.receiveArea}">
+                                <f:selectItems value="#{webUserController.myDistricts}" var="ra" itemValue="#{ra}" itemLabel="#{ra.name}" ></f:selectItems>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Sending Comments" ></p:outputLabel>
+                            <p:inputTextarea value="#{returnSubmissionController.selected.sentComments}" ></p:inputTextarea>
+
+                            <p:outputLabel value="Submitted Date" ></p:outputLabel>
+                            <p:calendar disabled="true" value="#{returnSubmissionController.selected.sentDate}" ></p:calendar>
+
+
+                            <p:commandButton ajax="false" value="Submit" action="#{returnSubmissionController.submitReturn()}" ></p:commandButton>
+
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

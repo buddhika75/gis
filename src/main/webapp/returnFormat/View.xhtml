@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+
+        <p:dialog id="ReturnFormatViewDlg" widgetVar="ReturnFormatViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleReturns.ViewReturnFormatTitle}">
+            
+            <f:view>
+
+
+                <h:form id="ReturnFormatViewForm">
+                    <p:panelGrid columns="2"  id="display">
+                        <h:outputText value="Name:"/>
+                        <h:outputText value="#{returnFormatController.selected.name}" title="Name"/>
+                        <h:outputText value="Code:"/>
+                        <h:outputText value="#{returnFormatController.selected.code}" title="Code"/>
+                        <h:outputText value="Frequency:"/>
+                        <h:outputText value="#{returnFormatController.selected.frequency}" title="Frequency"/>
+                        <h:outputText value="Category:"/>
+                        <h:outputText value="#{returnFormatController.selected.category}" title="Category"/>
+                        <h:outputText value="SenderStartDays:"/>
+                        <h:outputText value="#{returnFormatController.selected.senderStartDays}" title="SenderStartDays"/>
+                        <h:outputText value="SendingDeadlineMonths:"/>
+                        <h:outputText value="#{returnFormatController.selected.sendingDeadlineMonths}" title="SendingDeadlineMonths"/>
+                        <h:outputText value="SendingDeadlineDays:"/>
+                        <h:outputText value="#{returnFormatController.selected.sendingDeadlineDays}" title="SendingDeadlineDays"/>
+                        <h:outputText value="PrepairedBy:"/>
+                        <h:outputText value="#{returnFormatController.selected.prepairedBy}" title="PrepairedBy"/>
+                        <h:outputText value="SentBy:"/>
+                        <h:outputText value="#{returnFormatController.selected.sentBy}" title="SentBy"/>
+                        <h:outputText value="ReceivedBy:"/>
+                        <h:outputText value="#{returnFormatController.selected.receivedBy}" title="ReceivedBy"/>
+                        <h:outputText value="ReceivingDeadlineMonths:"/>
+                        <h:outputText value="#{returnFormatController.selected.receivingDeadlineMonths}" title="ReceivingDeadlineMonths"/>
+                        <h:outputText value="ReceivingDeadlineDays:"/>
+                        <h:outputText value="#{returnFormatController.selected.receivingDeadlineDays}" title="ReceivingDeadlineDays"/>
+                        <h:outputText value="ReceiveDeadline:"/>
+                        <h:outputText value="#{returnFormatController.selected.receiveDeadline}" title="ReceiveDeadline"/>
+                        <h:outputText value="SendingAreaType:"/>
+                        <h:outputText value="#{returnFormatController.selected.sendingAreaType}" title="SendingAreaType"/>
+                        <h:outputText value="ReceivingAreaType:"/>
+                        <h:outputText value="#{returnFormatController.selected.receivingAreaType}" title="ReceivingAreaType"/>
+                        <h:outputText value="Id:"/>
+                        <h:outputText value="#{returnFormatController.selected.id}" title="Id"/>
+                    </p:panelGrid>
+                </h:form>
+            </f:view>
+
+        
+        </p:dialog>
+
+    </ui:composition>
+</html>

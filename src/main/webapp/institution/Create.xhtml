@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InstitutionCreateDlg" widgetVar="InstitutionCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateInstitutionTitle}">
+            <h:form id="InstitutionCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{institutionController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_type}" for="type" />
+                        <p:selectOneMenu id="type" value="#{institutionController.selected.type}" >
+                            <f:selectItems value="#{enumController.institutionTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{institutionController.selected.name}" title="#{bundle.CreateInstitutionTitle_name}" />
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_code}" for="code" />
+                        <p:inputText id="code" value="#{institutionController.selected.code}" title="#{bundle.CreateInstitutionTitle_code}" />
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_address}" for="address" />
+                        <p:inputTextarea rows="4" cols="30" id="address" value="#{institutionController.selected.address}" title="#{bundle.CreateInstitutionTitle_address}" />
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_telephone}" for="telephone" />
+                        <p:inputText id="telephone" value="#{institutionController.selected.telephone}" title="#{bundle.CreateInstitutionTitle_telephone}" />
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{institutionController.selected.email}" title="#{bundle.CreateInstitutionTitle_email}" />
+                        <p:outputLabel value="#{bundle.CreateInstitutionLabel_fax}" for="fax" />
+                        <p:inputText id="fax" value="#{institutionController.selected.fax}" title="#{bundle.CreateInstitutionTitle_fax}" />
+                        <p:outputLabel value="PHI Area" for="area" />
+                        <p:selectOneMenu id="area" value="#{institutionController.selected.phiArea}" >
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="areaItem"
+                                           itemValue="#{areaItem}"
+                                           itemLabel="#{areaItem.name}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Educational Zone" for="ez" />
+                        <p:selectOneMenu id="ez" value="#{institutionController.selected.educationalZone}" >
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="areaItem"
+                                           itemValue="#{areaItem}"
+                                           itemLabel="#{areaItem.name}"/>
+                        </p:selectOneMenu>                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{institutionController.create}" value="#{bundle.Save}" update="display,:InstitutionListForm:datalist,:growl" oncomplete="handleSubmit(args,'InstitutionCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="InstitutionCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

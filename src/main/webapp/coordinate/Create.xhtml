@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CoordinateCreateDlg" widgetVar="CoordinateCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle2.CreateCoordinateTitle}">
+            <h:form id="CoordinateCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{coordinateController.selected != null}">
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_area}" for="area" />
+                        <p:selectOneMenu id="area" value="#{coordinateController.selected.area}" >
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="areaItem"
+                                           itemValue="#{areaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_institution}" for="institution" />
+                        <p:selectOneMenu id="institution" value="#{coordinateController.selected.institution}" >
+                            <f:selectItems value="#{institutionController.itemsAvailableSelectOne}"
+                                           var="institutionItem"
+                                           itemValue="#{institutionItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_webUser}" for="webUser" />
+                        <p:selectOneMenu id="webUser" value="#{coordinateController.selected.webUser}" >
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="webUserItem"
+                                           itemValue="#{webUserItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_longitude}" for="longitude" />
+                        <p:inputText id="longitude" value="#{coordinateController.selected.longitude}" title="#{bundle2.CreateCoordinateTitle_longitude}" />
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_latitude}" for="latitude" />
+                        <p:inputText id="latitude" value="#{coordinateController.selected.latitude}" title="#{bundle2.CreateCoordinateTitle_latitude}" />
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_elevation}" for="elevation" />
+                        <p:inputText id="elevation" value="#{coordinateController.selected.elevation}" title="#{bundle2.CreateCoordinateTitle_elevation}" />
+                        <p:outputLabel value="#{bundle2.CreateCoordinateLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{coordinateController.selected.id}" title="#{bundle2.CreateCoordinateTitle_id}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{coordinateController.create}" value="#{bundle2.Save}" update="display,:CoordinateListForm:datalist,:growl" oncomplete="handleSubmit(args,'CoordinateCreateDialog');"/>
+                    <p:commandButton value="#{bundle2.Cancel}" onclick="CoordinateCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

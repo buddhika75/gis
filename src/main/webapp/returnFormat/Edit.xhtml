@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReturnFormatEditDlg" widgetVar="ReturnFormatEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleReturns.EditReturnFormatTitle}">
+            <h:form id="ReturnFormatEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{returnFormatController.selected != null}">
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{returnFormatController.selected.name}" title="#{bundleReturns.CreateReturnFormatTitle_name}" />
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_code}" for="code" />
+                        <p:inputText id="code" value="#{returnFormatController.selected.code}" title="#{bundleReturns.CreateReturnFormatTitle_code}" />
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_frequency}" for="code" />
+                        <p:selectOneMenu value="#{returnFormatController.selected.frequency}" >
+                            <f:selectItems value="#{enumController.returnTimeFrequencys}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_category}" for="category" />
+                        <p:selectOneMenu id="category" value="#{returnFormatController.selected.category}" >
+                            <f:selectItems value="#{itemController.itemsAvailableSelectOne}"
+                                           var="categoryItem"
+                                           itemValue="#{categoryItem}"
+                                           itemLabel="#{categoryItem.name}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Submit Months"  />
+                        <p:inputText  value="#{returnFormatController.selected.sendingDeadlineMonths}" title="#{bundleReturns.CreateReturnFormatTitle_senderSubmitDays}" />
+
+                        <p:outputLabel value="Submit Days" for="sendingDeadline" />
+                        <p:inputText id="sendingDeadline" value="#{returnFormatController.selected.sendingDeadlineDays}" title="#{bundleReturns.CreateReturnFormatTitle_sendingDeadline}" />
+
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_prepairedBy}" for="prepairedBy" />
+                        <p:selectOneMenu id="prepairedBy" value="#{returnFormatController.selected.prepairedBy}" >
+                            <f:selectItems value="#{enumController.privilegeTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_sentBy}" for="sentBy" />
+                        <p:selectOneMenu id="sentBy" value="#{returnFormatController.selected.sentBy}" >
+                            <f:selectItems value="#{enumController.privilegeTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_receivedBy}" for="receivedBy" />
+                        <p:selectOneMenu id="receivedBy" value="#{returnFormatController.selected.receivedBy}" >
+                            <f:selectItems value="#{enumController.privilegeTypes}" ></f:selectItems>
+                        </p:selectOneMenu>                      
+
+
+                        <p:outputLabel value="Receive Months" for="receiveStartDays" />
+                        <p:inputText id="receiveStartDays" value="#{returnFormatController.selected.receivingDeadlineMonths}" title="#{bundleReturns.CreateReturnFormatTitle_receiveStartDays}" />
+                        <p:outputLabel value="Receive Days" for="receiveSubmitDays" />
+                        <p:inputText id="receiveSubmitDays" value="#{returnFormatController.selected.receivingDeadlineDays}" title="#{bundleReturns.CreateReturnFormatTitle_receiveSubmitDays}" />
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_sendingAreaType}" for="sendingAreaType" />
+                        <p:selectOneMenu id="sendingAreaType" value="#{returnFormatController.selected.sendingAreaType}" >
+                            <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{bundleReturns.CreateReturnFormatLabel_receivingAreaType}" for="receivingAreaType" />
+                        <p:selectOneMenu id="receivingAreaType" value="#{returnFormatController.selected.receivingAreaType}" >
+                            <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{returnFormatController.update}" value="#{bundleReturns.Save}" update="display,:ReturnFormatListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ReturnFormatEditDialog');"/>
+                    <p:commandButton value="#{bundleReturns.Cancel}" onclick="ReturnFormatEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

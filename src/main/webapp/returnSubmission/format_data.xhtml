@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Format Data
+            </ui:define>
+
+            <ui:define name="body">
+                <h:form >
+                    <p:panel header="Return Formats" >
+
+                        <p:dataTable value="#{returnSubmissionController.returnFormatLastSubmissions}" var="l" rowIndexVar="n" rowKey="#{l.returnFormat.id}"  >
+
+                            <p:column headerText="Format" >
+                                <p:outputLabel value="#{l.returnFormat.name}" ></p:outputLabel>
+                            </p:column>
+
+
+                            <p:column headerText="Submission Frequency" >
+                                <p:outputLabel value="#{l.returnFormat.frequency}" ></p:outputLabel>
+                            </p:column>
+
+                            <p:column  headerText="Last Submission Date">
+                                <p:outputLabel value="#{l.returnSubmission.sentDate}" >
+                                    <f:convertDateTime pattern="dd MMMM yyyy" timeZone="Asia/Colombo" ></f:convertDateTime>
+                                </p:outputLabel>
+                            </p:column>
+
+                            <p:column  headerText="Last Submission Year">
+                                <p:outputLabel value="#{l.returnSubmission.returnYear}" >
+                                </p:outputLabel>
+                            </p:column>    
+                            <p:column  headerText="Last Submission Quarter">
+                                <p:outputLabel value="#{l.returnSubmission.quarter} - " >
+                                </p:outputLabel>
+                            </p:column>                            
+
+                            <p:column  headerText="Last Submission Month">
+                                <p:outputLabel value="#{l.returnSubmission.returnMonth}" >
+                                </p:outputLabel>
+                            </p:column>                            
+
+
+
+                        </p:dataTable>
+
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

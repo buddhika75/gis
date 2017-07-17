@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Add New User
+            </ui:define>
+
+            <ui:define name="body">
+
+
+                <p:panel header="Add New User" >
+                    <h:form>
+                        <p:panelGrid columns="2" rendered="#{webUserController.selected ne null}">
+                            <p:outputLabel value="Type:" for="type" />
+                            <p:selectOneMenu id="type" value="#{webUserController.selected.type}" required="true" >
+                                <f:selectItems value="#{webUserController.myPrivilegeTypes}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Name:" for="name" />
+                            <p:inputText id="name" value="#{webUserController.selected.name}" title="Name" required="true"/>
+                            <p:outputLabel value="UserName:" for="userName" />
+                            <p:inputText id="userName" value="#{webUserController.userName}" title="UserName" required="true"/>
+                            <p:outputLabel value="Password:" for="password" />
+                            <p:inputText id="password" value="#{webUserController.password}" title="Password" required="true"/>
+                            <p:outputLabel value="Reenter Password:" for="repassword" />
+                            <p:inputText id="repassword" value="#{webUserController.confirmPassword}" title="Password" required="true"/>
+
+                            <p:outputLabel value="Area:" for="area" />
+                            <p:selectOneMenu id="area" value="#{webUserController.selected.area}" >
+                                <f:selectItems value="#{webUserController.myAreas}" var="a" itemLabel="#{a.name}" itemValue="#{a}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton ajax="false" value="Save" action="#{webUserController.saveNewUser()}" ></p:commandButton>
+                        
+                    </h:form>
+                    <h:form >
+                        <p:commandButton ajax="false" value="Login" action="#{webUserController.login()}" rendered="false" ></p:commandButton>
+                    </h:form>
+                </p:panel>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

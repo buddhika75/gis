@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ActivityViewDlg" widgetVar="ActivityViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewActivityTitle}">
+            <h:form id="ActivityViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{activityController.selected != null}">
+                        <h:outputText value="#{bundle.ViewActivityLabel_id}"/>
+                        <h:outputText value="#{activityController.selected.id}" title="#{bundle.ViewActivityTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_type}"/>
+                        <h:outputText value="#{activityController.selected.type}" title="#{bundle.ViewActivityTitle_type}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_institution}"/>
+                        <h:outputText value="#{activityController.selected.institution}" title="#{bundle.ViewActivityTitle_institution}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_activityDate}"/>
+                        <h:outputText value="#{activityController.selected.activityDate}" title="#{bundle.ViewActivityTitle_activityDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewActivityLabel_studentParticipation}"/>
+                        <h:outputText value="#{activityController.selected.studentParticipation}" title="#{bundle.ViewActivityTitle_studentParticipation}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_teacherParticpation}"/>
+                        <h:outputText value="#{activityController.selected.teacherParticpation}" title="#{bundle.ViewActivityTitle_teacherParticpation}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_totalParticipants}"/>
+                        <h:outputText value="#{activityController.selected.totalParticipants}" title="#{bundle.ViewActivityTitle_totalParticipants}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_phi}"/>
+                        <h:outputText value="#{activityController.selected.phi}" title="#{bundle.ViewActivityTitle_phi}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_mohArea}"/>
+                        <h:outputText value="#{activityController.selected.mohArea}" title="#{bundle.ViewActivityTitle_mohArea}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_phiArea}"/>
+                        <h:outputText value="#{activityController.selected.phiArea}" title="#{bundle.ViewActivityTitle_phiArea}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_creater}"/>
+                        <h:outputText value="#{activityController.selected.creater}" title="#{bundle.ViewActivityTitle_creater}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_createAt}"/>
+                        <h:outputText value="#{activityController.selected.createAt}" title="#{bundle.ViewActivityTitle_createAt}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewActivityLabel_moh}"/>
+                        <h:outputText value="#{activityController.selected.moh}" title="#{bundle.ViewActivityTitle_moh}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_amoh}"/>
+                        <h:outputText value="#{activityController.selected.amoh}" title="#{bundle.ViewActivityTitle_amoh}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_mo}"/>
+                        <h:outputText value="#{activityController.selected.mo}" title="#{bundle.ViewActivityTitle_mo}"/>
+                        <h:outputText value="#{bundle.ViewActivityLabel_amo_rmo}"/>
+                        <h:outputText value="#{activityController.selected.amo_rmo}" title="#{bundle.ViewActivityTitle_amo_rmo}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="ActivityViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReturnSubmissionViewDlg" widgetVar="ReturnSubmissionViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleReturns.ViewReturnSubmissionTitle}">
+            <h:form id="ReturnSubmissionViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{returnSubmissionController.selected != null}">
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_id}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.id}" title="#{bundleReturns.ViewReturnSubmissionTitle_id}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_returnFormat}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.returnFormat}" title="#{bundleReturns.ViewReturnSubmissionTitle_returnFormat}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_quarter}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.quarter}" title="#{bundleReturns.ViewReturnSubmissionTitle_quarter}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_returnMonth}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.returnMonth}" title="#{bundleReturns.ViewReturnSubmissionTitle_returnMonth}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_returnYear}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.returnYear}" title="#{bundleReturns.ViewReturnSubmissionTitle_returnYear}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_fromDate}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.fromDate}" title="#{bundleReturns.ViewReturnSubmissionTitle_fromDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_toDate}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.toDate}" title="#{bundleReturns.ViewReturnSubmissionTitle_toDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_sentDate}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.sentDate}" title="#{bundleReturns.ViewReturnSubmissionTitle_sentDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_sentArea}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.sentArea}" title="#{bundleReturns.ViewReturnSubmissionTitle_sentArea}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_prepairedBy}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.prepairedBy}" title="#{bundleReturns.ViewReturnSubmissionTitle_prepairedBy}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_sentBy}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.sentBy}" title="#{bundleReturns.ViewReturnSubmissionTitle_sentBy}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_receivedBy}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.receivedBy}" title="#{bundleReturns.ViewReturnSubmissionTitle_receivedBy}"/>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_receiveDate}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.receiveDate}" title="#{bundleReturns.ViewReturnSubmissionTitle_receiveDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleReturns.ViewReturnSubmissionLabel_receiveArea}"/>
+                        <h:outputText value="#{returnSubmissionController.selected.receiveArea}" title="#{bundleReturns.ViewReturnSubmissionTitle_receiveArea}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundleReturns.Close}" onclick="ReturnSubmissionViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

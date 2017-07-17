@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Submit a new Return
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+                    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDnIF053oCwO1848mAvz6-N6eSeOeD8BaI" type="text/javascript" ></script> 
+
+                    <p:panel header="Check Returns - #{returnSubmissionController.returnFormat.name}" style="width: 1600px!important; margin: auto;" >
+                        <h:panelGrid columns="18" >
+                            <p:outputLabel value="Year" rendered="#{returnSubmissionController.returnFormat.needYear}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.year}" rendered="#{returnSubmissionController.returnFormat.needYear}">
+                                <f:selectItems value="#{webUserController.recentYears}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="Month" rendered="#{returnSubmissionController.returnFormat.needMonth}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.month}"  rendered="#{returnSubmissionController.returnFormat.needMonth}">
+                                <f:selectItems value="#{enumController.months}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="Quarter" rendered="#{returnSubmissionController.returnFormat.needQuarter}"></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.quarter}"  rendered="#{returnSubmissionController.returnFormat.needQuarter}">
+                                <f:selectItems value="#{enumController.quarters}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="Deadline" ></p:outputLabel>
+                            <p:calendar value="#{returnSubmissionController.deadlineDate}" ></p:calendar>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:commandButton ajax="false" value="List" action="#{returnSubmissionController.listReceivedReturns()}" ></p:commandButton>
+                            <p:spacer width="10" height="1" ></p:spacer>
+                            <p:commandButton ajax="false" value="Back" action="#{returnSubmissionController.toCheckReturns()}" ></p:commandButton>
+
+
+                        </h:panelGrid>
+
+
+                        <p:tabView style="width: 95%!important;"  >
+                            <p:tab title="List of Received Returns" >
+                                <p:dataTable value="#{returnSubmissionController.items}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                                    <p:column width="50">
+                                        <f:facet name="header">
+                                            <h:outputText value="No"/>
+                                        </f:facet>
+                                        <h:outputText value="#{n+1}">
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Area"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.sentArea.name}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Sent Date"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.sentDate}">
+                                            <f:convertDateTime pattern="dd MMMM yyyy" timeZone="Asia/Colombo" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Received Date"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.receiveDate}">
+                                            <f:convertDateTime pattern="dd MMMM yyyy"  timeZone="Asia/Colombo" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Actions"/>
+                                        </f:facet>
+                                        <p:commandButton value="Delete" ajax="false" action="#{returnSubmissionController.deleteSubmission()}" >
+                                            <f:setPropertyActionListener target="#{returnSubmissionController.selected}" value="#{item}" ></f:setPropertyActionListener>
+                                        </p:commandButton>
+                                        <p:commandButton value="Edit" ajax="false" action="#{returnSubmissionController.editSubmission()}" >
+                                            <f:setPropertyActionListener target="#{returnSubmissionController.selected}" value="#{item}" ></f:setPropertyActionListener>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Responders &amp; Non-Responders List" >
+                                <table style="border: 1px solid #000000;padding: 5px;margin: auto;" >
+                                    <tr>
+                                        <th>
+                                            <p:outputLabel value="No" ></p:outputLabel>
+                                        </th>
+                                        <th>
+                                            <p:outputLabel value="MOH" ></p:outputLabel>
+                                        </th>
+                                        <th>
+                                            <p:outputLabel value="Status" ></p:outputLabel>
+                                        </th>
+                                        <th>
+                                            <p:outputLabel value="Received on" ></p:outputLabel>
+                                        </th>
+                                    </tr>
+                                    <ui:repeat value="#{returnSubmissionController.genItems}" var="gi" varStatus="myVarStatus" >
+                                        <tr style="color: #{gi.foreGroundColor}; background-color: #{gi.backGroundColor};padding: 15px; margin: 5px;">
+                                            <th style="color: #{gi.foreGroundColor}; background-color: #{gi.backGroundColor};padding: 15px; margin: 5px; text-align: left;">
+                                                <p:outputLabel value="#{myVarStatus.index + 1}" ></p:outputLabel>
+                                            </th>
+                                            <th style="color: #{gi.foreGroundColor}; background-color: #{gi.backGroundColor};padding: 15px; margin: 5px; text-align: left;">
+                                                <p:outputLabel value="#{gi.sentArea.name}" ></p:outputLabel>
+                                            </th>
+                                            <th style="color: #{gi.foreGroundColor}; background-color: #{gi.backGroundColor};padding: 15px; margin: 5px; text-align: left;">
+                                                <p:outputLabel value="#{gi.returnReceiveCategory}" ></p:outputLabel>
+                                            </th>
+                                            <th style="color: #{gi.foreGroundColor}; background-color: #{gi.backGroundColor};padding: 15px; margin: 5px; text-align: left;">
+                                                <p:outputLabel value="#{gi.receiveDate}" >
+                                                    <f:convertDateTime pattern="dd/MM/yy" timeZone="Asia/Colombo" ></f:convertDateTime>
+                                                </p:outputLabel>
+                                            </th>
+                                        </tr>
+
+                                    </ui:repeat>
+                                </table>
+
+                            </p:tab>
+                            <p:tab title="Timeline" >
+
+                                <p:timeline id="timeline" value="#{returnSubmissionController.model}" 
+                                            height="250px" > 
+                                </p:timeline>
+
+                            </p:tab>
+                            <p:tab title="Map" >
+
+                                <p:gmap id="gmap" center="#{webUserController.loggedRdhsArea.centreLatitude},#{webUserController.loggedRdhsArea.centreLongitude}" zoom="#{webUserController.loggedRdhsArea.zoomLavel}" type="ROADMAP" style="width:600px;height:400px;border: 1px solid black;" model="#{returnSubmissionController.polygonModel}">
+                                </p:gmap>
+
+
+                            </p:tab>
+
+
+
+                        </p:tabView>
+
+
+
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

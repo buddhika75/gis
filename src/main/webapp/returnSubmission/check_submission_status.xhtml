@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Check Submission Status
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+
+                    <p:panel header="Check Submission Status" >
+                        <p:panelGrid  >
+                            <p:row >
+                                <p:column colspan="5" >
+                                    <p:outputLabel value="Submission Period" ></p:outputLabel>
+                                </p:column>
+                            </p:row>
+                            <p:row >
+                                <p:column >
+                                    <p:outputLabel value="From" ></p:outputLabel>
+                                </p:column>
+                                <p:column >
+                                    <p:calendar value="#{returnSubmissionController.fromDate}" pattern="dd/MM/yy" ></p:calendar>
+                                </p:column>
+                                <p:column >
+                                    <p:spacer width="20" height="1" ></p:spacer>
+                                </p:column>
+                                <p:column >
+                                    <p:outputLabel value="To" ></p:outputLabel>
+                                </p:column>
+                                <p:column >
+                                    <p:calendar value="#{returnSubmissionController.toDate}" pattern="dd/MM/yy" ></p:calendar>
+                                </p:column>
+                            </p:row>
+
+                            <p:row >
+                                <p:column colspan="5" >
+                                    <p:commandButton ajax="false" value="List" action="#{returnSubmissionController.listMySubmissions()}" ></p:commandButton>
+                                </p:column>
+                            </p:row>
+
+                        </p:panelGrid>
+
+
+                        <p:dataTable value="#{returnSubmissionController.items}" var="item">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Return"/>
+                                </f:facet>
+                                <h:outputText value="#{item.returnFormat.name}">
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Sent Date"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sentDate}">
+                                    <f:convertDateTime pattern="dd MMMM yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Received Date"/>
+                                </f:facet>
+                                <h:outputText value="#{item.receiveDate}">
+                                    <f:convertDateTime pattern="dd MMMM yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Received By"/>
+                                </f:facet>
+                                <h:outputText value="#{item.receivedBy.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Sent Comments"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sentComments}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Receive Comments"/>
+                                </f:facet>
+                                <h:outputText value="#{item.receiveComments}"/>
+                            </p:column>
+                        </p:dataTable>
+
+
+
+
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

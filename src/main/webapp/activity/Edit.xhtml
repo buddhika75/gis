@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ActivityEditDlg" widgetVar="ActivityEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditActivityTitle}">
+            <h:form id="ActivityEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{activityController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditActivityLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{activityController.selected.id}" title="#{bundle.EditActivityTitle_id}" />
+                        <p:outputLabel value="#{bundle.EditActivityLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{activityController.selected.type}" title="#{bundle.EditActivityTitle_type}" />
+                        <p:outputLabel value="#{bundle.EditActivityLabel_institution}" for="institution" />
+                        <p:selectOneMenu id="institution" value="#{activityController.selected.institution}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{institutionController.itemsAvailableSelectOne}"
+                                           var="institutionItem"
+                                           itemValue="#{institutionItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_activityDate}" for="activityDate" />
+                        <p:calendar id="activityDate" pattern="dd MMMM yyyy" value="#{activityController.selected.activityDate}" title="#{bundle.EditActivityTitle_activityDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_studentParticipation}" for="studentParticipation" />
+                        <p:inputText id="studentParticipation" value="#{activityController.selected.studentParticipation}" title="#{bundle.EditActivityTitle_studentParticipation}" />
+                        <p:outputLabel value="#{bundle.EditActivityLabel_teacherParticpation}" for="teacherParticpation" />
+                        <p:inputText id="teacherParticpation" value="#{activityController.selected.teacherParticpation}" title="#{bundle.EditActivityTitle_teacherParticpation}" />
+                        <p:outputLabel value="#{bundle.EditActivityLabel_totalParticipants}" for="totalParticipants" />
+                        <p:inputText id="totalParticipants" value="#{activityController.selected.totalParticipants}" title="#{bundle.EditActivityTitle_totalParticipants}" />
+                        <p:outputLabel value="#{bundle.EditActivityLabel_phi}" for="phi" />
+                        <p:selectOneMenu id="phi" value="#{activityController.selected.phi}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="phiItem"
+                                           itemValue="#{phiItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_mohArea}" for="mohArea" />
+                        <p:selectOneMenu id="mohArea" value="#{activityController.selected.mohArea}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="mohAreaItem"
+                                           itemValue="#{mohAreaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_phiArea}" for="phiArea" />
+                        <p:selectOneMenu id="phiArea" value="#{activityController.selected.phiArea}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="phiAreaItem"
+                                           itemValue="#{phiAreaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_creater}" for="creater" />
+                        <p:selectOneMenu id="creater" value="#{activityController.selected.creater}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="createrItem"
+                                           itemValue="#{createrItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_createAt}" for="createAt" />
+                        <p:calendar id="createAt" pattern="MM/dd/yyyy HH:mm:ss" value="#{activityController.selected.createAt}" title="#{bundle.EditActivityTitle_createAt}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_moh}" for="moh" />
+                        <p:selectOneMenu id="moh" value="#{activityController.selected.moh}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="mohItem"
+                                           itemValue="#{mohItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_amoh}" for="amoh" />
+                        <p:selectOneMenu id="amoh" value="#{activityController.selected.amoh}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="amohItem"
+                                           itemValue="#{amohItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_mo}" for="mo" />
+                        <p:selectOneMenu id="mo" value="#{activityController.selected.mo}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="moItem"
+                                           itemValue="#{moItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditActivityLabel_amo_rmo}" for="amo_rmo" />
+                        <p:selectOneMenu id="amo_rmo" value="#{activityController.selected.amo_rmo}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="amo_rmoItem"
+                                           itemValue="#{amo_rmoItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{activityController.update}" value="#{bundle.Save}" update="display,:ActivityListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ActivityEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ActivityEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

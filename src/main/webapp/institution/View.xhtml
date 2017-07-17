@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InstitutionViewDlg" widgetVar="InstitutionViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewInstitutionTitle}">
+            <h:form id="InstitutionViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{institutionController.selected != null}">
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_type}"/>
+                        <h:outputText value="#{institutionController.selected.type}" title="#{bundle.ViewInstitutionTitle_type}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_name}"/>
+                        <h:outputText value="#{institutionController.selected.name}" title="#{bundle.ViewInstitutionTitle_name}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_code}"/>
+                        <h:outputText value="#{institutionController.selected.code}" title="#{bundle.ViewInstitutionTitle_code}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_address}"/>
+                        <h:outputText value="#{institutionController.selected.address}" title="#{bundle.ViewInstitutionTitle_address}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_telephone}"/>
+                        <h:outputText value="#{institutionController.selected.telephone}" title="#{bundle.ViewInstitutionTitle_telephone}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_email}"/>
+                        <h:outputText value="#{institutionController.selected.email}" title="#{bundle.ViewInstitutionTitle_email}"/>
+                        <h:outputText value="#{bundle.ViewInstitutionLabel_fax}"/>
+                        <h:outputText value="#{institutionController.selected.fax}" title="#{bundle.ViewInstitutionTitle_fax}"/>
+                        <h:outputText value="PHI Area"/>
+                        <h:outputText value="#{institutionController.selected.phiArea.name}" title="#{bundle.ViewInstitutionTitle_area}"/>
+                        <h:outputText value="Educational Zone"/>
+                        <h:outputText value="#{institutionController.selected.educationalZone.name}" title="#{bundle.ViewInstitutionTitle_area}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="InstitutionViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

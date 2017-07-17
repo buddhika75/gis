@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AreaEditDlg" widgetVar="AreaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditAreaTitle}">
+            <h:form id="AreaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{areaController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditAreaLabel_type}" for="type" />
+                        <p:selectOneMenu id="type" value="#{areaController.selected.type}" >
+                            <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditAreaLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{areaController.selected.name}" title="#{bundle.EditAreaTitle_name}" />
+                        <p:outputLabel value="#{bundle.EditAreaLabel_code}" for="code" />
+                        <p:inputText id="code" value="#{areaController.selected.code}" title="#{bundle.EditAreaTitle_code}" />
+                        <p:outputLabel value="#{bundle.EditAreaLabel_parentArea}" for="parentArea" />
+                        <p:selectOneMenu id="parentArea" value="#{areaController.selected.parentArea}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="parentAreaItem"
+                                           itemValue="#{parentAreaItem}"
+                                           itemLabel="#{parentAreaItem.name}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Centre Longitude"  />
+                        <p:inputText value="#{areaController.selected.centreLongitude}" />
+                        
+                        <p:outputLabel value="Centre Latitude"  />
+                        <p:inputText value="#{areaController.selected.centreLatitude}" />
+                        
+                        <p:outputLabel value="Default Zoom"  />
+                        <p:inputText value="#{areaController.selected.zoomLavel}" />
+                        
+                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{areaController.update}" value="#{bundle.Save}" update="display,:AreaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'AreaEditDialog');"/>
+                    
+                    <p:commandButton ajax="false" action="#{areaController.drawArea()}" value="Map" />
+                    
+                    <p:commandButton value="#{bundle.Cancel}" onclick="AreaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+
+            <h:form enctype="multipart/form-data" >
+                <p:fileUpload value="#{areaController.file}" mode="simple"/>
+
+                <h:commandButton id="btnSave" value="Save" action="#{areaController.saveCoordinates()}"/>
+
+            </h:form>
+
+           
+
+        </p:dialog>
+
+    </ui:composition>
+</html>

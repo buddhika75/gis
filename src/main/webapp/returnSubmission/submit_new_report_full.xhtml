@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Submit a new Return
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+
+                    <p:panel header="Create a new Return As Administrator - Step 1" >
+                        <p:panelGrid columns="2" >
+                            <p:outputLabel value="Return" ></p:outputLabel>
+                            <p:selectOneMenu value="#{returnSubmissionController.returnFormat}" var="f"  >
+                                <f:selectItem itemLabel="Select a Return" ></f:selectItem>
+                                <f:selectItems value="#{returnFormatController.itemsAvailableSelectOne}" var="f1" itemValue="#{f1}"  itemLabel="#{f1.name}"></f:selectItems>
+                                <p:column headerText="Name" >
+                                    <p:outputLabel value="#{f.name}" ></p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Code" >
+                                    <p:outputLabel value="#{f.code}" ></p:outputLabel>
+                                </p:column>
+                            </p:selectOneMenu>
+                            <p:commandButton ajax="false" value="To Create" action="#{returnSubmissionController.toSubmitNewReportAfterSelectionAsAdmin()}" ></p:commandButton>
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

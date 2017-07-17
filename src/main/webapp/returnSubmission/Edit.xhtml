@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ReturnSubmissionEditDlg" widgetVar="ReturnSubmissionEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleReturns.EditReturnSubmissionTitle}">
+            <h:form id="ReturnSubmissionEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{returnSubmissionController.selected != null}">
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{returnSubmissionController.selected.id}" title="#{bundleReturns.EditReturnSubmissionTitle_id}" />
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_returnFormat}" for="returnFormat" />
+                        <p:selectOneMenu id="returnFormat" value="#{returnSubmissionController.selected.returnFormat}" >
+                            <f:selectItem itemLabel="#{bundleReturns.SelectOneMessage}"/>
+                            <f:selectItems value="#{returnFormatController.itemsAvailableSelectOne}"
+                                           var="returnFormatItem"
+                                           itemValue="#{returnFormatItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_quarter}" for="quarter" />
+                        <p:inputText id="quarter" value="#{returnSubmissionController.selected.quarter}" title="#{bundleReturns.EditReturnSubmissionTitle_quarter}" />
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_returnMonth}" for="returnMonth" />
+                        <p:inputText id="returnMonth" value="#{returnSubmissionController.selected.returnMonth}" title="#{bundleReturns.EditReturnSubmissionTitle_returnMonth}" />
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_returnYear}" for="returnYear" />
+                        <p:inputText id="returnYear" value="#{returnSubmissionController.selected.returnYear}" title="#{bundleReturns.EditReturnSubmissionTitle_returnYear}" />
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_fromDate}" for="fromDate" />
+                        <p:calendar id="fromDate" pattern="dd MMMM yyyy" value="#{returnSubmissionController.selected.fromDate}" title="#{bundleReturns.EditReturnSubmissionTitle_fromDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_toDate}" for="toDate" />
+                        <p:calendar id="toDate" pattern="dd MMMM yyyy" value="#{returnSubmissionController.selected.toDate}" title="#{bundleReturns.EditReturnSubmissionTitle_toDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_sentDate}" for="sentDate" />
+                        <p:calendar id="sentDate" pattern="dd MMMM yyyy" value="#{returnSubmissionController.selected.sentDate}" title="#{bundleReturns.EditReturnSubmissionTitle_sentDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_sentArea}" for="sentArea" />
+                        <p:selectOneMenu id="sentArea" value="#{returnSubmissionController.selected.sentArea}" >
+                            <f:selectItem itemLabel="#{bundleReturns.SelectOneMessage}"/>
+                            <f:selectItems value="#{areaController.itemsAvailableSelectOne}"
+                                           var="sentAreaItem"
+                                           itemValue="#{sentAreaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_prepairedBy}" for="prepairedBy" />
+                        <p:selectOneMenu id="prepairedBy" value="#{returnSubmissionController.selected.prepairedBy}" >
+                            <f:selectItem itemLabel="#{bundleReturns.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="prepairedByItem"
+                                           itemValue="#{prepairedByItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_sentBy}" for="sentBy" />
+                        <p:selectOneMenu id="sentBy" value="#{returnSubmissionController.selected.sentBy}" >
+                            <f:selectItem itemLabel="#{bundleReturns.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="sentByItem"
+                                           itemValue="#{sentByItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_receivedBy}" for="receivedBy" />
+                        <p:selectOneMenu id="receivedBy" value="#{returnSubmissionController.selected.receivedBy}" >
+                            <f:selectItem itemLabel="#{bundleReturns.SelectOneMessage}"/>
+                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
+                                           var="receivedByItem"
+                                           itemValue="#{receivedByItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_receiveDate}" for="receiveDate" />
+                        <p:calendar id="receiveDate" pattern="dd MMMM yyyy" value="#{returnSubmissionController.selected.receiveDate}" title="#{bundleReturns.EditReturnSubmissionTitle_receiveDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundleReturns.EditReturnSubmissionLabel_receiveArea}" for="receiveArea" />
+                        <p:inputText id="receiveArea" value="#{returnSubmissionController.selected.receiveArea}" title="#{bundleReturns.EditReturnSubmissionTitle_receiveArea}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{returnSubmissionController.update}" value="#{bundleReturns.Save}" update="display,:ReturnSubmissionListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ReturnSubmissionEditDialog');"/>
+                    <p:commandButton value="#{bundleReturns.Cancel}" onclick="ReturnSubmissionEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="ReturnSubmissionListForm">
+                <p:panel header="#{bundleReturns.ListReturnSubmissionTitle}">
+                    <p:dataTable id="datalist" value="#{returnSubmissionController.items}" var="item"
+                                 selectionMode="single" selection="#{returnSubmissionController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column sortBy="#{item.returnFormat.name}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle_returnFormat}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnFormat.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Year/Quarter/Month"/>
+                            </f:facet>
+                            <h:outputText value="#{item.returnYear} - "/>
+                            <h:outputText value="#{item.quarter} - "/>
+                            <h:outputText value="#{item.returnMonth}"/>
+                        </p:column>
+
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle_sentDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentDate}">
+                                <f:convertDateTime pattern="dd MMMM yyyy"  timeZone="Asia/Colombo" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle_sentArea}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sentArea.name}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle_receiveDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.receiveDate}">
+                                <f:convertDateTime pattern="dd MMMM yyyy"  timeZone="Asia/Colombo" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleReturns.ListReturnSubmissionTitle_receiveArea}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.receiveArea}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundleReturns.Create}" actionListener="#{returnSubmissionController.prepareCreate}" update=":ReturnSubmissionCreateForm" oncomplete="PF('ReturnSubmissionCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundleReturns.View}" update=":ReturnSubmissionViewForm" oncomplete="PF('ReturnSubmissionViewDialog').show()" disabled="#{empty returnSubmissionController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundleReturns.Edit}" update=":ReturnSubmissionEditForm" oncomplete="PF('ReturnSubmissionEditDialog').show()" disabled="#{empty returnSubmissionController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundleReturns.Delete}" actionListener="#{returnSubmissionController.destroy}" update=":growl,datalist" disabled="#{empty returnSubmissionController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

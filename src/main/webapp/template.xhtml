@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title><ui:insert name="title">MOH Return Analysis</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" autoUpdate="true" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="80" header="MOH Return Analysis System">
+                <h:form id="menuForm">
+                    <p:menubar rendered="#{webUserController.logged}">
+                        <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
+                        <p:submenu label="MOH" rendered="#{webUserController.mohStaff}">
+                            <p:menuitem ajax="false" value="Submit New Return" action="#{returnSubmissionController.toSubmitNewReport()}" />
+                            <p:menuitem ajax="false" value="Submission Status" action="#{returnSubmissionController.toCheckSubmissionStatus()}" />
+                            <p:menuitem ajax="false" value="Return Formats" action="#{returnSubmissionController.listReturnFormatLastSubmissions()}" />
+
+                        </p:submenu>
+
+                        <p:submenu label="RDHS" rendered="#{webUserController.rdhsStaff}">
+                            <p:menuitem ajax="false" value="Receive My Returns" action="#{returnSubmissionController.toReceiveReturns()}" />
+                            <p:menuitem ajax="false" value="Check My Returns" action="#{returnSubmissionController.toCheckReturns()}" />
+                            <p:menuitem ajax="false" value="Check All Returns" action="#{returnSubmissionController.toCheckReturnsAll()}" disabled="#{!webUserController.rdhs}" />
+                        </p:submenu>
+
+                        <p:submenu label="PDHS"  rendered="#{webUserController.pdhsStaff}">
+                            <p:menuitem ajax="false" value="Check Returns" action="#{returnSubmissionController.toCheckReturns()}" />
+                        </p:submenu>
+
+                        <p:submenu label="User">
+                            <p:menuitem ajax="false" value="Edit my details" action="#{webUserController.toEditMyDetails()}" />
+                            <p:menuitem ajax="false" value="Change my password" action="#{webUserController.toEditMyPassword()}" />
+                        </p:submenu>
+
+                        <p:submenu label="Administration"  rendered="#{webUserController.admin}">
+                            <p:menuitem ajax="false" value="Submit New Return" action="#{returnSubmissionController.toSubmitNewReportFull()}" />
+                            <p:menuitem  ajax="false" value="Manage Areas" action="/area/add_area_index"   rendered="#{webUserController.admin}"/>
+                            <p:menuitem  ajax="false" value="Manage Users" action="/webUser/add_webuser_index" />
+                            <p:menuitem  ajax="false" action="/item/List" value="Manage Items"   rendered="#{webUserController.admin}"/>
+                            <p:menuitem  ajax="false" action="/returnFormat/List" value="Manage Return Formats"   rendered="#{webUserController.admin}"/>
+                            <p:menuitem  ajax="false" action="/returnSubmission/List" value="Manage Return Submissions"   rendered="#{webUserController.admin}"/>
+                        </p:submenu>
+                    </p:menubar>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="60">
+                <ui:insert name="footer">
+                    <h:form >
+                        <h:panelGrid columns="25" rendered="#{webUserController.logged}" >
+                            <p:outputLabel value="Logged User : #{webUserController.loggedUser.name}" ></p:outputLabel>
+                            <p:spacer height="1" width="5" ></p:spacer>
+
+                            <p:outputLabel value="|"  rendered="#{webUserController.loggedPdhsArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedPdhsArea ne null}"></p:spacer>
+                            <p:outputLabel value="PDHS : #{webUserController.loggedPdhsArea.name}" rendered="#{webUserController.loggedPdhsArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedPdhsArea ne null}" ></p:spacer>
+
+                            <p:outputLabel value="|"   rendered="#{webUserController.loggedRdhsArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedRdhsArea ne null}"></p:spacer>
+                            <p:outputLabel value="RDHS Area : #{webUserController.loggedRdhsArea.name}" rendered="#{webUserController.loggedRdhsArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5"  rendered="#{webUserController.loggedRdhsArea ne null}"></p:spacer>
+
+                            <p:outputLabel value="|"  rendered="#{webUserController.loggedMohArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedRdhsArea ne null}"></p:spacer>
+                            <p:outputLabel value="MOH Area : #{webUserController.loggedMohArea.name}" rendered="#{webUserController.loggedMohArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5"  rendered="#{webUserController.loggedMohArea ne null}"></p:spacer>
+
+
+                            <p:outputLabel value="|"  rendered="#{webUserController.loggedPhiArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedPhiArea ne null}"></p:spacer>
+                            <p:outputLabel value="PHI Area : #{webUserController.loggedPhiArea.name}" rendered="#{webUserController.loggedPhiArea ne null}"></p:outputLabel>
+                            <p:spacer height="1" width="5" rendered="#{webUserController.loggedPhiArea ne null}"></p:spacer>
+
+                            <p:spacer height="1" width="5" ></p:spacer>
+                            <p:outputLabel value="|"  ></p:outputLabel>
+                            <p:spacer height="1" width="5" ></p:spacer>
+                            <p:commandLink ajax="false" value="Logout" action="#{webUserController.logout()}" ></p:commandLink>
+
+
+
+                        </h:panelGrid>
+                    </h:form>
+                </ui:insert>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" >
+
+
+                <p:panel header="Login" rendered="#{!webUserController.logged}" style="z-index: 10; width: 400px; height: 150px;" >
+                    <h:form >
+                        <h:panelGrid columns="3" >
+                            <p:outputLabel value="Username" style="z-index: 10;" ></p:outputLabel>
+                            <p:spacer height="1" width="30" ></p:spacer>
+                            <p:inputText value="#{webUserController.userName}" style="z-index: 100;" ></p:inputText>
+                            <p:outputLabel value="Password" ></p:outputLabel>
+                            <p:spacer height="1" width="30" ></p:spacer>
+                            <p:inputText value="#{webUserController.password}" ></p:inputText>
+                        </h:panelGrid>
+                        <p:commandButton style="z-index: 10; float: right; margin-right:  80px; " ajax="false" value="Login" action="#{webUserController.login()}" ></p:commandButton>                            
+                    </h:form>
+                </p:panel>
+
+                <p:graphicImage library="images" name="home1.png" rendered="#{!webUserController.logged}" styleClass="centrecontent" width="75%" style="z-index: 0;" ></p:graphicImage>
+
+
+                <h:panelGrid rendered="#{webUserController.logged}" >
+                    <ui:insert name="body">
+                        Please Login to continue
+                    </ui:insert>
+                </h:panelGrid>
+
+
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+</html>

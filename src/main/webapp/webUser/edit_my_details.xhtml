@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                <p:outputLabel value="Edit My Details" ></p:outputLabel>
+            </ui:define>
+
+            <ui:define name="body">
+
+
+                <f:view>
+
+
+                    <h:form>
+                        <p:panel header="Edit My Details" >
+
+                            <p:commandButton value="Save" ajax="false" action="#{webUserController.update()}" ></p:commandButton>
+                            
+                            <p:panelGrid columns="2">
+
+                                <p:outputLabel value="Type:" for="type" />
+                                <p:outputLabel id="type" value="#{webUserController.selected.type}" title="Type" />
+
+                                <p:outputLabel value="Name:" for="name" />
+                                <p:inputText id="name" value="#{webUserController.selected.name}" title="Name" />
+
+                                <p:outputLabel value="UserName:" for="userName" />
+                                <p:outputLabel id="userName" value="#{webUserController.selected.userName}" title="UserName" />
+
+                                <p:outputLabel value="Institution:" for="institution" />
+                                <p:outputLabel id="institution" value="#{webUserController.selected.institution.name}" >
+                                </p:outputLabel>
+
+                                <p:outputLabel value="Area:" for="area" />
+                                <p:outputLabel id="area" value="#{webUserController.selected.area.name}" >
+                                </p:outputLabel>
+
+                                <p:outputLabel value="OfficialPhone:" for="officialPhone" />
+                                <p:inputText id="officialPhone" value="#{webUserController.selected.officialPhone}" title="OfficialPhone" />
+                                <p:outputLabel value="OfficeFax:" for="officeFax" />
+                                <p:inputText id="officeFax" value="#{webUserController.selected.officeFax}" title="OfficeFax" />
+                                <p:outputLabel value="MobilePhone:" for="mobilePhone" />
+                                <p:inputText id="mobilePhone" value="#{webUserController.selected.mobilePhone}" title="MobilePhone" />
+                                <p:outputLabel value="PersonalAddress:" for="personalAddress" />
+                                <p:inputText id="personalAddress" value="#{webUserController.selected.personalAddress}" title="PersonalAddress" />
+                                <p:outputLabel value="OfficialAddress:" for="officialAddress" />
+                                <p:inputText id="officialAddress" value="#{webUserController.selected.officialAddress}" title="OfficialAddress" />
+                                <p:outputLabel value="OfficialEmail:" for="officialEmail" />
+                                <p:inputText id="officialEmail" value="#{webUserController.selected.officialEmail}" title="OfficialEmail" />
+                                <p:outputLabel value="PersonalEmail:" for="personalEmail" />
+                                <p:inputText id="personalEmail" value="#{webUserController.selected.personalEmail}" title="PersonalEmail" />
+
+                            </p:panelGrid>
+
+                        </p:panel>
+                    </h:form>
+                </f:view>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

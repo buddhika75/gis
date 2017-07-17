@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Add New School
+            </ui:define>
+
+            <ui:define name="body">
+
+                <f:view>
+
+
+                    <h:form>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Type:" for="type" />
+                            <p:outputLabel id="type" value="#{institutionController.selected.type}" title="Type" />
+                            <p:outputLabel value="Name:" for="name" />
+                            <p:inputText id="name" value="#{institutionController.selected.name}" title="Name" />
+                            <p:outputLabel value="School Census No." for="code" />
+                            <p:inputText id="code" value="#{institutionController.selected.code}" title="Code" />
+                            <p:outputLabel value="Address:" for="address" />
+                            <p:inputTextarea rows="4" cols="30" id="address" value="#{institutionController.selected.address}" title="Address" />
+                            <p:outputLabel value="Telephone:" for="telephone" />
+                            <p:inputText id="telephone" value="#{institutionController.selected.telephone}" title="Telephone" />
+                            <p:outputLabel value="Email:" for="email" />
+                            <p:inputText id="email" value="#{institutionController.selected.email}" title="Email" />
+                            <p:outputLabel value="Fax:" for="fax" />
+                            <p:inputText id="fax" value="#{institutionController.selected.fax}" title="Fax" />
+                            <p:outputLabel value="PHI Area:" for="area" />
+                            <p:selectOneMenu id="area" value="#{institutionController.selected.phiArea}" >
+                                <f:selectItems value="#{webUserController.myPhiAreas}" var="a" itemLabel="#{a.name}" itemValue="#{a}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Educational Zone:" for="ea" />
+                            <p:selectOneMenu id="ea" value="#{institutionController.selected.educationalZone}" >
+                                <f:selectItems value="#{webUserController.myEducationalZones}" var="e"
+                                               itemLabel="#{e.name}" itemValue="#{e}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Type of School:" for="ty" />
+                            <p:selectOneMenu id="ty" value="#{institutionController.selected.typeOfSchool}" >
+                                <f:selectItems value="#{enumController.typesOfSchool}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton ajax="false" value="Save" action="#{institutionController.saveNewSchool()}" ></p:commandButton>
+                    </h:form>
+                </f:view>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

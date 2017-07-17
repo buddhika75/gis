@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+        <ui:composition template="./template.xhtml">
+            <ui:define name="body">
+                <h:form>
+                    <p:panel header="MOH" rendered="#{webUserController.mohStaff }" >
+                        <p:commandButton ajax="false" value="Submit New Return" action="#{returnSubmissionController.toSubmitNewReport()}" />
+                        <p:commandButton ajax="false" value="Submission Status" action="#{returnSubmissionController.toCheckSubmissionStatus()}" />
+                        <p:commandButton ajax="false" value="Return Formats" action="#{returnSubmissionController.listReturnFormatLastSubmissions()}" />
+                    </p:panel>
+                    <p:panel header="RDHS" rendered="#{webUserController.rdhsStaff }" >
+                        <p:commandButton ajax="false" value="Receive My Returns" action="#{returnSubmissionController.toReceiveReturns()}" />
+                        <p:commandButton ajax="false" value="Check My Returns" action="#{returnSubmissionController.toCheckReturns()}" />
+                        <p:commandButton ajax="false" value="Check All Returns" action="#{returnSubmissionController.toCheckReturnsAll()}" disabled="#{!webUserController.rdhs}" />
+                    </p:panel>
+                    <p:panel header="PDHS" rendered="#{webUserController.pdhsStaff }" >
+                        <p:commandButton ajax="false" value="Check All Returns" action="#{returnSubmissionController.toCheckReturnsAll()}" />
+                    </p:panel>
+                    <p:panel header="User Details"  >
+                        <p:commandButton ajax="false" value="Edit my details" action="#{webUserController.toEditMyDetails()}" />
+                        <p:commandButton ajax="false" value="Change my password" action="#{webUserController.toEditMyPassword()}" />
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+
+
+    </body>
+
+
+
+
+
+
+</html>
