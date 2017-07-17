@@ -1,6 +1,6 @@
 package lk.gov.health.beans;
 
-import lk.gov.health.schoolhealth.WebUser;
+import lk.gov.health.dengue.WebUser;
 import lk.gov.health.beans.util.JsfUtil;
 import lk.gov.health.beans.util.JsfUtil.PersistAction;
 import lk.gov.health.faces.WebUserFacade;
@@ -24,13 +24,13 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lk.gov.health.schoolhealth.Area;
-import lk.gov.health.schoolhealth.AreaType;
-import lk.gov.health.schoolhealth.Institution;
-import lk.gov.health.schoolhealth.InstitutionType;
-import lk.gov.health.schoolhealth.Month;
-import lk.gov.health.schoolhealth.PrivilegeType;
-import lk.gov.health.schoolhealth.Quarter;
+import lk.gov.health.dengue.Area;
+import lk.gov.health.dengue.AreaType;
+import lk.gov.health.dengue.Institution;
+import lk.gov.health.dengue.InstitutionType;
+import lk.gov.health.dengue.Month;
+import lk.gov.health.dengue.PrivilegeType;
+import lk.gov.health.dengue.Quarter;
 
 @Named
 @SessionScoped

@@ -5,18 +5,14 @@
  */
 package lk.gov.health.beans;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
-import lk.gov.health.schoolhealth.AreaType;
-import lk.gov.health.schoolhealth.InstitutionType;
-import lk.gov.health.schoolhealth.ItemType;
-import lk.gov.health.schoolhealth.Month;
-import lk.gov.health.schoolhealth.PrivilegeType;
-import lk.gov.health.schoolhealth.Quarter;
-import lk.gov.health.schoolhealth.ReturnReceiveCategory;
-import lk.gov.health.schoolhealth.ReturnTimeFrequency;
+import lk.gov.health.dengue.AreaType;
+import lk.gov.health.dengue.InstitutionType;
+import lk.gov.health.dengue.ItemType;
+import lk.gov.health.dengue.Month;
+import lk.gov.health.dengue.PrivilegeType;
+import lk.gov.health.dengue.Quarter;
 
 /**
  *
@@ -44,10 +40,7 @@ public class EnumController {
         return AreaType.values();
     }
     
-    public ReturnReceiveCategory[] getReturnReceiveCategories(){
-        return ReturnReceiveCategory.values();
-    }
-
+    
     public PrivilegeType[] getPrivilegeTypes() {
         return PrivilegeType.values();
     }
@@ -60,8 +53,6 @@ public class EnumController {
         return ItemType.values();
     }
     
-    public ReturnTimeFrequency[] getReturnTimeFrequencys(){
-        return ReturnTimeFrequency.values();
-    }
+   
 
 }

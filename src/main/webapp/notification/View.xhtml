@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="NotificationViewDlg" widgetVar="NotificationViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleDengue.ViewNotificationTitle}">
+            <h:form id="NotificationViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{notificationController.selected != null}">
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_id}"/>
+                        <h:outputText value="#{notificationController.selected.id}" title="#{bundleDengue.ViewNotificationTitle_id}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_serialNo}"/>
+                        <h:outputText value="#{notificationController.selected.serialNo}" title="#{bundleDengue.ViewNotificationTitle_serialNo}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_sendDate}"/>
+                        <h:outputText value="#{notificationController.selected.sendDate}" title="#{bundleDengue.ViewNotificationTitle_sendDate}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_addmitedDate}"/>
+                        <h:outputText value="#{notificationController.selected.addmitedDate}" title="#{bundleDengue.ViewNotificationTitle_addmitedDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_bht}"/>
+                        <h:outputText value="#{notificationController.selected.bht}" title="#{bundleDengue.ViewNotificationTitle_bht}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_patientsName}"/>
+                        <h:outputText value="#{notificationController.selected.patientsName}" title="#{bundleDengue.ViewNotificationTitle_patientsName}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_age}"/>
+                        <h:outputText value="#{notificationController.selected.age}" title="#{bundleDengue.ViewNotificationTitle_age}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_gender}"/>
+                        <h:outputText value="#{notificationController.selected.gender}" title="#{bundleDengue.ViewNotificationTitle_gender}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_phiArea}"/>
+                        <h:outputText value="#{notificationController.selected.phiArea}" title="#{bundleDengue.ViewNotificationTitle_phiArea}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_gnDivision}"/>
+                        <h:outputText value="#{notificationController.selected.gnDivision}" title="#{bundleDengue.ViewNotificationTitle_gnDivision}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_address}"/>
+                        <h:outputText value="#{notificationController.selected.address}" title="#{bundleDengue.ViewNotificationTitle_address}"/>
+                        <h:outputText value="#{bundleDengue.ViewNotificationLabel_tel}"/>
+                        <h:outputText value="#{notificationController.selected.tel}" title="#{bundleDengue.ViewNotificationTitle_tel}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundleDengue.Close}" onclick="NotificationViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

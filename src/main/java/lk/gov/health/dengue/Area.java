@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lk.gov.health.schoolhealth;
+package lk.gov.health.dengue;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,28 +21,25 @@ import javax.persistence.Temporal;
  * @author User
  */
 @Entity
-public class WebUser implements Serializable {
+public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Enumerated(EnumType.STRING)
-    PrivilegeType type;
+    AreaType type;
     String name;
-    @Column(unique = true)
-    String userName;
-    String password;
-    boolean active;
+    String code;
+    @ManyToOne
+    Area parentArea;
     @ManyToOne
     WebUser creater;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     Date createAt;
-    @ManyToOne
-    Institution institution;
-    @ManyToOne
-    Area area;
-
+    double centreLongitude;
+    double centreLatitude;
+    double zoomLavel;
     String officialPhone;
     String officeFax;
     String mobilePhone;
@@ -108,14 +104,50 @@ public class WebUser implements Serializable {
         this.personalEmail = personalEmail;
     }
     
+
+    
+    
+    public double getCentreLongitude() {
+        return centreLongitude;
+    }
+
+    public void setCentreLongitude(double centreLongitude) {
+        this.centreLongitude = centreLongitude;
+    }
+
+    public double getCentreLatitude() {
+        return centreLatitude;
+    }
+
+    public void setCentreLatitude(double centreLatitude) {
+        this.centreLatitude = centreLatitude;
+    }
+
+    public double getZoomLavel() {
+        return zoomLavel;
+    }
+
+    public void setZoomLavel(double zoomLavel) {
+        this.zoomLavel = zoomLavel;
+    }
+    
+    
     
     
 
-    public PrivilegeType getType() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public AreaType getType() {
         return type;
     }
 
-    public void setType(PrivilegeType type) {
+    public void setType(AreaType type) {
         this.type = type;
     }
 
@@ -127,28 +159,20 @@ public class WebUser implements Serializable {
         this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getCode() {
+        return code;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getPassword() {
-        return password;
+    public Area getParentArea() {
+        return parentArea;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setParentArea(Area parentArea) {
+        this.parentArea = parentArea;
     }
 
     public WebUser getCreater() {
@@ -166,30 +190,8 @@ public class WebUser implements Serializable {
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
-
-    public Institution getInstitution() {
-        return institution;
-    }
-
-    public void setInstitution(Institution institution) {
-        this.institution = institution;
-    }
-
-    public Area getArea() {
-        return area;
-    }
-
-    public void setArea(Area area) {
-        this.area = area;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -201,10 +203,10 @@ public class WebUser implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WebUser)) {
+        if (!(object instanceof Area)) {
             return false;
         }
-        WebUser other = (WebUser) object;
+        Area other = (Area) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -213,7 +215,7 @@ public class WebUser implements Serializable {
 
     @Override
     public String toString() {
-        return "lk.gov.health.schoolhealth.WebUser[ id=" + id + " ]";
+        return "lk.gov.health.schoolhealth.Area[ id=" + id + " ]";
     }
-
+    
 }

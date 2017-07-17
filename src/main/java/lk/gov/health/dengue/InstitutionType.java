@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lk.gov.health.schoolhealth;
+package lk.gov.health.dengue;
 
 /**
  *
  * @author User
  */
-public enum AreaType {
-    PHM,
-    PHI,
+public enum InstitutionType {
+    School,
     MOH,
-    District,
-    Province,
-    National,
+    RDHS,
+    PD,
+    Ministry,
 }

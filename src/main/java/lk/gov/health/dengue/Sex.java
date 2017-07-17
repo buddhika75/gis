@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lk.gov.health.schoolhealth;
+package lk.gov.health.dengue;
 
 /**
  *
  * @author User
  */
-public enum InstitutionType {
-    School,
-    MOH,
-    RDHS,
-    PD,
-    Ministry,
+public enum Sex {
+    Male,
+    Female,
+    Other,
 }

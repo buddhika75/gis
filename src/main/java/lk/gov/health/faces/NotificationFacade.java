@@ -8,14 +8,14 @@ package lk.gov.health.faces;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import lk.gov.health.schoolhealth.ReturnFormat;
+import lk.gov.health.dengue.Notification;
 
 /**
  *
  * @author User
  */
 @Stateless
-public class ReturnFormatFacade extends AbstractFacade<ReturnFormat> {
+public class NotificationFacade extends AbstractFacade<Notification> {
 
     @PersistenceContext(unitName = "pu")
     private EntityManager em;
@@ -25,8 +25,8 @@ public class ReturnFormatFacade extends AbstractFacade<ReturnFormat> {
         return em;
     }
 
-    public ReturnFormatFacade() {
-        super(ReturnFormat.class);
+    public NotificationFacade() {
+        super(Notification.class);
     }
     
 }

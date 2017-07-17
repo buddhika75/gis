@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="NotificationEditDlg" widgetVar="NotificationEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundleDengue.EditNotificationTitle}">
+            <h:form id="NotificationEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{notificationController.selected != null}">
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{notificationController.selected.id}" title="#{bundleDengue.EditNotificationTitle_id}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_serialNo}" for="serialNo" />
+                        <p:inputText id="serialNo" value="#{notificationController.selected.serialNo}" title="#{bundleDengue.EditNotificationTitle_serialNo}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_sendDate}" for="sendDate" />
+                        <p:inputText id="sendDate" value="#{notificationController.selected.sendDate}" title="#{bundleDengue.EditNotificationTitle_sendDate}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_addmitedDate}" for="addmitedDate" />
+                        <p:calendar id="addmitedDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{notificationController.selected.addmitedDate}" title="#{bundleDengue.EditNotificationTitle_addmitedDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_bht}" for="bht" />
+                        <p:inputText id="bht" value="#{notificationController.selected.bht}" title="#{bundleDengue.EditNotificationTitle_bht}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_patientsName}" for="patientsName" />
+                        <p:inputText id="patientsName" value="#{notificationController.selected.patientsName}" title="#{bundleDengue.EditNotificationTitle_patientsName}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_age}" for="age" />
+                        <p:inputText id="age" value="#{notificationController.selected.age}" title="#{bundleDengue.EditNotificationTitle_age}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_gender}" for="gender" />
+                        <p:inputText id="gender" value="#{notificationController.selected.gender}" title="#{bundleDengue.EditNotificationTitle_gender}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_phiArea}" for="phiArea" />
+                        <p:inputText id="phiArea" value="#{notificationController.selected.phiArea}" title="#{bundleDengue.EditNotificationTitle_phiArea}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_gnDivision}" for="gnDivision" />
+                        <p:inputText id="gnDivision" value="#{notificationController.selected.gnDivision}" title="#{bundleDengue.EditNotificationTitle_gnDivision}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_address}" for="address" />
+                        <p:inputText id="address" value="#{notificationController.selected.address}" title="#{bundleDengue.EditNotificationTitle_address}" />
+                        <p:outputLabel value="#{bundleDengue.EditNotificationLabel_tel}" for="tel" />
+                        <p:inputText id="tel" value="#{notificationController.selected.tel}" title="#{bundleDengue.EditNotificationTitle_tel}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{notificationController.update}" value="#{bundleDengue.Save}" update="display,:NotificationListForm:datalist,:growl" oncomplete="handleSubmit(args, 'NotificationEditDialog');"/>
+                    <p:commandButton value="#{bundleDengue.Cancel}" onclick="NotificationEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

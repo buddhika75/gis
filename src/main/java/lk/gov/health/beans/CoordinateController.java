@@ -1,6 +1,6 @@
 package lk.gov.health.beans;
 
-import lk.gov.health.schoolhealth.Coordinate;
+import lk.gov.health.dengue.Coordinate;
 import lk.gov.health.beans.util.JsfUtil;
 import lk.gov.health.beans.util.JsfUtil.PersistAction;
 import lk.gov.health.faces.CoordinateFacade;

@@ -8,7 +8,7 @@ package lk.gov.health.faces;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import lk.gov.health.schoolhealth.WebUser;
+import lk.gov.health.dengue.WebUser;
 
 /**
  *

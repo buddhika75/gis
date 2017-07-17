@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundleDengue.ListNotificationTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="NotificationListForm">
+                <p:panel header="#{bundleDengue.ListNotificationTitle}">
+                    <p:dataTable id="datalist" value="#{notificationController.items}" var="item"
+                                 selectionMode="single" selection="#{notificationController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_serialNo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.serialNo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_sendDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.sendDate}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_addmitedDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.addmitedDate}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_bht}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.bht}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_patientsName}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.patientsName}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_age}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.age}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_gender}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.gender}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_phiArea}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.phiArea}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_gnDivision}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.gnDivision}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_address}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.address}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundleDengue.ListNotificationTitle_tel}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tel}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundleDengue.Create}" actionListener="#{notificationController.prepareCreate}" update=":NotificationCreateForm" oncomplete="PF('NotificationCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundleDengue.View}" update=":NotificationViewForm" oncomplete="PF('NotificationViewDialog').show()" disabled="#{empty notificationController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundleDengue.Edit}" update=":NotificationEditForm" oncomplete="PF('NotificationEditDialog').show()" disabled="#{empty notificationController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundleDengue.Delete}" actionListener="#{notificationController.destroy}" update=":growl,datalist" disabled="#{empty notificationController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            
+            
+            
+            
+            <h:form enctype="multipart/form-data" >
+                <p:fileUpload value="#{notificationController.file}" mode="simple"/>
+                <h:commandButton id="btnSave" value="Upload" action="#{notificationController.uploadNotificationExcelFile()}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

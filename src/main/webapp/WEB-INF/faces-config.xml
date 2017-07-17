@@ -36,5 +36,9 @@
             <base-name>/BundleItems</base-name>
             <var>bundleItems</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/BundleDengue</base-name>
+            <var>bundleDengue</var>
+        </resource-bundle>
     </application>
 </faces-config>
