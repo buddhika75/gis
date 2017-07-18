@@ -91,7 +91,7 @@ public class NotificationController implements Serializable {
     public String toListNotificationsByMoh() {
         return "/notification/moh_notifications";
     }
-    
+
     public String listMohAreaNotifications() {
         areaNotifications = new ArrayList<Notification>();
         Map m = new HashMap();
@@ -106,9 +106,9 @@ public class NotificationController implements Serializable {
         areaNotifications = getFacade().findBySQL(j, m);
         return "/notification/moh_notifications";
     }
-    
-    public String deleteNotification(){
-        if(selected==null){
+
+    public String deleteNotification() {
+        if (selected == null) {
             JsfUtil.addErrorMessage("Nothing to delete");
             return "";
         }
@@ -116,12 +116,12 @@ public class NotificationController implements Serializable {
         JsfUtil.addSuccessMessage("Deleted");
         return listMohAreaNotifications();
     }
-    
+
     public String listMohAreaSummeries() {
         List<Area> gns = areaController.getGnAreasOfMoh(mohArea);
         areaSummerys = new ArrayList<AreaSummery>();
         areaNotifications = new ArrayList<Notification>();
-        int count =1;
+        int count = 1;
         for (Area a : gns) {
             AreaSummery as = new AreaSummery();
             as.setArea(a);
@@ -177,17 +177,17 @@ public class NotificationController implements Serializable {
             Polygon polygon = new Polygon();
             a.setR(255);
             if (maxCount < 25) {
-                a.setG(255 - (a.getCount()*10));
-                a.setB(255 - (a.getCount()*10));
+                a.setG(255 - (a.getCount() * 10));
+                a.setB(255 - (a.getCount() * 10));
             } else if (maxCount < 255) {
                 a.setG(255 - a.getCount());
                 a.setB(255 - a.getCount());
-            }else if(maxCount < 2550){
-                a.setG(255 - (a.getCount()/10));
-                a.setB(255 - (a.getCount()/10));
-            }else if(maxCount < 25500){
-                a.setG(255 - (a.getCount()/100));
-                a.setB(255 - (a.getCount()/100));
+            } else if (maxCount < 2550) {
+                a.setG(255 - (a.getCount() / 10));
+                a.setB(255 - (a.getCount() / 10));
+            } else if (maxCount < 25500) {
+                a.setG(255 - (a.getCount() / 100));
+                a.setB(255 - (a.getCount() / 100));
             }
             String j = "select c from Coordinate c where c.area=:a";
             Map m = new HashMap();
@@ -324,7 +324,13 @@ public class NotificationController implements Serializable {
                             case 6:
                                 if (intVal == 0) {
                                     strVal = strVal.replaceAll("\\D+", "");
-                                    intVal = Integer.parseUnsignedInt(strVal);
+                                    try {
+                                        intVal = Integer.parseUnsignedInt(strVal);
+                                    } catch (NumberFormatException ex) {
+                                        intVal = 999;
+                                        System.out.println("strVal = " + strVal);
+                                        System.out.println("ex = " + ex.getMessage());
+                                    }
                                 }
                                 n.setAge(intVal);
                                 break;
@@ -336,8 +342,11 @@ public class NotificationController implements Serializable {
                                 }
                                 break;
                             case 9:
+                                System.out.println("case 9");
                                 strVal = formatter.formatCellValue(cell);
+                                System.out.println("strVal = " + strVal);
                                 strVal = strVal.replaceAll("\\s+", "");
+                                System.out.println("strVal = " + strVal);
                                 Area gnArea = areaController.getArea(strVal, AreaType.GN);
                                 n.setGnDivision(gnArea);
                                 if (gnArea == null) {
@@ -484,7 +493,7 @@ public class NotificationController implements Serializable {
     }
 
     public Date getFromDate() {
-        if(fromDate==null){
+        if (fromDate == null) {
             fromDate = webUserController.getFirstDayOfMonth();
         }
         return fromDate;
@@ -495,7 +504,7 @@ public class NotificationController implements Serializable {
     }
 
     public Date getToDate() {
-        if(toDate==null){
+        if (toDate == null) {
             toDate = new Date();
         }
         return toDate;
@@ -576,8 +585,6 @@ public class NotificationController implements Serializable {
     public void setAreaNotifications(List<Notification> areaNotifications) {
         this.areaNotifications = areaNotifications;
     }
-    
-    
 
     @FacesConverter(forClass = Notification.class)
     public static class NotificationControllerConverter implements Converter {

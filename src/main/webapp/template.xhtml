@@ -18,7 +18,7 @@
         <p:growl id="growl" life="3000" autoUpdate="true" />
 
         <p:layout fullPage="true">
-            <p:layoutUnit position="north" size="80" header="MOH Return Analysis System">
+            <p:layoutUnit position="north" size="80" header="Dengue Analysis System">
                 <h:form id="menuForm">
                     <p:menubar rendered="#{webUserController.logged}">
                         <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
@@ -52,6 +52,9 @@
                 <ui:insert name="footer">
                     <h:form >
                         <h:panelGrid columns="25" rendered="#{webUserController.logged}" >
+                            
+                            <p:outputLabel value="&copy; Health Information Unit, Department of Healtj Services, Southern Province" ></p:outputLabel>
+                            
                             <p:outputLabel value="Logged User : #{webUserController.loggedUser.name}" ></p:outputLabel>
                             <p:spacer height="1" width="5" ></p:spacer>
 
