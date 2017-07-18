@@ -29,21 +29,49 @@
                                            itemLabel="#{parentAreaItem.name}"/>
                         </p:selectOneMenu>
 
+                        <p:outputLabel value="PDHS"  />
+                        <p:selectOneMenu  value="#{areaController.selected.pdhsArea}" >
+                            <f:selectItems value="#{areaController.pdhsAreas}"
+                                           var="p" itemLabel="#{p.name}"
+                                           itemValue="#{p}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="RDHS"  />
+                        <p:selectOneMenu  value="#{areaController.selected.rdhsArea}" >
+                            <f:selectItems value="#{areaController.rdhsAreas}"
+                                           var="r" itemLabel="#{r.name}"
+                                           itemValue="#{r}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="MOH"  />
+                        <p:selectOneMenu  value="#{areaController.selected.mohArea}" >
+                            <f:selectItems value="#{areaController.mohAreas}"
+                                           var="m" itemLabel="#{m.name}"
+                                           itemValue="#{m}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="PHI"  />
+                        <p:selectOneMenu  value="#{areaController.selected.phiArea}" >
+                            <f:selectItems value="#{areaController.phiAreas}"
+                                           var="ph" itemLabel="#{ph.name}"
+                                           itemValue="#{ph}"/>
+                        </p:selectOneMenu>
+
                         <p:outputLabel value="Centre Longitude"  />
                         <p:inputText value="#{areaController.selected.centreLongitude}" />
-                        
+
                         <p:outputLabel value="Centre Latitude"  />
                         <p:inputText value="#{areaController.selected.centreLatitude}" />
-                        
+
                         <p:outputLabel value="Default Zoom"  />
                         <p:inputText value="#{areaController.selected.zoomLavel}" />
-                        
-                        
+
+
                     </p:panelGrid>
                     <p:commandButton actionListener="#{areaController.update}" value="#{bundle.Save}" update="display,:AreaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'AreaEditDialog');"/>
-                    
+
                     <p:commandButton ajax="false" action="#{areaController.drawArea()}" value="Map" />
-                    
+
                     <p:commandButton value="#{bundle.Cancel}" onclick="AreaEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
@@ -55,7 +83,7 @@
 
             </h:form>
 
-           
+
 
         </p:dialog>
 

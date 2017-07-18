@@ -58,14 +58,6 @@
                                            itemValue="#{ph}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="#{bundle.CreateAreaLabel_creater}" for="creater" />
-                        <p:selectOneMenu id="creater" value="#{areaController.selected.creater}" >
-                            <f:selectItems value="#{webUserController.itemsAvailableSelectOne}"
-                                           var="createrItem"
-                                           itemValue="#{createrItem}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.CreateAreaLabel_createAt}" for="createAt" />
-                        <p:calendar id="createAt" pattern="MM/dd/yyyy HH:mm:ss" value="#{areaController.selected.createAt}" title="#{bundle.EditAreaTitle_createAt}"  showOn="button"/>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{areaController.create}" value="#{bundle.Save}" update="display,:AreaListForm:datalist,:growl" oncomplete="handleSubmit(args,'AreaCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="AreaCreateDialog.hide()"/>
