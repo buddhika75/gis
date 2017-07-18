@@ -89,7 +89,7 @@ public class NotificationController implements Serializable {
     }
 
     public String toListNotificationsByMoh() {
-        return "/notification/moh_notificaions";
+        return "/notification/moh_notifications";
     }
     
     public String listMohAreaNotifications() {
