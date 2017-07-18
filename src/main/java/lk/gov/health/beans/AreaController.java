@@ -330,6 +330,16 @@ public class AreaController implements Serializable {
         selected.setType(AreaType.PHI);
         return "/area/add_phi";
     }
+    
+    public String toAddGnArea() {
+        if (!webUserController.isCapableOfAddingPhiAreas()) {
+            JsfUtil.addErrorMessage("You are not autherized");
+            return "";
+        }
+        selected = new Area();
+        selected.setType(AreaType.GN);
+        return "/area/add_gn";
+    }
 
     public String saveNewProvince() {
         if (!webUserController.isCapableOfAddingProvinces()) {
@@ -401,6 +411,20 @@ public class AreaController implements Serializable {
         return "/area/add_area_index";
     }
 
+    public String saveNewGn() {
+        if (!webUserController.isCapableOfAddingPhiAreas()) {
+            JsfUtil.addErrorMessage("You are not autherized");
+            return "";
+        }
+        selected.setCreateAt(new Date());
+        getFacade().create(selected);
+        selected = null;
+        items = null;
+        webUserController.fillLogginDetails();
+        JsfUtil.addSuccessMessage("New GN Area Saved");
+        return "/area/add_area_index";
+    }
+    
     public List<Area> getAreas(AreaType areaType, Area superArea) {
         String j;
         Map m = new HashMap();
