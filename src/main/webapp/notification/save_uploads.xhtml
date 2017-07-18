@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                Save Uploaded Data
+            </ui:define>
+
+            <ui:define name="body">
+
+                <p:panel header="Save Uploaded Data" >
+
+
+                    <h:form  >
+
+                        <p:inputTextarea value="#{notificationController.message}" rows="10" cols="200" ></p:inputTextarea>
+                        
+                        <p:dataTable value="#{notificationController.notificationsToSave}" var="item">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Serial No"/>
+                                </f:facet>
+                                <h:outputText value="#{item.serialNo}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Send Date"/>
+                                </f:facet>
+                                <h:outputText value="#{item.sendDate}">
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Hospital"/>
+                                </f:facet>
+                                <h:outputText value="#{item.hospital.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Addmited Date"/>
+                                </f:facet>
+                                <h:outputText value="#{item.addmitedDate}">
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="BHT"/>
+                                </f:facet>
+                                <h:outputText value="#{item.bht}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Patients Name"/>
+                                </f:facet>
+                                <h:outputText value="#{item.patientsName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Age"/>
+                                </f:facet>
+                                <h:outputText value="#{item.age}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gender"/>
+                                </f:facet>
+                                <h:outputText value="#{item.gender}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="PHI Area"/>
+                                </f:facet>
+                                <h:outputText value="#{item.phiArea.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="GN Division"/>
+                                </f:facet>
+                                <h:outputText value="#{item.gnDivision.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Address"/>
+                                </f:facet>
+                                <h:outputText value="#{item.address}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Tel"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tel}"/>
+                            </p:column>
+                        </p:dataTable>
+
+
+                        <p:commandButton ajax="false" id="btnSave" value="Save" action="#{notificationController.saveUploadedData()}"/>
+                    </h:form>
+
+
+                </p:panel>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

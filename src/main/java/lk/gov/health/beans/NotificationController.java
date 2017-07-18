@@ -77,13 +77,15 @@ public class NotificationController implements Serializable {
     private List<AreaSummery> areaSummerys;
     List<Notification> areaNotifications;
 
+    List<Notification> notificationsToSave;
+    String message = "";
     private TimelineModel model;
     private MapModel polygonModel;
 
-    public String toUploadExcelFile(){
-        return "/nitification/upload_excel";
+    public String toUploadExcelFile() {
+        return "/notification/upload_excel";
     }
-    
+
     public String listMohAreaSummeries() {
         List<Area> gns = areaController.getGnAreasOfMoh(mohArea);
         areaSummerys = new ArrayList<AreaSummery>();
@@ -102,12 +104,12 @@ public class NotificationController implements Serializable {
                 + " and n.SendDate between :sdf and :sdt ";
         m.put("moh", mohArea);
         m.put("sdf", fromDate);
-        m.put("sdf", toDate);
+        m.put("sdt", toDate);
         areaNotifications = getFacade().findBySQL(j, m);
         for (AreaSummery as : areaSummerys) {
             for (Notification n : areaNotifications) {
-                if(as.getArea().equals(n.getGnDivision())){
-                    as.setCount(as.getCount()+ 1);
+                if (as.getArea().equals(n.getGnDivision())) {
+                    as.setCount(as.getCount() + 1);
                 }
             }
         }
@@ -116,10 +118,10 @@ public class NotificationController implements Serializable {
         return "/notification/moh_summery";
     }
 
-    public String toAnalyzeGnByMoh(){
+    public String toAnalyzeGnByMoh() {
         return "/notification/moh_summery";
     }
-    
+
     public void createTimeLineOfNotifications() {
         model = new TimelineModel();
         for (Notification s : areaNotifications) {
@@ -131,18 +133,38 @@ public class NotificationController implements Serializable {
 
     private void markGnMapForSummeries() {
         polygonModel = new DefaultMapModel();
+        int maxCount = 0;
+        for (AreaSummery a : areaSummerys) {
+            if (maxCount < a.getCount()) {
+                maxCount = a.getCount();
+            }
+        }
         for (AreaSummery a : areaSummerys) {
             Polygon polygon = new Polygon();
+            a.setR(255);
+            if (maxCount < 25) {
+                a.setG(255 - (a.getCount()*10));
+                a.setB(255 - (a.getCount()*10));
+            } else if (maxCount < 255) {
+                a.setG(255 - a.getCount());
+                a.setB(255 - a.getCount());
+            }else if(maxCount < 2550){
+                a.setG(255 - (a.getCount()/10));
+                a.setB(255 - (a.getCount()/10));
+            }else if(maxCount < 25500){
+                a.setG(255 - (a.getCount()/100));
+                a.setB(255 - (a.getCount()/100));
+            }
             String j = "select c from Coordinate c where c.area=:a";
             Map m = new HashMap();
-            m.put("a", a);
+            m.put("a", a.getArea());
             List<Coordinate> cs = coordinateFacade.findBySQL(j, m);
             for (Coordinate c : cs) {
                 LatLng coord = new LatLng(c.getLatitude(), c.getLongitude());
                 polygon.getPaths().add(coord);
             }
             polygon.setStrokeColor("#FF9900");
-            polygon.setFillColor("#D8000C");
+            polygon.setFillColor(a.getRgb());
             polygon.setStrokeOpacity(1);
             polygon.setFillOpacity(0.9);
             polygon.setData(a.getArea().getName());
@@ -166,6 +188,8 @@ public class NotificationController implements Serializable {
             JsfUtil.addErrorMessage("Please select an CSV File");
             return "";
         }
+
+        notificationsToSave = new ArrayList<Notification>();
 
         InputStream in;
         JsfUtil.addSuccessMessage(file.getFileName() + " file uploaded.");
@@ -239,6 +263,7 @@ public class NotificationController implements Serializable {
 
                         switch (colNo) {
                             case 0:
+                                strVal = formatter.formatCellValue(cell);
                                 n.setSerialNo(strVal);
                                 break;
                             case 1:
@@ -248,7 +273,7 @@ public class NotificationController implements Serializable {
                                 Institution hospital = institutionController.getInstitutionsByName(strVal);
                                 if (hospital == null) {
                                     JsfUtil.addErrorMessage(strVal + " is not a recognised hospital");
-                                    System.out.println(strVal + " is not a recognised hospital");
+                                    message += strVal + " is not a recognised hospital.\n";
                                 }
                                 n.setHospital(hospital);
                                 break;
@@ -277,12 +302,13 @@ public class NotificationController implements Serializable {
                                 }
                                 break;
                             case 9:
+                                strVal = formatter.formatCellValue(cell);
                                 strVal = strVal.replaceAll("\\s+", "");
                                 Area gnArea = areaController.getArea(strVal, AreaType.GN);
                                 n.setGnDivision(gnArea);
                                 if (gnArea == null) {
                                     JsfUtil.addErrorMessage(strVal + " is not a recognised GN Area");
-                                    System.out.println(strVal + " is not a recognised GN Area");
+                                    message += strVal + " is not a recognised GN Area. + \n";
                                 }
                                 break;
                             case 8:
@@ -304,7 +330,8 @@ public class NotificationController implements Serializable {
 
                         colNo++;
                     }
-                    getFacade().create(n);
+                    notificationsToSave.add(n);
+//                    getFacade().create(n);
                 }
 
                 rowCount++;
@@ -317,7 +344,16 @@ public class NotificationController implements Serializable {
             return "";
         }
 
-        return "";
+        return "/notification/save_uploads";
+    }
+
+    public String saveUploadedData() {
+        for (Notification n : notificationsToSave) {
+            getFacade().create(n);
+        }
+        JsfUtil.addSuccessMessage("Data Saved");
+        notificationsToSave = new ArrayList<Notification>();
+        return toUploadExcelFile();
     }
 
     public NotificationController() {
@@ -459,6 +495,38 @@ public class NotificationController implements Serializable {
 
     public void setAreaSummerys(List<AreaSummery> areaSummerys) {
         this.areaSummerys = areaSummerys;
+    }
+
+    public List<Notification> getNotificationsToSave() {
+        return notificationsToSave;
+    }
+
+    public void setNotificationsToSave(List<Notification> notificationsToSave) {
+        this.notificationsToSave = notificationsToSave;
+    }
+
+    public TimelineModel getModel() {
+        return model;
+    }
+
+    public void setModel(TimelineModel model) {
+        this.model = model;
+    }
+
+    public MapModel getPolygonModel() {
+        return polygonModel;
+    }
+
+    public void setPolygonModel(MapModel polygonModel) {
+        this.polygonModel = polygonModel;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @FacesConverter(forClass = Notification.class)

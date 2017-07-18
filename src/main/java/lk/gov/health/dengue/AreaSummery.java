@@ -16,7 +16,7 @@ public class AreaSummery {
     int r;
     int b;
     int g;
-    String rbg;
+    String rgb;
 
     public int getId() {
         return id;
@@ -69,12 +69,13 @@ public class AreaSummery {
         this.g = g;
     }
 
-    public String getRbg() {
-        return rbg;
+    public String getRgb() {
+        rgb = String.format("#%02x%02x%02x", r, g, b); 
+        return rgb;
     }
 
-    public void setRbg(String rbg) {
-        this.rbg = rbg;
+    public void setRgb(String rgb) {
+        this.rgb = rgb;
     }
     
     

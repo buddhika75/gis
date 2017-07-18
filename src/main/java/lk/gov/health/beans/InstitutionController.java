@@ -79,7 +79,9 @@ public class InstitutionController implements Serializable {
         j = "select i from "
                 + " Institution i "
                 + " where upper(i.name) =:n ";
-        m.put("n", name.toUpperCase());
+        m.put("n", name.trim().toUpperCase());
+//        System.out.println("m = " + m);
+//        System.out.println("j = " + j);
         return getFacade().findFirstBySQL(j, m);
     }
     

@@ -37,6 +37,7 @@
 
                         <p:submenu label="Administration"  rendered="#{webUserController.admin or webUserController.developmentStage}">
                             <p:menuitem  ajax="false" value="Manage Areas" action="/area/add_area_index"   rendered="#{webUserController.admin}"/>
+                            <p:menuitem  ajax="false" value="Manage Hospitals" action="/institution/index"   rendered="#{webUserController.admin}"/>
                             <p:menuitem  ajax="false" value="Manage Users" action="/webUser/add_webuser_index" />
                             <p:menuitem  ajax="false" action="/item/List" value="Manage Items"   rendered="#{webUserController.admin}"/>
                             <p:menuitem  ajax="false" action="/notification/List" value="Manage Notifications"   rendered="#{webUserController.admin}"/>

@@ -15,4 +15,5 @@ public enum InstitutionType {
     RDHS,
     PD,
     Ministry,
+    Hospital,
 }
