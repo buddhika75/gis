@@ -63,6 +63,8 @@ public class NotificationController implements Serializable {
     AreaController areaController;
     @Inject
     CoordinateFacade coordinateFacade;
+    @Inject
+    WebUserController webUserController;
 
     private List<Notification> items = null;
     private Notification selected;
@@ -86,15 +88,47 @@ public class NotificationController implements Serializable {
         return "/notification/upload_excel";
     }
 
+    public String toListNotificationsByMoh() {
+        return "/notification/moh_notificaions";
+    }
+    
+    public String listMohAreaNotifications() {
+        areaNotifications = new ArrayList<Notification>();
+        Map m = new HashMap();
+        String j;
+        j = "select n "
+                + " from Notification n "
+                + " where n.gnDivision.mohArea=:moh "
+                + " and n.SendDate between :sdf and :sdt ";
+        m.put("moh", mohArea);
+        m.put("sdf", fromDate);
+        m.put("sdt", toDate);
+        areaNotifications = getFacade().findBySQL(j, m);
+        return "/notification/moh_notifications";
+    }
+    
+    public String deleteNotification(){
+        if(selected==null){
+            JsfUtil.addErrorMessage("Nothing to delete");
+            return "";
+        }
+        getFacade().remove(selected);
+        JsfUtil.addSuccessMessage("Deleted");
+        return listMohAreaNotifications();
+    }
+    
     public String listMohAreaSummeries() {
         List<Area> gns = areaController.getGnAreasOfMoh(mohArea);
         areaSummerys = new ArrayList<AreaSummery>();
         areaNotifications = new ArrayList<Notification>();
+        int count =1;
         for (Area a : gns) {
             AreaSummery as = new AreaSummery();
             as.setArea(a);
             as.setCount(0);
+            as.setId(count);
             areaSummerys.add(as);
+            count++;
         }
         Map m = new HashMap();
         String j;
@@ -450,6 +484,9 @@ public class NotificationController implements Serializable {
     }
 
     public Date getFromDate() {
+        if(fromDate==null){
+            fromDate = webUserController.getFirstDayOfMonth();
+        }
         return fromDate;
     }
 
@@ -458,6 +495,9 @@ public class NotificationController implements Serializable {
     }
 
     public Date getToDate() {
+        if(toDate==null){
+            toDate = new Date();
+        }
         return toDate;
     }
 

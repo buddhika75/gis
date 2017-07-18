@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                MOH Notifications
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+
+
+                    <p:panel header="MOH Notifications" style="width: 1600px!important; margin: auto;" >
+                        <h:panelGrid columns="18" >
+                            <p:outputLabel value="From" ></p:outputLabel>
+                            <p:calendar value="#{notificationController.fromDate}" ></p:calendar>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="To" ></p:outputLabel>
+                            <p:calendar value="#{notificationController.toDate}" ></p:calendar>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="MOH" ></p:outputLabel>
+                            <p:selectOneMenu value="#{notificationController.mohArea}"  >
+                                <f:selectItems value="#{areaController.mohAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:commandButton ajax="false" value="Process" action="#{notificationController.listMohAreaNotifications()}" ></p:commandButton>
+                            <p:spacer width="10" height="1" ></p:spacer>
+                            <p:commandButton ajax="false" value="Back" action="/index" ></p:commandButton>
+
+
+                        </h:panelGrid>
+
+
+                        <p:dataTable value="#{notificationController.areaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                            <p:column width="50" sortBy="#{n+1}">
+                                <f:facet name="header">
+                                    <h:outputText value="No"/>
+                                </f:facet>
+                                <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                    <h:outputText value="#{n+1}" styleClass="heatText">
+                                    </h:outputText>
+                                </div>
+                            </p:column>
+                            <p:column sortBy="#{item.area.name}" filterBy="#{item.area.name}">
+                                <f:facet name="header">
+                                    <h:outputText value="Area"/>
+                                </f:facet>
+                                <h:outputText value="#{item.area.name}"/>
+                            </p:column>
+                            <p:column  sortBy="#{item.area.code}" filterBy="#{item.area.code}">
+                                <f:facet name="header">
+                                    <h:outputText value="Code"/>
+                                </f:facet>
+                                <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                    <h:outputText value="#{item.area.code}" styleClass="heatText"/>
+                                </div>
+                            </p:column>
+                            <p:column  sortBy="#{item.count}" >
+                                <f:facet name="header">
+                                    <h:outputText value="Count"/>
+                                </f:facet>
+                                <h:outputText value="#{item.count}">
+                                </h:outputText>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Delete"/>
+                                </f:facet>
+                                <p:commandButton ajax="false" 
+                                                 action="#{notificationController.deleteNotification()}"
+                                                 value="Delete" >
+                                    <f:setPropertyActionListener value="#{item}" target="#{notificationController.selected}" ></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+                            
+                        </p:dataTable>
+
+
+
+
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -31,7 +31,7 @@
 
                             <p:outputLabel value="MOH" ></p:outputLabel>
                             <p:selectOneMenu value="#{notificationController.mohArea}"  >
-                                <f:selectItems value="#{areaController.mohAreas}" ></f:selectItems>
+                                <f:selectItems value="#{areaController.mohAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
                             </p:selectOneMenu>
                             <p:spacer width="10" height="1" ></p:spacer>
 
@@ -46,25 +46,34 @@
                         <p:tabView style="width: 95%!important;"  >
                             <p:tab title="Number of Cases by GN Areas" >
                                 <p:dataTable value="#{notificationController.areaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
-                                    <p:column width="50">
+                                    <p:column width="50" sortBy="#{n+1}">
                                         <f:facet name="header">
                                             <h:outputText value="No"/>
                                         </f:facet>
-                                        <h:outputText value="#{n+1}">
-                                        </h:outputText>
+                                        <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                            <h:outputText value="#{n+1}" styleClass="heatText">
+                                            </h:outputText>
+                                        </div>
                                     </p:column>
-                                    <p:column>
+                                    <p:column sortBy="#{item.area.name}" filterBy="#{item.area.name}">
                                         <f:facet name="header">
                                             <h:outputText value="Area"/>
                                         </f:facet>
                                         <h:outputText value="#{item.area.name}"/>
                                     </p:column>
-                                    <p:column>
+                                    <p:column  sortBy="#{item.area.code}" filterBy="#{item.area.code}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Code"/>
+                                        </f:facet>
+                                        <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                            <h:outputText value="#{item.area.code}" styleClass="heatText"/>
+                                        </div>
+                                    </p:column>
+                                    <p:column  sortBy="#{item.count}" >
                                         <f:facet name="header">
                                             <h:outputText value="Count"/>
                                         </f:facet>
                                         <h:outputText value="#{item.count}">
-                                            <f:convertDateTime pattern="dd MMMM yyyy" timeZone="Asia/Colombo" />
                                         </h:outputText>
                                     </p:column>
                                 </p:dataTable>
@@ -79,7 +88,8 @@
                             </p:tab>
                             <p:tab title="Timeline" >
 
-
+                                <p:timeline value="#{notificationController.model}"
+                                            ></p:timeline>
 
                             </p:tab>
 
