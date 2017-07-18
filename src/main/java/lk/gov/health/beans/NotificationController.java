@@ -569,6 +569,16 @@ public class NotificationController implements Serializable {
         this.message = message;
     }
 
+    public List<Notification> getAreaNotifications() {
+        return areaNotifications;
+    }
+
+    public void setAreaNotifications(List<Notification> areaNotifications) {
+        this.areaNotifications = areaNotifications;
+    }
+    
+    
+
     @FacesConverter(forClass = Notification.class)
     public static class NotificationControllerConverter implements Converter {
 

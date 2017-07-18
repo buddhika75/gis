@@ -43,37 +43,84 @@
                         </h:panelGrid>
 
 
-                        <p:dataTable value="#{notificationController.areaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
-                            <p:column width="50" sortBy="#{n+1}">
+                        <p:dataTable value="#{notificationController.areaNotifications}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                                                        <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="No"/>
+                                    <h:outputText value="Serial No"/>
                                 </f:facet>
-                                <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
-                                    <h:outputText value="#{n+1}" styleClass="heatText">
-                                    </h:outputText>
-                                </div>
+                                <h:outputText value="#{item.serialNo}"/>
                             </p:column>
-                            <p:column sortBy="#{item.area.name}" filterBy="#{item.area.name}">
+                            <p:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Area"/>
+                                    <h:outputText value="Send Date"/>
                                 </f:facet>
-                                <h:outputText value="#{item.area.name}"/>
-                            </p:column>
-                            <p:column  sortBy="#{item.area.code}" filterBy="#{item.area.code}">
-                                <f:facet name="header">
-                                    <h:outputText value="Code"/>
-                                </f:facet>
-                                <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
-                                    <h:outputText value="#{item.area.code}" styleClass="heatText"/>
-                                </div>
-                            </p:column>
-                            <p:column  sortBy="#{item.count}" >
-                                <f:facet name="header">
-                                    <h:outputText value="Count"/>
-                                </f:facet>
-                                <h:outputText value="#{item.count}">
+                                <h:outputText value="#{item.sendDate}">
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
                                 </h:outputText>
                             </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Hospital"/>
+                                </f:facet>
+                                <h:outputText value="#{item.hospital.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Addmited Date"/>
+                                </f:facet>
+                                <h:outputText value="#{item.addmitedDate}">
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="BHT"/>
+                                </f:facet>
+                                <h:outputText value="#{item.bht}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Patients Name"/>
+                                </f:facet>
+                                <h:outputText value="#{item.patientsName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Age"/>
+                                </f:facet>
+                                <h:outputText value="#{item.age}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Gender"/>
+                                </f:facet>
+                                <h:outputText value="#{item.gender}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="PHI Area"/>
+                                </f:facet>
+                                <h:outputText value="#{item.phiArea.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="GN Division"/>
+                                </f:facet>
+                                <h:outputText value="#{item.gnDivision.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Address"/>
+                                </f:facet>
+                                <h:outputText value="#{item.address}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Tel"/>
+                                </f:facet>
+                                <h:outputText value="#{item.tel}"/>
+                            </p:column>
+
                             <p:column  >
                                 <f:facet name="header">
                                     <h:outputText value="Delete"/>
