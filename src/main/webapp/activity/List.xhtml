@@ -50,7 +50,7 @@
                                 <h:outputText value="#{bundle.ListActivityTitle_activityDate}"/>
                             </f:facet>
                             <h:outputText value="#{item.activityDate}">
-                                <f:convertDateTime pattern="dd MMMM yyyy" />
+                                <f:convertDateTime pattern="dd MMMM yyyy"  timeZone="Asia/Colombo" />
                             </h:outputText>
                         </p:column>
                         <p:column>

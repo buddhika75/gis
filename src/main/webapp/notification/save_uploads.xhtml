@@ -35,7 +35,7 @@
                                     <h:outputText value="Send Date"/>
                                 </f:facet>
                                 <h:outputText value="#{item.sendDate}">
-                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy"  timeZone="Asia/Colombo" />
                                 </h:outputText>
                             </p:column>
                             <p:column>
@@ -49,7 +49,7 @@
                                     <h:outputText value="Addmited Date"/>
                                 </f:facet>
                                 <h:outputText value="#{item.addmitedDate}">
-                                    <f:convertDateTime pattern="dd/MMMM/yyyy" />
+                                    <f:convertDateTime pattern="dd/MMMM/yyyy"  timeZone="Asia/Colombo" />
                                 </h:outputText>
                             </p:column>
                             <p:column>
