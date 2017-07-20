@@ -253,7 +253,7 @@ public class NotificationController implements Serializable {
             int rowCount = 0;
             for (Row row : sheet1) {
 
-                if (rowCount > 0) {
+                if (rowCount > 6) {
                     Notification n = new Notification();
 
                     int colNo = 0;
@@ -299,6 +299,7 @@ public class NotificationController implements Serializable {
                             case 0:
                                 strVal = formatter.formatCellValue(cell);
                                 n.setSerialNo(strVal);
+                                n.setPid(dblVal.longValue());
                                 break;
                             case 1:
                                 n.setSendDate(dateVal);
@@ -341,7 +342,13 @@ public class NotificationController implements Serializable {
                                     n.setGender(Sex.Female);
                                 }
                                 break;
+                            case 8:
+                                Area district = areaController.getArea(strVal, AreaType.District);
+                                n.setDistrict(district);
                             case 9:
+                                Area moh = areaController.getArea(strVal, AreaType.MOH);
+                                n.setDistrict(moh);
+                            case 11:
                                 System.out.println("case 9");
                                 strVal = formatter.formatCellValue(cell);
                                 System.out.println("strVal = " + strVal);
@@ -354,19 +361,19 @@ public class NotificationController implements Serializable {
                                     message += strVal + " is not a recognised GN Area. + \n";
                                 }
                                 break;
-                            case 8:
+                            case 10:
                                 if (n.getGnDivision() != null && n.getGnDivision().getParentArea() != null) {
                                     n.setPhiArea(n.getGnDivision().getParentArea().getParentArea());
                                 }
                                 break;
-                            case 10:
+                            case 12:
                                 n.setAddress(strVal);
                                 break;
-                            case 11:
+                            case 13:
                                 strVal = formatter.formatCellValue(cell);
                                 n.setTel(strVal);
                                 break;
-                            case 12:
+                            case 14:
                                 n.setFooging(boolVal);
                                 break;
                         }

@@ -22,11 +22,11 @@
                     <p:panel header="MOH Notifications" style="width: 1600px!important; margin: auto;" >
                         <h:panelGrid columns="18" >
                             <p:outputLabel value="From" ></p:outputLabel>
-                            <p:calendar value="#{notificationController.fromDate}" ></p:calendar>
+                            <p:calendar value="#{notificationController.fromDate}" pattern="dd MMMM yyyy" ></p:calendar>
                             <p:spacer width="10" height="1" ></p:spacer>
 
                             <p:outputLabel value="To" ></p:outputLabel>
-                            <p:calendar value="#{notificationController.toDate}" ></p:calendar>
+                            <p:calendar value="#{notificationController.toDate}"  pattern="dd MMMM yyyy" ></p:calendar>
                             <p:spacer width="10" height="1" ></p:spacer>
 
                             <p:outputLabel value="MOH" ></p:outputLabel>
