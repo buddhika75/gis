@@ -43,6 +43,11 @@
                 </h:form>
 
 
+                <h:form enctype="multipart/form-data" >
+                    <p:fileUpload value="#{areaController.file}" mode="simple"/>
+                    <p:commandButton ajax="false" value="Upload All GN Areas at once" action="#{areaController.saveGnCoordinates()}" disabled="#{!webUserController.admin}" ></p:commandButton>
+                </h:form>
+
 
             </ui:define>
 

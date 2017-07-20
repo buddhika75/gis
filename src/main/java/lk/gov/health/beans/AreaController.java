@@ -296,7 +296,7 @@ public class AreaController implements Serializable {
                     return "";
                 }
 
-                moh = getArea(provinceName, AreaType.MOH);
+                moh = getArea(mohAreaName, AreaType.MOH);
                 if (moh == null) {
                     System.out.println("moh = " + moh);
                     moh = new Area();
@@ -314,7 +314,7 @@ public class AreaController implements Serializable {
                     JsfUtil.addErrorMessage("MOH Exists");
                 }
                 System.out.println("to add coords");
-                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]"," ");
+                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
                 addCoordinates(moh, coordinatesText);
                 System.out.println("adter add codes = ");
             }
@@ -329,14 +329,202 @@ public class AreaController implements Serializable {
         } catch (SAXException ex) {
             System.out.println("ex.getMessage() = " + ex.getMessage());
             Logger.getLogger(AreaController.class.getName()).log(Level.SEVERE, null, ex);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("ex.getMessage() = " + ex.getMessage());
         }
-        return "" ;
+        return "";
+    }
+
+    public String saveGnCoordinates() {
+        System.out.println("saveMohCoordinates");
+        if (file == null || "".equals(file.getFileName())) {
+            return "";
+        }
+        if (file == null) {
+            JsfUtil.addErrorMessage("Please select an KML File");
+            return "";
+        }
+
+        Area province;
+        Area district;
+        Area moh;
+        Area gn;
+
+        String text = "";
+        String provinceName = "";
+        String districtName = "";
+        String mohAreaName = "";
+        String gnAreaName = "";
+        String gnAreaCode = "";
+        String centreLon = "";
+        String centreLat = "";
+        String centreLongLat = "";
+        String coordinatesText = "";
+
+        InputStream in;
+        JsfUtil.addSuccessMessage(file.getFileName() + " file uploaded.");
+        try {
+            JsfUtil.addSuccessMessage(file.getFileName());
+            in = file.getInputstream();
+            File f;
+            f = new File(Calendar.getInstance().getTimeInMillis() + file.getFileName());
+            FileOutputStream out = new FileOutputStream(f);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+
+            File fXmlFile = new File(f.getAbsolutePath());
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("Placemark");
+
+            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
+                Node gnNode = nList.item(gnCount);
+                NodeList gnNodes = gnNode.getChildNodes();
+                for (int gnElemantCount = 0; gnElemantCount < gnNodes.getLength(); gnElemantCount++) {
+
+                    Node gnDataNode = gnNodes.item(gnElemantCount);
+
+                    if (gnElemantCount == 4) {
+                        NodeList gnEdNodes = gnDataNode.getChildNodes();
+                        for (int gnEdCount = 0; gnEdCount < gnEdNodes.getLength(); gnEdCount++) {
+                            Node gnEdNode = gnEdNodes.item(gnEdCount);
+                            if (gnEdNode.hasChildNodes()) {
+                                if (gnEdNode.getFirstChild().getTextContent().equals("PROVINCE_N")) {
+                                    provinceName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("DISTRICT_N")) {
+                                    districtName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
+                                    mohAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+                            }
+                        }
+                    }
+
+                    if (gnElemantCount == 6) {
+
+                        NodeList gnEdNodes = gnDataNode.getChildNodes();
+                        for (int gnEdCount = 0; gnEdCount < gnEdNodes.getLength(); gnEdCount++) {
+                            Node gnEdNode = gnEdNodes.item(gnEdCount);
+
+                            if (gnEdCount == 2) {
+                                coordinatesText = gnEdNode.getTextContent().trim();
+//                                System.out.println("coordinatesText = " + coordinatesText);
+                            }
+
+                            if (gnEdNode.hasChildNodes()) {
+
+                                centreLongLat = gnEdNode.getFirstChild().getTextContent();
+
+                                if (centreLongLat.contains(",")) {
+                                    String[] ll = centreLongLat.split(",");
+                                    centreLat = ll[1].trim();
+                                    centreLon = ll[0].trim();
+                                }
+
+                                if (gnEdNode.getFirstChild().getTextContent().equals("PROVINCE_N")) {
+                                    provinceName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("DISTRICT_N")) {
+                                    districtName = gnEdNode.getLastChild().getTextContent();
+                                }
+
+                                if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
+                                    mohAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+
+                                if (gnEdNode.getFirstChild().getTextContent().equals("GND_NO")) {
+                                    gnAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("GND_N")) {
+                                    gnAreaCode = gnEdNode.getLastChild().getTextContent();
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (gnElemantCount == 8) {
+                        System.out.println("gnDataNode = " + gnDataNode.getTextContent());
+                    }
+
+                }
+
+                province = getArea(provinceName, AreaType.Province);
+                if (province == null) {
+                    System.out.println("province = " + province);
+                    JsfUtil.addErrorMessage("Add " + provinceName);
+                    return "";
+                }
+
+                district = getArea(districtName, AreaType.District);
+                if (district == null) {
+                    System.out.println("district = " + district);
+                    JsfUtil.addErrorMessage("Add " + districtName);
+                    return "";
+                }
+
+                moh = getArea(mohAreaName, AreaType.MOH);
+                if (moh == null) {
+                    System.out.println("MOH = " + mohAreaName);
+                    JsfUtil.addErrorMessage("Add " + mohAreaName);
+                    return "";
+                }
+
+                gn = getArea(gnAreaCode, AreaType.GN);
+                if (gn == null) {
+                    System.out.println("moh = " + gn);
+                    gn = new Area();
+                    gn.setType(AreaType.GN);
+                    gn.setCentreLatitude(Double.parseDouble(centreLat));
+                    gn.setCentreLongitude(Double.parseDouble(centreLon));
+                    gn.setZoomLavel(16);
+                    gn.setName(gnAreaName);
+                    gn.setCode(gnAreaCode);
+                    gn.setPdhsArea(province);
+                    gn.setRdhsArea(district);
+                    gn.setParentArea(moh);
+                    gn.setMohArea(moh);
+                    getFacade().create(gn);
+                    System.out.println("gn = " + gn);
+                } else {
+                    JsfUtil.addErrorMessage("MOH Exists");
+                }
+                System.out.println("to add coords");
+                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
+                addCoordinates(gn, coordinatesText);
+                System.out.println("adter add codes = ");
+            }
+
+        } catch (IOException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            JsfUtil.addErrorMessage(ex.getMessage());
+            return "";
+        } catch (ParserConfigurationException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            Logger.getLogger(AreaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            Logger.getLogger(AreaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+        }
+        return "";
     }
 
     public void addCoordinates(Area area, String s) {
-        System.out.println("adding codes = " );
+        System.out.println("adding codes = ");
         String j = "select c from Coordinate c where c.area=:a";
         Map m = new HashMap();
         m.put("a", area);

@@ -27,6 +27,8 @@ public class Notification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    Long pid;
+    
     private String serialNo;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date SendDate;
@@ -39,6 +41,10 @@ public class Notification implements Serializable {
     private int age;
     @Enumerated(EnumType.STRING)
     private Sex gender;
+    @ManyToOne
+    Area district;
+    @ManyToOne
+    Area moh;
     @ManyToOne
     private Area phiArea;
     @ManyToOne
@@ -186,5 +192,31 @@ public class Notification implements Serializable {
     public void setFooging(boolean fooging) {
         this.fooging = fooging;
     }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public Area getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(Area district) {
+        this.district = district;
+    }
+
+    public Area getMoh() {
+        return moh;
+    }
+
+    public void setMoh(Area moh) {
+        this.moh = moh;
+    }
+    
+    
     
 }
