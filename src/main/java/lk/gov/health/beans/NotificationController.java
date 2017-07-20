@@ -253,7 +253,7 @@ public class NotificationController implements Serializable {
             int rowCount = 0;
             for (Row row : sheet1) {
 
-                if (rowCount > 0) {
+                if (rowCount > 6) {
                     Notification n = new Notification();
 
                     int colNo = 0;
