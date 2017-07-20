@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Print MOH Map</title>
+    </h:head>
+    <h:body>
+        <h:form >
+            <script src="http://maps.google.com/maps/api/js?key=AIzaSyDnIF053oCwO1848mAvz6-N6eSeOeD8BaI" type="text/javascript" ></script> 
+
+            <p:panel header="MOH Dengue Summery Map" >
+                <h:panelGrid columns="18" >
+                    <p:outputLabel value="From" ></p:outputLabel>
+                    <p:outputLabel value="#{notificationController.fromDate}"  >
+                        <f:convertDateTime  pattern="dd MMMM yyyy" ></f:convertDateTime>
+                    </p:outputLabel>
+                    <p:spacer width="10" height="1" ></p:spacer>
+
+                    <p:outputLabel value="To" ></p:outputLabel>
+                    <p:outputLabel value="#{notificationController.toDate}"  >
+                        <f:convertDateTime  pattern="dd MMMM yyyy" ></f:convertDateTime>
+                    </p:outputLabel>
+
+                    <p:spacer width="10" height="1" ></p:spacer>
+                    <p:outputLabel value="MOH" ></p:outputLabel>
+                    <p:outputLabel value="#{notificationController.mohArea.name}"  >
+                    </p:outputLabel>
+                    <p:spacer width="10" height="1" ></p:spacer>
+
+                    <button onclick="myFunction()">Print</button>
+                    <p:commandButton ajax="false" value="Back" action="/notification/moh_summery" ></p:commandButton>
+
+
+                </h:panelGrid>
+
+
+                <script>
+                    function myFunction() {
+                        window.print();
+                    }
+                </script>
+                <p:gmap id="gmap" 
+                        center="#{notificationController.mohArea.centreLatitude},#{notificationController.mohArea.centreLongitude}" zoom="#{notificationController.mohArea.zoomLavel}" 
+                        type="ROADMAP" style="width:100%;height: 600px;border: 1px solid black;" 
+                        streetView="true"
+                        model="#{notificationController.polygonModel}">
+                </p:gmap>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+

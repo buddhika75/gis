@@ -79,9 +79,10 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab title="Heat Map" >
+                                <p:commandButton value="To Print" action="/notification/print_moh_map" ajax="false" ></p:commandButton>
                                 <p:gmap id="gmap" 
                                         center="#{notificationController.mohArea.centreLatitude},#{notificationController.mohArea.centreLongitude}" zoom="#{notificationController.mohArea.zoomLavel}" 
-                                        type="ROADMAP" style="width:1200px;height:800px;border: 1px solid black;" 
+                                        type="ROADMAP" style="width:900px;height:600px;border: 1px solid black;" 
                                         streetView="true"
                                         model="#{notificationController.polygonModel}">
                                 </p:gmap>
