@@ -13,6 +13,7 @@ import lk.gov.health.beans.util.JsfUtil.PersistAction;
 import lk.gov.health.faces.AreaFacade;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import lk.gov.health.faces.CoordinateFacade;
 import lk.gov.health.dengue.AreaType;
 import lk.gov.health.dengue.Coordinate;
@@ -39,6 +43,10 @@ import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
 import org.primefaces.model.map.Polygon;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 @Named
 @SessionScoped
@@ -157,6 +165,203 @@ public class AreaController implements Serializable {
 
     public void setFile(UploadedFile file) {
         this.file = file;
+    }
+
+    public String saveMohCoordinates() {
+        System.out.println("saveMohCoordinates");
+        if (file == null || "".equals(file.getFileName())) {
+            return "";
+        }
+        if (file == null) {
+            JsfUtil.addErrorMessage("Please select an KML File");
+            return "";
+        }
+
+        Area province;
+        Area district;
+        Area moh;
+
+        String text = "";
+        String provinceName = "";
+        String districtName = "";
+        String mohAreaName = "";
+        String centreLon = "";
+        String centreLat = "";
+        String centreLongLat = "";
+        String coordinatesText = "";
+
+        InputStream in;
+        JsfUtil.addSuccessMessage(file.getFileName() + " file uploaded.");
+        try {
+            JsfUtil.addSuccessMessage(file.getFileName());
+            in = file.getInputstream();
+            File f;
+            f = new File(Calendar.getInstance().getTimeInMillis() + file.getFileName());
+            FileOutputStream out = new FileOutputStream(f);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+
+            File fXmlFile = new File(f.getAbsolutePath());
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("Placemark");
+
+            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
+                Node gnNode = nList.item(gnCount);
+                NodeList gnNodes = gnNode.getChildNodes();
+                for (int gnElemantCount = 0; gnElemantCount < gnNodes.getLength(); gnElemantCount++) {
+
+                    Node gnDataNode = gnNodes.item(gnElemantCount);
+
+                    if (gnElemantCount == 4) {
+                        NodeList gnEdNodes = gnDataNode.getChildNodes();
+                        for (int gnEdCount = 0; gnEdCount < gnEdNodes.getLength(); gnEdCount++) {
+                            Node gnEdNode = gnEdNodes.item(gnEdCount);
+                            if (gnEdNode.hasChildNodes()) {
+                                if (gnEdNode.getFirstChild().getTextContent().equals("PROVINCE_N")) {
+                                    provinceName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("DISTRICT_N")) {
+                                    districtName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
+                                    mohAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+                            }
+                        }
+                    }
+
+                    if (gnElemantCount == 6) {
+
+                        NodeList gnEdNodes = gnDataNode.getChildNodes();
+                        for (int gnEdCount = 0; gnEdCount < gnEdNodes.getLength(); gnEdCount++) {
+                            Node gnEdNode = gnEdNodes.item(gnEdCount);
+
+                            if (gnEdCount == 2) {
+                                coordinatesText = gnEdNode.getTextContent().trim();
+//                                System.out.println("coordinatesText = " + coordinatesText);
+                            }
+
+                            if (gnEdNode.hasChildNodes()) {
+
+                                centreLongLat = gnEdNode.getFirstChild().getTextContent();
+
+                                if (centreLongLat.contains(",")) {
+                                    String[] ll = centreLongLat.split(",");
+                                    centreLat = ll[1].trim();
+                                    centreLon = ll[0].trim();
+                                }
+
+                                if (gnEdNode.getFirstChild().getTextContent().equals("PROVINCE_N")) {
+                                    provinceName = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("DISTRICT_N")) {
+                                    districtName = gnEdNode.getLastChild().getTextContent();
+                                }
+
+                                if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
+                                    mohAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+                            }
+                        }
+                    }
+
+                    if (gnElemantCount == 8) {
+                        System.out.println("gnDataNode = " + gnDataNode.getTextContent());
+                    }
+
+                }
+
+                province = getArea(provinceName, AreaType.Province);
+                if (province == null) {
+                    System.out.println("province = " + province);
+                    JsfUtil.addErrorMessage("Add " + provinceName);
+                    return "";
+                }
+
+                district = getArea(districtName, AreaType.District);
+                if (district == null) {
+                    System.out.println("district = " + district);
+                    JsfUtil.addErrorMessage("Add " + districtName);
+                    return "";
+                }
+
+                moh = getArea(provinceName, AreaType.MOH);
+                if (moh == null) {
+                    System.out.println("moh = " + moh);
+                    moh = new Area();
+                    moh.setType(AreaType.MOH);
+                    moh.setCentreLatitude(Double.parseDouble(centreLat));
+                    moh.setCentreLongitude(Double.parseDouble(centreLon));
+                    moh.setZoomLavel(12);
+                    moh.setName(mohAreaName);
+                    moh.setPdhsArea(province);
+                    moh.setRdhsArea(district);
+                    moh.setParentArea(district);
+                    getFacade().create(moh);
+                    System.out.println("moh = " + moh);
+                } else {
+                    JsfUtil.addErrorMessage("MOH Exists");
+                }
+                System.out.println("to add coords");
+                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]"," ");
+                addCoordinates(moh, coordinatesText);
+                System.out.println("adter add codes = ");
+            }
+
+        } catch (IOException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            JsfUtil.addErrorMessage(ex.getMessage());
+            return "";
+        } catch (ParserConfigurationException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            Logger.getLogger(AreaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+            Logger.getLogger(AreaController.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(Exception ex){
+            System.out.println("ex.getMessage() = " + ex.getMessage());
+        }
+        return "" ;
+    }
+
+    public void addCoordinates(Area area, String s) {
+        System.out.println("adding codes = " );
+        String j = "select c from Coordinate c where c.area=:a";
+        Map m = new HashMap();
+        m.put("a", area);
+        List<Coordinate> cs = coordinateFacade.findBySQL(j, m);
+        for (Coordinate c : cs) {
+            coordinateFacade.remove(c);
+        }
+        String cvsSplitBy = ",";
+        String[] coords = s.split(" ");
+        for (String a : coords) {
+            System.out.println("a = " + a);
+            String[] country = a.split(cvsSplitBy);
+            if (country.length > 1) {
+                System.out.println("Coordinates [Longitude= " + country[0] + " , Latitude=" + country[1] + "]");
+                Coordinate c = new Coordinate();
+                c.setArea(area);
+                String strLon = country[0].replace("\"", "");
+                String strLat = country[1].replace("\"", "");
+                double lon = Double.parseDouble(strLon);
+                double lat = Double.parseDouble(strLat);
+                c.setLongitude(lon);
+                c.setLatitude(lat);
+                coordinateFacade.create(c);
+            }
+        }
     }
 
     public String saveCoordinates() {
@@ -330,7 +535,7 @@ public class AreaController implements Serializable {
         selected.setType(AreaType.PHI);
         return "/area/add_phi";
     }
-    
+
     public String toAddGnArea() {
         if (!webUserController.isCapableOfAddingPhiAreas()) {
             JsfUtil.addErrorMessage("You are not autherized");
@@ -424,7 +629,7 @@ public class AreaController implements Serializable {
         JsfUtil.addSuccessMessage("New GN Area Saved");
         return "/area/add_area_index";
     }
-    
+
     public List<Area> getAreas(AreaType areaType, Area superArea) {
         String j;
         Map m = new HashMap();
