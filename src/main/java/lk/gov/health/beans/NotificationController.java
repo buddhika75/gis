@@ -252,22 +252,19 @@ public class NotificationController implements Serializable {
 
             int rowCount = 0;
             for (Row row : sheet1) {
+//                System.out.println("row = " + row);
+                if (rowCount > 4) {
 
-                if (rowCount > 6) {
                     Notification n = new Notification();
 
-                    int colNo = 0;
                     for (Cell cell : row) {
                         CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
                         System.out.print(cellRef.formatAsString());
-                        System.out.print(" - ");
-
                         String strVal = "";
                         Date dateVal = null;
                         int intVal = 0;
                         Double dblVal = 0.00;
                         Boolean boolVal = false;
-
                         switch (cell.getCellTypeEnum()) {
                             case STRING:
                                 strVal = cell.getRichStringCellValue().getString();
@@ -294,15 +291,23 @@ public class NotificationController implements Serializable {
                             default:
                                 System.out.println();
                         }
-
-                        switch (colNo) {
+                        System.out.println("colNo = " + cell.getColumnIndex());
+                        switch (cell.getColumnIndex()) {
                             case 0:
+                                if (dblVal == 0.0) {
+                                    continue;
+                                }
                                 strVal = formatter.formatCellValue(cell);
                                 n.setSerialNo(strVal);
                                 n.setPid(dblVal.longValue());
                                 break;
                             case 1:
+                                System.out.println("dateVal = " + dateVal);
+                                if (dateVal == null) {
+                                    dateVal = webUserController.getDateFromString(strVal);
+                                }
                                 n.setSendDate(dateVal);
+                                System.out.println("n.getSendDate() = " + n.getSendDate());
                                 break;
                             case 2:
                                 Institution hospital = institutionController.getInstitutionsByName(strVal);
@@ -313,6 +318,9 @@ public class NotificationController implements Serializable {
                                 n.setHospital(hospital);
                                 break;
                             case 3:
+                                if (dateVal == null) {
+                                    dateVal = webUserController.getDateFromString(strVal);
+                                }
                                 n.setAddmitedDate(dateVal);
                                 break;
                             case 4:
@@ -345,20 +353,21 @@ public class NotificationController implements Serializable {
                             case 8:
                                 Area district = areaController.getArea(strVal, AreaType.District);
                                 n.setDistrict(district);
+                                break;
                             case 9:
                                 Area moh = areaController.getArea(strVal, AreaType.MOH);
-                                n.setDistrict(moh);
+                                n.setMoh(moh);
+                                break;
                             case 11:
-                                System.out.println("case 9");
                                 strVal = formatter.formatCellValue(cell);
-                                System.out.println("strVal = " + strVal);
-                                strVal = strVal.replaceAll("\\s+", "");
-                                System.out.println("strVal = " + strVal);
-                                Area gnArea = areaController.getArea(strVal, AreaType.GN);
-                                n.setGnDivision(gnArea);
-                                if (gnArea == null) {
-                                    JsfUtil.addErrorMessage(strVal + " is not a recognised GN Area");
-                                    message += strVal + " is not a recognised GN Area. + \n";
+                                if (!strVal.isEmpty()) {
+                                    strVal = strVal.replaceAll("\\s+", "");
+                                    Area gnArea = areaController.getArea(strVal, AreaType.GN);
+                                    n.setGnDivision(gnArea);
+                                    if (gnArea == null) {
+                                        JsfUtil.addErrorMessage(strVal + " is not a recognised GN Area");
+                                        message += strVal + " is not a recognised GN Area. + \n";
+                                    }
                                 }
                                 break;
                             case 10:
@@ -373,32 +382,34 @@ public class NotificationController implements Serializable {
                                 strVal = formatter.formatCellValue(cell);
                                 n.setTel(strVal);
                                 break;
-                            case 14:
-                                n.setFooging(boolVal);
-                                break;
                         }
 
-                        colNo++;
                     }
                     notificationsToSave.add(n);
-//                    getFacade().create(n);
                 }
-
                 rowCount++;
             }
-
             JsfUtil.addSuccessMessage("Succesfully added " + rowCount + " notifications.");
-
         } catch (IOException ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
             return "";
         }
-
         return "/notification/save_uploads";
     }
 
     public String saveUploadedData() {
         for (Notification n : notificationsToSave) {
+            if (n.getPid() != null) {
+                String j = "Select n "
+                        + " from Notification n "
+                        + " where n.pid = :pid";
+                Map m = new HashMap();
+                m.put("pid", n);
+                Notification previousNotif = getFacade().findFirstBySQL(j, m);
+                if (previousNotif != null) {
+                    getFacade().remove(previousNotif);
+                }
+            }
             getFacade().create(n);
         }
         JsfUtil.addSuccessMessage("Data Saved");

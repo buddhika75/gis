@@ -6,6 +6,9 @@ import lk.gov.health.beans.util.JsfUtil.PersistAction;
 import lk.gov.health.faces.WebUserFacade;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,6 +86,21 @@ public class WebUserController implements Serializable {
 
     public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
+    }
+
+    public Date getDateFromString(String strDate, String format) {
+        String startDateString = strDate;
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        try {
+            return df.parse(startDateString);
+        } catch (ParseException e) {
+            System.out.println("e = " + e);
+            return null;
+        }
+    }
+
+    public Date getDateFromString(String strDate) {
+        return getDateFromString(strDate, "yyyy-mm-dd");
     }
 
     public String toEditMyDetails() {
