@@ -384,7 +384,8 @@ public class AreaController implements Serializable {
 
             NodeList nList = doc.getElementsByTagName("Placemark");
 
-            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
+//            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
+            for (int gnCount = 0; gnCount < 3; gnCount++) {
                 Node gnNode = nList.item(gnCount);
                 NodeList gnNodes = gnNode.getChildNodes();
                 for (int gnElemantCount = 0; gnElemantCount < gnNodes.getLength(); gnElemantCount++) {
@@ -405,6 +406,13 @@ public class AreaController implements Serializable {
                                 if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
                                     mohAreaName = gnEdNode.getLastChild().getTextContent();
                                 }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("GND_NO")) {
+                                    gnAreaCode = gnEdNode.getLastChild().getTextContent();
+                                }
+                                if (gnEdNode.getFirstChild().getTextContent().equals("GND_N")) {
+                                    gnAreaName = gnEdNode.getLastChild().getTextContent();
+                                }
+
                             }
                         }
                     }
@@ -436,16 +444,17 @@ public class AreaController implements Serializable {
                                 if (gnEdNode.getFirstChild().getTextContent().equals("DISTRICT_N")) {
                                     districtName = gnEdNode.getLastChild().getTextContent();
                                 }
-
                                 if (gnEdNode.getFirstChild().getTextContent().equals("MOH_N")) {
                                     mohAreaName = gnEdNode.getLastChild().getTextContent();
+                                    System.out.println("mohAreaName = " + mohAreaName);
                                 }
-
                                 if (gnEdNode.getFirstChild().getTextContent().equals("GND_NO")) {
-                                    gnAreaName = gnEdNode.getLastChild().getTextContent();
+                                    gnAreaCode = gnEdNode.getLastChild().getTextContent();
+                                    System.out.println("gnAreaCode = " + gnAreaCode);
                                 }
                                 if (gnEdNode.getFirstChild().getTextContent().equals("GND_N")) {
-                                    gnAreaCode = gnEdNode.getLastChild().getTextContent();
+                                    gnAreaName = gnEdNode.getLastChild().getTextContent();
+                                    System.out.println("gnAreaName = " + gnAreaName);
                                 }
 
                             }
@@ -480,6 +489,8 @@ public class AreaController implements Serializable {
                 }
 
                 gn = getArea(gnAreaCode, AreaType.GN);
+                System.out.println("gnAreaCode = " + gnAreaCode);
+                System.out.println("gnAreaName = " + gnAreaName);
                 if (gn == null) {
                     System.out.println("GN = " + gn);
                     gn = new Area();
