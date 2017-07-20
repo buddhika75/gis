@@ -310,15 +310,12 @@ public class AreaController implements Serializable {
                     moh.setParentArea(district);
                     getFacade().create(moh);
                     System.out.println("moh = " + moh);
+                    coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
+                    addCoordinates(moh, coordinatesText);
                 } else {
                     JsfUtil.addErrorMessage("MOH Exists");
                 }
-                System.out.println("to add coords");
-                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
-                addCoordinates(moh, coordinatesText);
-                System.out.println("adter add codes = ");
             }
-
         } catch (IOException ex) {
             System.out.println("ex.getMessage() = " + ex.getMessage());
             JsfUtil.addErrorMessage(ex.getMessage());
@@ -484,7 +481,7 @@ public class AreaController implements Serializable {
 
                 gn = getArea(gnAreaCode, AreaType.GN);
                 if (gn == null) {
-                    System.out.println("moh = " + gn);
+                    System.out.println("GN = " + gn);
                     gn = new Area();
                     gn.setType(AreaType.GN);
                     gn.setCentreLatitude(Double.parseDouble(centreLat));
@@ -498,13 +495,13 @@ public class AreaController implements Serializable {
                     gn.setMohArea(moh);
                     getFacade().create(gn);
                     System.out.println("gn = " + gn);
+                    System.out.println("to add coords");
+                    coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
+                    addCoordinates(gn, coordinatesText);
+                    System.out.println("adter add codes = ");
                 } else {
-                    JsfUtil.addErrorMessage("MOH Exists");
+                    JsfUtil.addErrorMessage("GN Exists");
                 }
-                System.out.println("to add coords");
-                coordinatesText = coordinatesText.replaceAll("[\\t\\n\\r]", " ");
-                addCoordinates(gn, coordinatesText);
-                System.out.println("adter add codes = ");
             }
 
         } catch (IOException ex) {
