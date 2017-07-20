@@ -254,7 +254,7 @@ public class NotificationController implements Serializable {
             for (Row row : sheet1) {
 //                System.out.println("row = " + row);
                 if (rowCount > 4) {
-                    
+
                     Notification n = new Notification();
 
                     for (Cell cell : row) {
@@ -383,7 +383,7 @@ public class NotificationController implements Serializable {
                                 n.setTel(strVal);
                                 break;
                         }
-                        
+
                     }
                     notificationsToSave.add(n);
                 }
@@ -399,14 +399,16 @@ public class NotificationController implements Serializable {
 
     public String saveUploadedData() {
         for (Notification n : notificationsToSave) {
-            String j = "Select n "
-                    + " from Notification n "
-                    + " where n.pid = :pid";
-            Map m = new HashMap();
-            m.put("pid", n);
-            Notification previousNotif = getFacade().findFirstBySQL(j, m);
-            if (previousNotif != null) {
-                getFacade().remove(previousNotif);
+            if (n.getPid() != null) {
+                String j = "Select n "
+                        + " from Notification n "
+                        + " where n.pid = :pid";
+                Map m = new HashMap();
+                m.put("pid", n);
+                Notification previousNotif = getFacade().findFirstBySQL(j, m);
+                if (previousNotif != null) {
+                    getFacade().remove(previousNotif);
+                }
             }
             getFacade().create(n);
         }
