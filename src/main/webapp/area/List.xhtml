@@ -45,6 +45,25 @@
                             </f:facet>
                             <h:outputText value="#{item.code}"/>
                         </p:column>
+                        <p:column sortBy="MOH Area">
+                            <f:facet name="header">
+                                <h:outputText value="MOH Area"/>
+                            </f:facet>
+                            <h:outputText value="#{item.mohArea.name}"/>
+                        </p:column>
+                        <p:column sortBy="RDHS Area">
+                            <f:facet name="header">
+                                <h:outputText value="RDHS Area"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rdhsArea.name}"/>
+                        </p:column>
+                        <p:column sortBy="PDHS Area">
+                            <f:facet name="header">
+                                <h:outputText value="PDHS Area"/>
+                            </f:facet>
+                            <h:outputText value="#{item.pdhsArea.name}"/>
+                        </p:column>
+
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListAreaTitle_parentArea}"/>
@@ -64,13 +83,13 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
-            
-            
-           <h:form enctype="multipart/form-data" >
+
+
+            <h:form enctype="multipart/form-data" >
                 <p:fileUpload value="#{areaController.file}" mode="simple"/>
                 <h:commandButton id="btnSave" value="Save" action="#{areaController.saveCentreCoordinates()}"/>
             </h:form>
-            
+
         </ui:define>
     </ui:composition>
 

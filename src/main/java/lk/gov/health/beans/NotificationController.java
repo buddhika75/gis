@@ -48,6 +48,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 import org.primefaces.model.map.Polygon;
 import org.primefaces.model.timeline.TimelineEvent;
 import org.primefaces.model.timeline.TimelineModel;
@@ -177,6 +178,7 @@ public class NotificationController implements Serializable {
         }
         for (AreaSummery a : areaSummerys) {
             Polygon polygon = new Polygon();
+            LatLng cord =  new LatLng(a.getArea().getCentreLatitude(), a.getArea().getCentreLongitude());
             a.setR(255);
             if (maxCount < 25) {
                 a.setG(255 - (a.getCount() * 10));
@@ -205,6 +207,7 @@ public class NotificationController implements Serializable {
             polygon.setFillOpacity(0.9);
             polygon.setData(a.getArea().getName());
             polygonModel.addOverlay(polygon);
+            polygonModel.addOverlay(new Marker(cord, a.getArea().getName(), "zelenjava.png", "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
         }
     }
 
