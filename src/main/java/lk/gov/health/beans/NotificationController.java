@@ -41,6 +41,8 @@ import lk.gov.health.dengue.Coordinate;
 import lk.gov.health.dengue.Institution;
 import lk.gov.health.dengue.Sex;
 import lk.gov.health.faces.CoordinateFacade;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.map.DefaultMapModel;
@@ -242,10 +244,16 @@ public class NotificationController implements Serializable {
             out.flush();
             out.close();
 
-            FileInputStream excelFile = new FileInputStream(new File(f.getAbsolutePath()));
-            Workbook workbook = new XSSFWorkbook(excelFile);
+//            FileInputStream excelFile = new FileInputStream(new File(f.getAbsolutePath()));
+//            Workbook workbook = new XSSFWorkbook(excelFile);
+//            
+            Workbook workbook = WorkbookFactory.create(new File(f.getAbsolutePath()));
+    
+            
+            
             DataFormatter formatter = new DataFormatter();
 
+            
             JsfUtil.addSuccessMessage("Excel File Opened");
 
             Sheet sheet1 = workbook.getSheetAt(0);
@@ -393,6 +401,10 @@ public class NotificationController implements Serializable {
         } catch (IOException ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
             return "";
+        } catch (InvalidFormatException ex) {
+            Logger.getLogger(NotificationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncryptedDocumentException ex) {
+            Logger.getLogger(NotificationController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "/notification/save_uploads";
     }
