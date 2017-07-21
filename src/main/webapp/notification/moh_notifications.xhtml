@@ -44,11 +44,11 @@
 
 
                         <p:dataTable value="#{notificationController.areaNotifications}" var="item" rowKey="#{item.id}" rowIndexVar="n">
-                                                        <p:column>
+                            <p:column>
                                 <f:facet name="header">
                                     <h:outputText value="Serial No"/>
                                 </f:facet>
-                                <h:outputText value="#{item.serialNo}"/>
+                                <h:outputText value="#{item.pid}"/>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
@@ -131,7 +131,7 @@
                                     <f:setPropertyActionListener value="#{item}" target="#{notificationController.selected}" ></f:setPropertyActionListener>
                                 </p:commandButton>
                             </p:column>
-                            
+
                         </p:dataTable>
 
 

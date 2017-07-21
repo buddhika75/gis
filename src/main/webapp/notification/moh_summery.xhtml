@@ -80,18 +80,17 @@
                             </p:tab>
                             <p:tab title="Heat Map" >
                                 <p:commandButton value="To Print" action="/notification/print_moh_map" ajax="false" ></p:commandButton>
-                                <p:gmap id="gmap" 
+                                <p:gmap id="gmap" widgetVar="w_gmap" 
                                         center="#{notificationController.mohArea.centreLatitude},#{notificationController.mohArea.centreLongitude}" zoom="#{notificationController.mohArea.zoomLavel}" 
                                         type="ROADMAP" style="width:900px;height:600px;border: 1px solid black;" 
-                                        streetView="true"
+                                        streetView="true" fitBounds="true"
+                                        
                                         model="#{notificationController.polygonModel}">
                                 </p:gmap>
                             </p:tab>
                             <p:tab title="Timeline" >
-
                                 <p:timeline value="#{notificationController.model}"
                                             ></p:timeline>
-
                             </p:tab>
 
                         </p:tabView>
