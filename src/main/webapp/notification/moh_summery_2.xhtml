@@ -23,6 +23,9 @@
                 streetView="true"
                 model="#{notificationController.polygonModel}">
         </p:gmap>
+        <p:commandButton value="Test" >
+            <p:ajax update=":#{p:component('gmap')}" ></p:ajax>
+        </p:commandButton>
         <script >
             function initMap() {
                 var mypos = {lat: #{notificationController.mohArea.centreLatitude}, lng: #{notificationController.mohArea.centreLongitude}};
