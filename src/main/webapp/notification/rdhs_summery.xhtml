@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                MOH Summery
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+                    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDnIF053oCwO1848mAvz6-N6eSeOeD8BaI" type="text/javascript" ></script> 
+
+                    <p:panel header="MOH Summery" style="width: 1600px!important; margin: auto;" >
+                        <h:panelGrid columns="18" >
+                            <p:outputLabel value="From" ></p:outputLabel>
+                            <p:calendar value="#{notificationController.fromDate}"  pattern="dd MMMM yyyy" ></p:calendar>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="To" ></p:outputLabel>
+                            <p:calendar value="#{notificationController.toDate}"  pattern="dd MMMM yyyy" ></p:calendar>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:outputLabel value="RDHS" ></p:outputLabel>
+                            <p:selectOneMenu value="#{notificationController.rdhsArea}"  >
+                                <f:selectItems value="#{areaController.rdhsAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer width="10" height="1" ></p:spacer>
+
+                            <p:commandButton ajax="false" value="Process" action="#{notificationController.listMohAreaSummeries()}" ></p:commandButton>
+                            <p:spacer width="10" height="1" ></p:spacer>
+                            <p:commandButton ajax="false" value="Back" action="/index" ></p:commandButton>
+
+
+                        </h:panelGrid>
+
+
+                        <p:tabView style="width: 95%!important;"  >
+                            <p:tab title="Number of Cases by GN Areas" >
+                                <p:dataTable value="#{notificationController.areaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                                    <p:column width="50" sortBy="#{n+1}">
+                                        <f:facet name="header">
+                                            <h:outputText value="No"/>
+                                        </f:facet>
+                                        <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                            <h:outputText value="#{n+1}" styleClass="heatText">
+                                            </h:outputText>
+                                        </div>
+                                    </p:column>
+                                    <p:column sortBy="#{item.area.name}" filterBy="#{item.area.name}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Area"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.area.name}"/>
+                                    </p:column>
+                                    <p:column  sortBy="#{item.area.code}" filterBy="#{item.area.code}">
+                                        <f:facet name="header">
+                                            <h:outputText value="Code"/>
+                                        </f:facet>
+                                        <div style="background-color: #{item.rgb}; width: 90%;height: 90%; padding: 1px;" >
+                                            <h:outputText value="#{item.area.code}" styleClass="heatText"/>
+                                        </div>
+                                    </p:column>
+                                    <p:column  sortBy="#{item.count}" >
+                                        <f:facet name="header">
+                                            <h:outputText value="Count"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.count}">
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Heat Map" >
+                                <p:commandButton value="To Print" action="/notification/print_moh_map" ajax="false" ></p:commandButton>
+                                <p:gmap id="gmap" widgetVar="w_gmap" 
+                                        center="#{notificationController.mohArea.centreLatitude},#{notificationController.mohArea.centreLongitude}" zoom="#{notificationController.mohArea.zoomLavel}" 
+                                        type="ROADMAP" style="width:900px;height:600px;border: 1px solid black;" 
+                                        streetView="true" fitBounds="true"
+                                        
+                                        model="#{notificationController.polygonModel}">
+                                </p:gmap>
+                            </p:tab>
+                            <p:tab title="Timeline" >
+                                <p:timeline value="#{notificationController.model}"
+                                            ></p:timeline>
+                            </p:tab>
+
+                        </p:tabView>
+
+
+
+
+                    </p:panel>
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
