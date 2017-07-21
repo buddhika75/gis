@@ -419,7 +419,7 @@ public class NotificationController implements Serializable {
                         + " from Notification n "
                         + " where n.pid = :pid";
                 Map m = new HashMap();
-                m.put("pid", n);
+                m.put("pid", n.getPid());
                 Notification previousNotif = getFacade().findFirstBySQL(j, m);
                 if (previousNotif != null) {
                     getFacade().remove(previousNotif);
