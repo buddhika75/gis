@@ -384,8 +384,8 @@ public class AreaController implements Serializable {
 
             NodeList nList = doc.getElementsByTagName("Placemark");
 
-//            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
-            for (int gnCount = 0; gnCount < 3; gnCount++) {
+            for (int gnCount = 0; gnCount < nList.getLength(); gnCount++) {
+//            for (int gnCount = 0; gnCount < 3; gnCount++) {
                 Node gnNode = nList.item(gnCount);
                 NodeList gnNodes = gnNode.getChildNodes();
                 for (int gnElemantCount = 0; gnElemantCount < gnNodes.getLength(); gnElemantCount++) {
