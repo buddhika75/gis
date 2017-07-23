@@ -44,13 +44,13 @@
 
 
                         <p:dataTable value="#{notificationController.areaNotifications}" var="item" rowKey="#{item.id}" rowIndexVar="n">
-                            <p:column>
+                            <p:column sortBy="#{item.pid}">
                                 <f:facet name="header">
-                                    <h:outputText value="Serial No"/>
+                                    <h:outputText value="PID"/>
                                 </f:facet>
                                 <h:outputText value="#{item.pid}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.sendDate}">
                                 <f:facet name="header">
                                     <h:outputText value="Send Date"/>
                                 </f:facet>
@@ -58,13 +58,13 @@
                                     <f:convertDateTime pattern="dd/MMMM/yyyy" timeZone="Asia/Colombo" />
                                 </h:outputText>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.hospital.name}">
                                 <f:facet name="header">
                                     <h:outputText value="Hospital"/>
                                 </f:facet>
                                 <h:outputText value="#{item.hospital.name}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.addmitedDate}">
                                 <f:facet name="header">
                                     <h:outputText value="Addmited Date"/>
                                 </f:facet>
@@ -72,62 +72,61 @@
                                     <f:convertDateTime pattern="dd/MMMM/yyyy"  timeZone="Asia/Colombo" />
                                 </h:outputText>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.bht}">
                                 <f:facet name="header">
                                     <h:outputText value="BHT"/>
                                 </f:facet>
                                 <h:outputText value="#{item.bht}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.patientsName}">
                                 <f:facet name="header">
                                     <h:outputText value="Patients Name"/>
                                 </f:facet>
                                 <h:outputText value="#{item.patientsName}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.age}">
                                 <f:facet name="header">
                                     <h:outputText value="Age"/>
                                 </f:facet>
                                 <h:outputText value="#{item.age}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.gender}">
                                 <f:facet name="header">
                                     <h:outputText value="Gender"/>
                                 </f:facet>
                                 <h:outputText value="#{item.gender}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.district.name}">
                                 <f:facet name="header">
                                     <h:outputText value="District"/>
                                 </f:facet>
                                 <h:outputText value="#{item.district.name}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.moh.name}">
                                 <f:facet name="header">
                                     <h:outputText value="MOH Area"/>
                                 </f:facet>
                                 <h:outputText value="#{item.moh.name}"/>
-                                <!--<h:outputText value="#{item.gnDivision.mohArea.name}"/>-->
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.phiArea.name}">
                                 <f:facet name="header">
                                     <h:outputText value="PHI Area"/>
                                 </f:facet>
                                 <h:outputText value="#{item.phiArea.name}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.gnDivision.name}">
                                 <f:facet name="header">
                                     <h:outputText value="GN Division"/>
                                 </f:facet>
                                 <h:outputText value="#{item.gnDivision.name}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.address}">
                                 <f:facet name="header">
                                     <h:outputText value="Address"/>
                                 </f:facet>
                                 <h:outputText value="#{item.address}"/>
                             </p:column>
-                            <p:column>
+                            <p:column sortBy="#{item.tel}">
                                 <f:facet name="header">
                                     <h:outputText value="Tel"/>
                                 </f:facet>

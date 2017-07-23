@@ -106,7 +106,7 @@ public class NotificationController implements Serializable {
     }
 
     public List<AreaSummery> getAllAreaSummerys() {
-        if(appController.getAllAreaSummerys()==null){
+        if (appController.getAllAreaSummerys() == null) {
             createProvincialDengueMap();
         }
         allAreaSummerys = appController.getAllAreaSummerys();
@@ -191,6 +191,38 @@ public class NotificationController implements Serializable {
                 n.setMoh(n.getGnDivision().getMohArea());
                 getFacade().edit(n);
             }
+        }
+    }
+
+    public void addDistrictsToNotifications() {
+        List<Notification> ns = new ArrayList<Notification>();
+        String j;
+        j = "select n "
+                + " from Notification n "
+                + " where n.district is null";
+        ns = getFacade().findBySQL(j);
+        for (Notification n : ns) {
+            if (n.getGnDivision() != null) {
+                n.setDistrict(n.getGnDivision().getRdhsArea());
+                getFacade().edit(n);
+            }
+        }
+    }
+
+    public void removeDuplicates() {
+        List<Notification> ns;
+        String j;
+        j = "select n "
+                + " from Notification n";
+        ns = getFacade().findBySQL(j);
+        for (Notification n : ns) {
+            j = "select n "
+                    + " from Notificaion n "
+                    + " where n.patientsName=:name"
+                    + " and n.tel=:tel";
+            Map m = new HashMap();
+            m.put("name", n.getPatientsName());
+            m.put("tel", n.getTel());
         }
     }
 
@@ -307,6 +339,7 @@ public class NotificationController implements Serializable {
             provincialDengueMap.addOverlay(polygon);
         }
         appController.setProvincialDengueMap(provincialDengueMap);
+        appController.setAllAreaSummerys(allAreaSummerys);
     }
 
 //    public void createTimeLineOfNotifications() {
@@ -597,15 +630,27 @@ public class NotificationController implements Serializable {
             if (n.getPid() != null) {
                 String j = "Select n "
                         + " from Notification n "
-                        + " where n.pid = :pid";
+                        + " where (n.pid = :pid or n.tel=:tel)";
                 Map m = new HashMap();
                 m.put("pid", n.getPid());
+                m.put("tel", n.getTel());
                 Notification previousNotif = getFacade().findFirstBySQL(j, m);
-                if (previousNotif != null) {
-                    getFacade().remove(previousNotif);
+                if (previousNotif == null) {
+                    getFacade().create(n);
+                } else {
+                    if (n.getGnDivision() == null && previousNotif.getGnDivision() != null) {
+                        previousNotif.setPid(n.getPid());
+                        getFacade().edit(previousNotif);
+                        System.out.println("Previous one saved");
+                    } else {
+                        if (previousNotif != null) {
+                            getFacade().remove(previousNotif);
+                        }
+                        getFacade().create(n);
+                        System.out.println("new one saved.");
+                    }
                 }
             }
-            getFacade().create(n);
         }
         JsfUtil.addSuccessMessage("Data Saved");
         notificationsToSave = new ArrayList<Notification>();
