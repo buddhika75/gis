@@ -600,7 +600,10 @@ public class NotificationController implements Serializable {
                             case 11:
                                 strVal = formatter.formatCellValue(cell);
                                 if (!strVal.isEmpty()) {
-                                    strVal = strVal.replaceAll("\\s+", "");
+                                    strVal = strVal.trim();
+                                    if (strVal.length() < 6) {
+                                        strVal = strVal.replaceAll("\\s+", "");
+                                    }
                                     Area gnArea = areaController.getArea(strVal, AreaType.GN);
                                     n.setGnDivision(gnArea);
                                     if (gnArea == null) {
