@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+
+            <ui:define name="title">
+                RDHS Weekly Cumulative Line Chart
+            </ui:define>
+
+            <ui:define name="body">
+
+                <h:form >
+                    <div class="ui-fluid">
+                        <p:panelGrid columns="12" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank">
+                            <p:outputLabel value="From"  ></p:outputLabel>
+                            <p:calendar  value="#{notificationController.fromDate}"  pattern="dd MMMM yyyy" ></p:calendar>
+                            <p:spacer height="0" width="1" ></p:spacer>
+                            <h:outputLabel value="To"    ></h:outputLabel>    
+                            <p:calendar  value="#{notificationController.toDate}"  pattern="dd MMMM yyyy" ></p:calendar>
+                            <p:spacer height="0" width="1" ></p:spacer>
+                            <p:outputLabel value="RDHS"  ></p:outputLabel>
+                            <p:selectOneMenu value="#{notificationController.rdhsArea}"  >
+                                <f:selectItems value="#{areaController.rdhsAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                            </p:selectOneMenu>
+                            <p:spacer height="0" width="1" ></p:spacer>
+                        </p:panelGrid>
+                    </div>
+                    <div class="ui-fluid" >
+                        <p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank">
+                            <p:commandButton ajax="false" value="Process" action="#{notificationController.createRdhsCumulativeLineChart}" ></p:commandButton>
+                            <p:commandButton ajax="false" value="Back" action="/index" ></p:commandButton>
+                        </p:panelGrid>
+                    </div>
+                    <div class="ui-fluid" >
+
+                        <p:chart  type="line" model="#{notificationController.lineModel}" style="height:300px; width: 1000px;"/>
+
+                    </div>
+
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

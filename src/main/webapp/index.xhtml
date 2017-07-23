@@ -15,52 +15,61 @@
                     <p:outputLabel value="Last Thirty Days Dengue Status" ></p:outputLabel>
                 </h1>
                 <div class="ui-fluid" >
-                    <p:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
 
-                        <p:gmap center="6,80" style="height: 600px;width: 100%; " type="hybrid" zoom="10" fitBounds="true" model="#{notificationController.provincialDengueMap}" >
-                            <p:ajax event="overlaySelect" listener="#{notificationController.onPdPolygonSelect}" update="infoWindow" />
-                            <p:gmapInfoWindow id="infoWindow" >
-                                <p:panel header="Data"  style="text-align: center; display: block; margin: auto">
-                                    <h:panelGroup rendered="#{notificationController.selectedAreaSummery ne null}" >
-                                        <h:panelGrid columns="2" >
-                                            <p:outputLabel value="Name" ></p:outputLabel>
-                                            <p:outputLabel value="#{notificationController.selectedAreaSummery.area.name}" ></p:outputLabel>
-                                            <p:outputLabel value="District" ></p:outputLabel>
-                                            <p:outputLabel value="#{notificationController.selectedAreaSummery.area.rdhsArea.name}" ></p:outputLabel>
-                                            <p:outputLabel value="Notified Cases" ></p:outputLabel>
-                                            <p:outputLabel value="#{notificationController.selectedAreaSummery.count}" ></p:outputLabel>
-                                            <p:outputLabel value="Population" ></p:outputLabel>
-                                            <p:outputLabel value="#{notificationController.selectedAreaSummery.area.population}" ></p:outputLabel>
-                                            <p:outputLabel value="Area (Sq. km.)" ></p:outputLabel>
-                                            <p:outputLabel value="#{notificationController.selectedAreaSummery.area.areaSqKm}" ></p:outputLabel>
+                    <h:form>
 
-                                        </h:panelGrid>
-                                    </h:panelGroup>
-                                </p:panel>
-                            </p:gmapInfoWindow>
-                        </p:gmap>
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+
+                            <p:gmap center="6,80" style="height: 600px;width: 100%; " type="hybrid" zoom="10" fitBounds="true" model="#{notificationController.provincialDengueMap}" >
+                                <p:ajax event="overlaySelect" listener="#{notificationController.onPdPolygonSelect}" update="infoWindow" />
+                                <p:gmapInfoWindow id="infoWindow" >
+                                    <p:panel header="Data"  style="text-align: center; display: block; margin: auto">
+                                        <h:panelGroup rendered="#{notificationController.selectedAreaSummery ne null}" >
+                                            <h:panelGrid columns="2" >
+                                                <p:outputLabel value="Name" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.name}" ></p:outputLabel>
+                                                <p:outputLabel value="District" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.rdhsArea.name}" ></p:outputLabel>
+                                                <p:outputLabel value="Notified Cases" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.count}" ></p:outputLabel>
+                                                <p:outputLabel value="Population" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.population}" ></p:outputLabel>
+                                                <p:outputLabel value="Area (Sq. km .)" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.areaSqKm}" ></p:outputLabel>
+                                            </h:panelGrid>
+                                            <p:commandButton value="View GN Distribution" ajax="false" action="#{notificationController.listMohAreaSummeries()}" >
+                                                <f:setPropertyActionListener value="#{notificationController.selectedAreaSummery.area}" target="#{notificationController.mohArea}" ></f:setPropertyActionListener>
+                                            </p:commandButton>
+                                        </h:panelGroup>
+
+                                    </p:panel>
+                                </p:gmapInfoWindow>
+                            </p:gmap>
 
 
-                        <p:dataTable value="#{notificationController.allAreaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
-                            <p:column sortBy="#{item.area.name}"  >
-                                <f:facet name="header">
-                                    <h:outputText value="Area"/>
-                                </f:facet>
-                                <div style="background-color: #{item.rgb}; color: blueviolet;">
-                                    <h:outputText value="#{item.area.name}"/>
-                                </div>
-                            </p:column>
-                            <p:column  sortBy="#{item.count}" >
-                                <f:facet name="header">
-                                    <h:outputText value="Count"/>
-                                </f:facet>
-                                <div style="background-color: #{item.rgb}; color: blueviolet;" >
-                                    <h:outputText value="#{item.count}">
-                                    </h:outputText>
-                                </div>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panelGrid>
+                            <p:dataTable value="#{notificationController.allAreaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                                <p:column sortBy="#{item.area.name}"  >
+                                    <f:facet name="header">
+                                        <h:outputText value="Area"/>
+                                    </f:facet>
+                                    <div style="background-color: #{item.rgb}; color: blueviolet;">
+                                        <h:outputText value="#{item.area.name}"/>
+                                    </div>
+                                </p:column>
+                                <p:column  sortBy="#{item.count}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Count"/>
+                                    </f:facet>
+                                    <div style="background-color: #{item.rgb}; color: blueviolet;" >
+                                        <h:outputText value="#{item.count}">
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panelGrid>
+
+                    </h:form>
+
                 </div>
 
             </ui:define>

@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.persistence.TemporalType;
 import lk.gov.health.dengue.Area;
 import lk.gov.health.dengue.AreaSummery;
 import lk.gov.health.dengue.AreaType;
@@ -46,6 +47,11 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.CategoryAxis;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
@@ -96,6 +102,8 @@ public class NotificationController implements Serializable {
     private TimelineModel model;
     private MapModel polygonModel;
     private MapModel provincialDengueMap;
+
+    LineChartModel lineModel = new LineChartModel();
 
     public AppController getAppController() {
         return appController;
@@ -261,6 +269,79 @@ public class NotificationController implements Serializable {
         getFacade().remove(selected);
         JsfUtil.addSuccessMessage("Deleted");
         return listMohAreaNotifications();
+    }
+
+    public String toCreateRdhsCumulativeLineChart() {
+        return "/notification/rdhs_weekly_cumulative";
+    }
+
+    public String createRdhsCumulativeLineChart() {
+        System.out.println("createRdhsCumulativeLineChart");
+        lineModel = new LineChartModel();
+        lineModel.setTitle("Category Chart");
+        lineModel.setLegendPosition("e");
+        lineModel.setShowPointLabels(true);
+        lineModel.getAxes().put(AxisType.X, new CategoryAxis("Week of Year"));
+        
+        Axis yAxis = lineModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Number of Cases");
+        yAxis.setMin(0);
+
+        List<Area> mohs = areaController.getAreas(AreaType.MOH, rdhsArea);
+
+        System.out.println("mohs.size() = " + mohs.size());
+
+        for (Area moh : mohs) {
+
+            System.out.println("moh.getName() = " + moh.getName());
+
+            ChartSeries mohSeries = new ChartSeries();
+            mohSeries.setLabel(moh.getName());
+
+            Calendar start = Calendar.getInstance();
+            start.setTime(getFromDate());
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(getToDate());
+
+            Calendar current = Calendar.getInstance();
+            current.setTime(getFromDate());
+
+            while (current.before(end)) {
+
+                System.out.println("current = " + current);
+
+                String j;
+                Map m = new HashMap();
+
+                j = "select count(n) "
+                        + " from Notification n "
+                        + " where n.moh=:moh "
+                        + " and n.SendDate between :fd and :td";
+                m.put("moh", moh);
+                m.put("fd", current.getTime());
+                current.add(Calendar.DATE, 6);
+                m.put("td", current.getTime());
+                current.add(Calendar.DATE, 1);
+                Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                System.out.println("l = " + l);
+                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), l);
+
+            }
+
+            lineModel.addSeries(mohSeries);
+
+        }
+
+        return "/notification/rdhs_weekly_cumulative";
+    }
+
+    public LineChartModel getLineModel() {
+        return lineModel;
+    }
+
+    public void setLineModel(LineChartModel lineModel) {
+        this.lineModel = lineModel;
     }
 
     public String listMohAreaSummeries() {
