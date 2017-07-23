@@ -57,7 +57,26 @@ public class Area implements Serializable {
     Area mohArea;
     @ManyToOne
     Area phiArea;
+    
+    Long population;
+    Double areaSqKm;
 
+    public Long getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(Long population) {
+        this.population = population;
+    }
+
+    public Double getAreaSqKm() {
+        return areaSqKm;
+    }
+
+    public void setAreaSqKm(Double areaSqKm) {
+        this.areaSqKm = areaSqKm;
+    }
+    
     public String getOfficialPhone() {
         return officialPhone;
     }

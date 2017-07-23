@@ -33,7 +33,7 @@
                             </f:facet>
                             <h:outputText value="#{item.type}"/>
                         </p:column>
-                        <p:column sortBy="#{item.name}">
+                        <p:column sortBy="#{item.name}" filterBy="#{item.name}">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListAreaTitle_name}"/>
                             </f:facet>

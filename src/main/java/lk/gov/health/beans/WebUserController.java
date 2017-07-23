@@ -90,7 +90,7 @@ public class WebUserController implements Serializable {
 
     public Date getDateFromString(String strDate, String format) {
         String startDateString = strDate;
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return df.parse(startDateString);
         } catch (ParseException e) {
@@ -100,7 +100,7 @@ public class WebUserController implements Serializable {
     }
 
     public Date getDateFromString(String strDate) {
-        return getDateFromString(strDate, "yyyy-mm-dd");
+        return getDateFromString(strDate, "yyyy-MM-dd");
     }
 
     public String toEditMyDetails() {
@@ -1182,6 +1182,20 @@ public class WebUserController implements Serializable {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
+        c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
+        return c.getTime();
+    }
+
+    public Date getThirtyDaysBack() {
+        return getThirtyDaysBack(new Date());
+    }
+    
+    public Date getThirtyDaysBack(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, -30);
         c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
         c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
         c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));

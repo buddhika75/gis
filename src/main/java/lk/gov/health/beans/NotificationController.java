@@ -45,6 +45,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
@@ -68,6 +69,8 @@ public class NotificationController implements Serializable {
     CoordinateFacade coordinateFacade;
     @Inject
     WebUserController webUserController;
+    @Inject
+    AppController appController;
 
     private List<Notification> items = null;
     private Notification selected;
@@ -78,14 +81,95 @@ public class NotificationController implements Serializable {
     private Area mohArea;
     private Area rdhsArea;
     private Area pdhsArea;
+    Area selectedGn;
+    Area selectedMoh;
 
     private List<AreaSummery> areaSummerys;
     List<Notification> areaNotifications;
+    AreaSummery selectedAreaSummery;
+
+    List<AreaSummery> allAreaSummerys;
+    List<Notification> allAreaNotifications;
 
     List<Notification> notificationsToSave;
     String message = "";
     private TimelineModel model;
     private MapModel polygonModel;
+    private MapModel provincialDengueMap;
+
+    public AppController getAppController() {
+        return appController;
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
+
+    public List<AreaSummery> getAllAreaSummerys() {
+        if(appController.getAllAreaSummerys()==null){
+            createProvincialDengueMap();
+        }
+        allAreaSummerys = appController.getAllAreaSummerys();
+        return allAreaSummerys;
+    }
+
+    public void setAllAreaSummerys(List<AreaSummery> allAreaSummerys) {
+        this.allAreaSummerys = allAreaSummerys;
+    }
+
+    public List<Notification> getAllAreaNotifications() {
+        return allAreaNotifications;
+    }
+
+    public void setAllAreaNotifications(List<Notification> allAreaNotifications) {
+        this.allAreaNotifications = allAreaNotifications;
+    }
+
+    public MapModel getProvincialDengueMap() {
+        if (appController.getProvincialDengueMap() == null) {
+            createProvincialDengueMap();
+        }
+        provincialDengueMap = appController.getProvincialDengueMap();
+        return provincialDengueMap;
+    }
+
+    public void setProvincialDengueMap(MapModel provincialDengueMap) {
+        this.provincialDengueMap = provincialDengueMap;
+    }
+
+    public void createProvincialDengueMap() {
+        System.out.println("creating provincial dengue map");
+        List<Area> mohs = areaController.getMohAreas();
+        allAreaSummerys = new ArrayList<AreaSummery>();
+        allAreaNotifications = new ArrayList<Notification>();
+        int count = 1;
+        for (Area a : mohs) {
+            AreaSummery as = new AreaSummery();
+            as.setArea(a);
+            as.setCount(0);
+            as.setId(count);
+            allAreaSummerys.add(as);
+            count++;
+        }
+        System.out.println("allAreaSummerys = " + allAreaSummerys.size());
+        Map m = new HashMap();
+        String j;
+        j = "select n "
+                + " from Notification n "
+                + " where n.SendDate between :sdf and :sdt ";
+        m.put("sdf", getFromDate());
+        m.put("sdt", getToDate());
+        allAreaNotifications = getFacade().findBySQL(j, m);
+        for (AreaSummery as : allAreaSummerys) {
+            for (Notification n : allAreaNotifications) {
+                if (as.getArea().equals(n.getMoh())) {
+                    as.setCount(as.getCount() + 1);
+                }
+            }
+        }
+        System.out.println("allAreaNotifications = " + allAreaNotifications);
+        createProvincialMap();
+    }
 
     public String toUploadExcelFile() {
         return "/notification/upload_excel";
@@ -95,13 +179,28 @@ public class NotificationController implements Serializable {
         return "/notification/moh_notifications";
     }
 
+    public void addMohAreasToNotifications() {
+        List<Notification> ns = new ArrayList<Notification>();
+        String j;
+        j = "select n "
+                + " from Notification n "
+                + " where n.moh is null";
+        ns = getFacade().findBySQL(j);
+        for (Notification n : ns) {
+            if (n.getGnDivision() != null) {
+                n.setMoh(n.getGnDivision().getMohArea());
+                getFacade().edit(n);
+            }
+        }
+    }
+
     public String listMohAreaNotifications() {
         areaNotifications = new ArrayList<Notification>();
         Map m = new HashMap();
         String j;
         j = "select n "
                 + " from Notification n "
-                + " where n.gnDivision.mohArea=:moh "
+                + " where n.moh=:moh "
                 + " and n.SendDate between :sdf and :sdt ";
         m.put("moh", mohArea);
         m.put("sdf", fromDate);
@@ -137,7 +236,7 @@ public class NotificationController implements Serializable {
         String j;
         j = "select n "
                 + " from Notification n "
-                + " where n.gnDivision.mohArea=:moh "
+                + " where n.moh=:moh "
                 + " and n.SendDate between :sdf and :sdt ";
         m.put("moh", mohArea);
         m.put("sdf", fromDate);
@@ -150,7 +249,6 @@ public class NotificationController implements Serializable {
                 }
             }
         }
-        createTimeLineOfNotifications();
         markGnMapForSummeries();
         return "/notification/moh_summery";
     }
@@ -159,40 +257,40 @@ public class NotificationController implements Serializable {
         return "/notification/moh_summery";
     }
 
-    public void createTimeLineOfNotifications() {
-        model = new TimelineModel();
-        for (Notification s : areaNotifications) {
-            if (s != null && s.getGnDivision() != null && s.getSendDate() != null) {
-                model.add(new TimelineEvent(s.getGnDivision().getName(), s.getSendDate()));
-            }
-        }
-    }
-
-    private void markGnMapForSummeries() {
-        polygonModel = new DefaultMapModel();
+    private void createProvincialMap() {
+        provincialDengueMap = new DefaultMapModel();
         int maxCount = 0;
-        for (AreaSummery a : areaSummerys) {
+        for (AreaSummery a : allAreaSummerys) {
             if (maxCount < a.getCount()) {
                 maxCount = a.getCount();
             }
         }
-        for (AreaSummery a : areaSummerys) {
+        for (AreaSummery a : allAreaSummerys) {
             Polygon polygon = new Polygon();
-            LatLng cord =  new LatLng(a.getArea().getCentreLatitude(), a.getArea().getCentreLongitude());
+            LatLng cord = new LatLng(a.getArea().getCentreLatitude(), a.getArea().getCentreLongitude());
             a.setR(255);
-            if (maxCount < 25) {
-                a.setG(255 - (a.getCount() * 10));
-                a.setB(255 - (a.getCount() * 10));
-            } else if (maxCount < 255) {
-                a.setG(255 - a.getCount());
-                a.setB(255 - a.getCount());
-            } else if (maxCount < 2550) {
-                a.setG(255 - (a.getCount() / 10));
-                a.setB(255 - (a.getCount() / 10));
-            } else if (maxCount < 25500) {
-                a.setG(255 - (a.getCount() / 100));
-                a.setB(255 - (a.getCount() / 100));
-            }
+            Double d;
+            Integer co = a.getCount();
+            d = ((double) co / (double) maxCount) * 255.0;
+            System.out.println("d = " + d);
+            int i = d.intValue();
+            System.out.println("i = " + i);
+            a.setG(255 - i);
+            a.setB(255 - i);
+
+//            if (maxCount < 25) {
+//                a.setG(255 - (a.getCount() * 10));
+//                a.setB(255 - (a.getCount() * 10));
+//            } else if (maxCount < 255) {
+//                a.setG(255 - a.getCount());
+//                a.setB(255 - a.getCount());
+//            } else if (maxCount < 2550) {
+//                a.setG(255 - (a.getCount() / 10));
+//                a.setB(255 - (a.getCount() / 10));
+//            } else if (maxCount < 25500) {
+//                a.setG(255 - (a.getCount() / 100));
+//                a.setB(255 - (a.getCount() / 100));
+//            }
             String j = "select c from Coordinate c where c.area=:a";
             Map m = new HashMap();
             m.put("a", a.getArea());
@@ -205,9 +303,91 @@ public class NotificationController implements Serializable {
             polygon.setFillColor(a.getRgb());
             polygon.setStrokeOpacity(1);
             polygon.setFillOpacity(0.9);
-            polygon.setData(a.getArea().getName());
+            polygon.setData(a.getArea().getId());
+            provincialDengueMap.addOverlay(polygon);
+        }
+        appController.setProvincialDengueMap(provincialDengueMap);
+    }
+
+//    public void createTimeLineOfNotifications() {
+//        model = new TimelineModel();
+//        for (Notification s : areaNotifications) {
+//            if (s != null && s.getGnDivision() != null && s.getSendDate() != null) {
+//                model.add(new TimelineEvent(s.getGnDivision().getName(), s.getSendDate()));
+//            }
+//        }
+//    }
+    private void markGnMapForSummeries() {
+        polygonModel = new DefaultMapModel();
+        int maxCount = 0;
+        for (AreaSummery a : areaSummerys) {
+            if (maxCount < a.getCount()) {
+                maxCount = a.getCount();
+            }
+        }
+        for (AreaSummery a : areaSummerys) {
+            Polygon polygon = new Polygon();
+            LatLng cord = new LatLng(a.getArea().getCentreLatitude(), a.getArea().getCentreLongitude());
+            a.setR(255);
+            Double d;
+            Integer co = a.getCount();
+            d = ((double) co / (double) maxCount) * 255.0;
+            System.out.println("d = " + d);
+            int i = d.intValue();
+            System.out.println("i = " + i);
+            a.setG(255 - i);
+            a.setB(255 - i);
+
+//            if (maxCount < 25) {
+//                a.setG(255 - (a.getCount() * 10));
+//                a.setB(255 - (a.getCount() * 10));
+//            } else if (maxCount < 255) {
+//                a.setG(255 - a.getCount());
+//                a.setB(255 - a.getCount());
+//            } else if (maxCount < 2550) {
+//                a.setG(255 - (a.getCount() / 10));
+//                a.setB(255 - (a.getCount() / 10));
+//            } else if (maxCount < 25500) {
+//                a.setG(255 - (a.getCount() / 100));
+//                a.setB(255 - (a.getCount() / 100));
+//            }
+            String j = "select c from Coordinate c where c.area=:a";
+            Map m = new HashMap();
+            m.put("a", a.getArea());
+            List<Coordinate> cs = coordinateFacade.findBySQL(j, m);
+            for (Coordinate c : cs) {
+                LatLng coord = new LatLng(c.getLatitude(), c.getLongitude());
+                polygon.getPaths().add(coord);
+            }
+            polygon.setStrokeColor("#FF9900");
+            polygon.setFillColor(a.getRgb());
+            polygon.setStrokeOpacity(1);
+            polygon.setFillOpacity(0.9);
+            polygon.setData(a.getArea().getId());
             polygonModel.addOverlay(polygon);
-            polygonModel.addOverlay(new Marker(cord, a.getArea().getName(), "zelenjava.png", "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
+//            polygonModel.addOverlay(new Marker(cord, a.getArea().getName(), "zelenjava.png", "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
+        }
+    }
+
+    public void onGnPolygonSelect(OverlaySelectEvent event) {
+        Polygon polygon = (Polygon) event.getOverlay();
+        selectedGn = getAreaController().getAreaById(Long.parseLong(polygon.getData().toString()));
+        selectedAreaSummery = null;
+        for (AreaSummery as : areaSummerys) {
+            if (as.getArea().equals(selectedGn)) {
+                selectedAreaSummery = as;
+            }
+        }
+    }
+
+    public void onPdPolygonSelect(OverlaySelectEvent event) {
+        Polygon polygon = (Polygon) event.getOverlay();
+        selectedMoh = getAreaController().getAreaById(Long.parseLong(polygon.getData().toString()));
+        selectedAreaSummery = null;
+        for (AreaSummery as : allAreaSummerys) {
+            if (as.getArea().equals(selectedMoh)) {
+                selectedAreaSummery = as;
+            }
         }
     }
 
@@ -251,12 +431,9 @@ public class NotificationController implements Serializable {
 //            Workbook workbook = new XSSFWorkbook(excelFile);
 //            
             Workbook workbook = WorkbookFactory.create(new File(f.getAbsolutePath()));
-    
-            
-            
+
             DataFormatter formatter = new DataFormatter();
 
-            
             JsfUtil.addSuccessMessage("Excel File Opened");
 
             Sheet sheet1 = workbook.getSheetAt(0);
@@ -323,8 +500,8 @@ public class NotificationController implements Serializable {
                             case 2:
                                 Institution hospital = institutionController.getInstitutionsByName(strVal);
                                 if (hospital == null) {
-                                    JsfUtil.addErrorMessage(strVal + " is not a recognised hospital");
-                                    message += strVal + " is not a recognised hospital.\n";
+                                    hospital = institutionController.createHospital(strVal);
+//                                    message += strVal + " is not a recognised hospital.\n";
                                 }
                                 n.setHospital(hospital);
                                 break;
@@ -367,6 +544,9 @@ public class NotificationController implements Serializable {
                                 break;
                             case 9:
                                 Area moh = areaController.getArea(strVal, AreaType.MOH);
+                                if (moh == null) {
+                                    message += strVal + " is not a recognised MOH Area. + \n";
+                                }
                                 n.setMoh(moh);
                                 break;
                             case 11:
@@ -527,7 +707,7 @@ public class NotificationController implements Serializable {
 
     public Date getFromDate() {
         if (fromDate == null) {
-            fromDate = webUserController.getFirstDayOfMonth();
+            fromDate = webUserController.getThirtyDaysBack();
         }
         return fromDate;
     }
@@ -617,6 +797,70 @@ public class NotificationController implements Serializable {
 
     public void setAreaNotifications(List<Notification> areaNotifications) {
         this.areaNotifications = areaNotifications;
+    }
+
+    public NotificationFacade getEjbFacade() {
+        return ejbFacade;
+    }
+
+    public void setEjbFacade(NotificationFacade ejbFacade) {
+        this.ejbFacade = ejbFacade;
+    }
+
+    public InstitutionController getInstitutionController() {
+        return institutionController;
+    }
+
+    public void setInstitutionController(InstitutionController institutionController) {
+        this.institutionController = institutionController;
+    }
+
+    public AreaController getAreaController() {
+        return areaController;
+    }
+
+    public void setAreaController(AreaController areaController) {
+        this.areaController = areaController;
+    }
+
+    public CoordinateFacade getCoordinateFacade() {
+        return coordinateFacade;
+    }
+
+    public void setCoordinateFacade(CoordinateFacade coordinateFacade) {
+        this.coordinateFacade = coordinateFacade;
+    }
+
+    public WebUserController getWebUserController() {
+        return webUserController;
+    }
+
+    public void setWebUserController(WebUserController webUserController) {
+        this.webUserController = webUserController;
+    }
+
+    public Area getSelectedGn() {
+        return selectedGn;
+    }
+
+    public void setSelectedGn(Area selectedGn) {
+        this.selectedGn = selectedGn;
+    }
+
+    public Area getSelectedMoh() {
+        return selectedMoh;
+    }
+
+    public void setSelectedMoh(Area selectedMoh) {
+        this.selectedMoh = selectedMoh;
+    }
+
+    public AreaSummery getSelectedAreaSummery() {
+        return selectedAreaSummery;
+    }
+
+    public void setSelectedAreaSummery(AreaSummery selectedAreaSummery) {
+        this.selectedAreaSummery = selectedAreaSummery;
     }
 
     @FacesConverter(forClass = Notification.class)

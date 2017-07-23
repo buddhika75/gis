@@ -109,6 +109,16 @@
                         </f:facet>
                     </p:dataTable>
                 </p:panel>
+                
+                <p:panel header="Administration" >
+                    <h:panelGrid columns="1" >
+                        <p:commandButton ajax="false" action="#{appController.resetProvincialDengueMap()}" value="Reset Provincial Dengue Map" ></p:commandButton>
+                        <p:commandButton ajax="false" action="#{notificationController.addMohAreasToNotifications()}" value="Add MOH Areas to Notifications" ></p:commandButton>
+                        
+                    </h:panelGrid>
+                    
+                </p:panel>
+                
             </h:form>
 
             <ui:include src="Create.xhtml"/>

@@ -112,6 +112,10 @@ public class AreaController implements Serializable {
         this.pdhsAreas = pdhsAreas;
     }
 
+    public Area getAreaById(Long id) {
+        return getFacade().find(id);
+    }
+
     public List<Area> getGnAreasOfMoh(Area mohArea) {
         String j;
         Map m = new HashMap();

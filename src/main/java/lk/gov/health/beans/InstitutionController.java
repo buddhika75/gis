@@ -47,6 +47,14 @@ public class InstitutionController implements Serializable {
         return "/institution/index";
     }
 
+    public Institution createHospital(String hospitalName){
+        Institution mi = new Institution();
+        mi.setType(InstitutionType.Hospital);
+        mi.setName(hospitalName);
+        getFacade().create(mi);
+        return mi;
+    }
+    
     public List<Institution> getInstitutions(InstitutionType type, Area phiArea, Area area, Area educationalZone) {
         String j;
         Map m = new HashMap();

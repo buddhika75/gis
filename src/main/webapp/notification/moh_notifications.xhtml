@@ -98,6 +98,19 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">
+                                    <h:outputText value="District"/>
+                                </f:facet>
+                                <h:outputText value="#{item.district.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="MOH Area"/>
+                                </f:facet>
+                                <h:outputText value="#{item.moh.name}"/>
+                                <!--<h:outputText value="#{item.gnDivision.mohArea.name}"/>-->
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
                                     <h:outputText value="PHI Area"/>
                                 </f:facet>
                                 <h:outputText value="#{item.phiArea.name}"/>
