@@ -209,20 +209,32 @@ public class NotificationController implements Serializable {
         }
     }
 
-    public void removeDuplicates() {
+    public void fixPids() {
         List<Notification> ns;
         String j;
         j = "select n "
-                + " from Notification n";
+                + " from Notification n "
+                + " where n.pid is null";
         ns = getFacade().findBySQL(j);
         for (Notification n : ns) {
             j = "select n "
-                    + " from Notificaion n "
+                    + " from Notification n "
                     + " where n.patientsName=:name"
-                    + " and n.tel=:tel";
+                    + " and n.tel=:tel"
+                    + " and n.pid is not null";
             Map m = new HashMap();
             m.put("name", n.getPatientsName());
             m.put("tel", n.getTel());
+            List<Notification> childns = getFacade().findBySQL(j, m);
+            System.out.println("childns.size() = " + childns.size());
+            for (Notification cn : childns) {
+                if (cn.getPid() != null) {
+                    n.setPid(cn.getPid());
+                    getFacade().edit(n);
+                    getFacade().remove(cn);
+                }
+            }
+
         }
     }
 
@@ -521,6 +533,9 @@ public class NotificationController implements Serializable {
                                 strVal = formatter.formatCellValue(cell);
                                 n.setSerialNo(strVal);
                                 n.setPid(dblVal.longValue());
+                                if (n.getPid() == null || n.getPid() == 0.0) {
+                                    message += cellRef.formatAsString() + " is not a valid pid. Please check. + \n";
+                                }
                                 break;
                             case 1:
                                 System.out.println("dateVal = " + dateVal);
@@ -630,10 +645,11 @@ public class NotificationController implements Serializable {
             if (n.getPid() != null) {
                 String j = "Select n "
                         + " from Notification n "
-                        + " where (n.pid = :pid or n.tel=:tel)";
+                        + " where (n.pid = :pid or (n.tel=:tel and n.patientsName=:ptn))";
                 Map m = new HashMap();
                 m.put("pid", n.getPid());
                 m.put("tel", n.getTel());
+                m.put("ptn", n.getPatientsName());
                 Notification previousNotif = getFacade().findFirstBySQL(j, m);
                 if (previousNotif == null) {
                     getFacade().create(n);
@@ -643,9 +659,7 @@ public class NotificationController implements Serializable {
                         getFacade().edit(previousNotif);
                         System.out.println("Previous one saved");
                     } else {
-                        if (previousNotif != null) {
-                            getFacade().remove(previousNotif);
-                        }
+                        getFacade().remove(previousNotif);
                         getFacade().create(n);
                         System.out.println("new one saved.");
                     }

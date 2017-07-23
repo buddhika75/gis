@@ -47,7 +47,8 @@ public class AppController {
     }
     
     public void resetProvincialDengueMap(){
-        
+        provincialDengueMap = null;
+        allAreaSummerys = null;
     }
     
 }
