@@ -49,6 +49,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
@@ -104,7 +105,10 @@ public class NotificationController implements Serializable {
     private MapModel provincialDengueMap;
 
     LineChartModel lineModel = new LineChartModel();
+     private BarChartModel barModel;
 
+     
+     
     public AppController getAppController() {
         return appController;
     }
@@ -278,7 +282,7 @@ public class NotificationController implements Serializable {
     public String createRdhsCumulativeLineChart() {
         System.out.println("createRdhsCumulativeLineChart");
         lineModel = new LineChartModel();
-        lineModel.setTitle("Category Chart");
+        lineModel.setTitle("Weekly Cumulative Dengue Notifications");
         lineModel.setLegendPosition("e");
         lineModel.setShowPointLabels(true);
         lineModel.getAxes().put(AxisType.X, new CategoryAxis("Week of Year"));
@@ -307,6 +311,8 @@ public class NotificationController implements Serializable {
             Calendar current = Calendar.getInstance();
             current.setTime(getFromDate());
 
+            Long cumulative =0l;
+            
             while (current.before(end)) {
 
                 System.out.println("current = " + current);
@@ -324,8 +330,9 @@ public class NotificationController implements Serializable {
                 m.put("td", current.getTime());
                 current.add(Calendar.DATE, 1);
                 Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                cumulative += l;
                 System.out.println("l = " + l);
-                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), l);
+                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), cumulative);
 
             }
 
@@ -335,7 +342,228 @@ public class NotificationController implements Serializable {
 
         return "/notification/rdhs_weekly_cumulative";
     }
+    
+    
+    
+    public String toCreateMohCumulativeLineChart() {
+        return "/notification/moh_weekly_cumulative";
+    }
 
+    public String createMohCumulativeLineChart() {
+        System.out.println("createRdhsCumulativeLineChart");
+        lineModel = new LineChartModel();
+        lineModel.setTitle("Weekely Cumulative Dengue Notifications");
+        lineModel.setLegendPosition("e");
+        lineModel.setShowPointLabels(true);
+        lineModel.getAxes().put(AxisType.X, new CategoryAxis("Week of Year"));
+        
+        Axis yAxis = lineModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Number of Cases");
+        yAxis.setMin(0);
+
+        List<Area> gns = areaController.getGnAreasOfMoh(mohArea);
+
+        System.out.println("mohs.size() = " + gns.size());
+
+        for (Area gn : gns) {
+
+            System.out.println("moh.getName() = " + gn.getName());
+
+            ChartSeries gnSeries = new ChartSeries();
+            gnSeries.setLabel(gn.getName());
+
+            Calendar start = Calendar.getInstance();
+            start.setTime(getFromDate());
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(getToDate());
+
+            Calendar current = Calendar.getInstance();
+            current.setTime(getFromDate());
+
+            Long cumulative =0l;
+            
+            while (current.before(end)) {
+
+                System.out.println("current = " + current);
+
+                String j;
+                Map m = new HashMap();
+
+                j = "select count(n) "
+                        + " from Notification n "
+                        + " where n.gnDivision=:gn "
+                        + " and n.SendDate between :fd and :td";
+                m.put("gn", gn);
+                m.put("fd", current.getTime());
+                current.add(Calendar.DATE, 6);
+                m.put("td", current.getTime());
+                current.add(Calendar.DATE, 1);
+                Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                System.out.println("l = " + l);
+                cumulative += l;
+                gnSeries.set(current.get(Calendar.WEEK_OF_YEAR), cumulative);
+
+            }
+
+            lineModel.addSeries(gnSeries);
+
+        }
+
+        return "/notification/moh_weekly_cumulative";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public String toCreateRdhsCasesChart() {
+        return "/notification/rdhs_weekly_cases";
+    }
+
+    public String createRdhsCasesChart() {
+        System.out.println("createRdhsCumulativeLineChart");
+        barModel = new BarChartModel();
+        barModel.setTitle("Weekly Cumulative Dengue Notifications");
+        barModel.setLegendPosition("e");
+        barModel.setShowPointLabels(true);
+        barModel.getAxes().put(AxisType.X, new CategoryAxis("Week of Year"));
+        
+        Axis yAxis = barModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Number of Cases");
+        yAxis.setMin(0);
+
+        List<Area> mohs = areaController.getAreas(AreaType.MOH, rdhsArea);
+
+        System.out.println("mohs.size() = " + mohs.size());
+
+        for (Area moh : mohs) {
+
+            System.out.println("moh.getName() = " + moh.getName());
+
+            ChartSeries mohSeries = new ChartSeries();
+            mohSeries.setLabel(moh.getName());
+
+            Calendar start = Calendar.getInstance();
+            start.setTime(getFromDate());
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(getToDate());
+
+            Calendar current = Calendar.getInstance();
+            current.setTime(getFromDate());
+
+            Long cumulative =0l;
+            
+            while (current.before(end)) {
+
+                System.out.println("current = " + current);
+
+                String j;
+                Map m = new HashMap();
+
+                j = "select count(n) "
+                        + " from Notification n "
+                        + " where n.moh=:moh "
+                        + " and n.SendDate between :fd and :td";
+                m.put("moh", moh);
+                m.put("fd", current.getTime());
+                current.add(Calendar.DATE, 6);
+                m.put("td", current.getTime());
+                current.add(Calendar.DATE, 1);
+                Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                cumulative += l;
+                System.out.println("l = " + l);
+                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), l);
+
+            }
+
+            barModel.addSeries(mohSeries);
+
+        }
+
+        return "/notification/rdhs_weekly_cases";
+    }
+    
+    
+    
+    public String toCreateMohCasesChart() {
+        return "/notification/moh_weekly_cases";
+    }
+
+    public String createMohCasesChart() {
+        System.out.println("createRdhsCumulativeLineChart");
+        barModel = new BarChartModel();
+        barModel.setTitle("Weekely Cumulative Dengue Notifications");
+        barModel.setLegendPosition("e");
+        barModel.setShowPointLabels(true);
+        barModel.getAxes().put(AxisType.X, new CategoryAxis("Week of Year"));
+        
+        Axis yAxis = lineModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Number of Cases");
+        yAxis.setMin(0);
+
+        List<Area> gns = areaController.getGnAreasOfMoh(mohArea);
+
+        System.out.println("mohs.size() = " + gns.size());
+
+        for (Area gn : gns) {
+
+            System.out.println("moh.getName() = " + gn.getName());
+
+            ChartSeries gnSeries = new ChartSeries();
+            gnSeries.setLabel(gn.getName());
+
+            Calendar start = Calendar.getInstance();
+            start.setTime(getFromDate());
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(getToDate());
+
+            Calendar current = Calendar.getInstance();
+            current.setTime(getFromDate());
+
+            Long cumulative =0l;
+            
+            while (current.before(end)) {
+
+                System.out.println("current = " + current);
+
+                String j;
+                Map m = new HashMap();
+
+                j = "select count(n) "
+                        + " from Notification n "
+                        + " where n.gnDivision=:gn "
+                        + " and n.SendDate between :fd and :td";
+                m.put("gn", gn);
+                m.put("fd", current.getTime());
+                current.add(Calendar.DATE, 6);
+                m.put("td", current.getTime());
+                current.add(Calendar.DATE, 1);
+                Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                System.out.println("l = " + l);
+                cumulative += l;
+                gnSeries.set(current.get(Calendar.WEEK_OF_YEAR), cumulative);
+
+            }
+
+            barModel.addSeries(gnSeries);
+
+        }
+
+        return "/notification/moh_weekly_cases";
+    }
+    
+    
+    
+    
+    
+    
     public LineChartModel getLineModel() {
         return lineModel;
     }
@@ -1004,6 +1232,14 @@ public class NotificationController implements Serializable {
 
     public void setSelectedAreaSummery(AreaSummery selectedAreaSummery) {
         this.selectedAreaSummery = selectedAreaSummery;
+    }
+
+    public BarChartModel getBarModel() {
+        return barModel;
+    }
+
+    public void setBarModel(BarChartModel barModel) {
+        this.barModel = barModel;
     }
 
     @FacesConverter(forClass = Notification.class)

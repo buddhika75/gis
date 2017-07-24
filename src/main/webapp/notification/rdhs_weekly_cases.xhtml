@@ -11,7 +11,7 @@
         <ui:composition template="./../template.xhtml">
 
             <ui:define name="title">
-                RDHS Weekly Cumulative Line Chart
+                RDHS Weekly Cases Chart
             </ui:define>
 
             <ui:define name="body">
@@ -34,13 +34,13 @@
                     </div>
                     <div class="ui-fluid" >
                         <p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank">
-                            <p:commandButton ajax="false" value="Process" action="#{notificationController.createRdhsCumulativeLineChart}" ></p:commandButton>
+                            <p:commandButton ajax="false" value="Process" action="#{notificationController.createRdhsCasesChart}" ></p:commandButton>
                             <p:commandButton ajax="false" value="Back" action="/index" ></p:commandButton>
                         </p:panelGrid>
                     </div>
                     <div class="ui-fluid" >
                         <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
-                            <p:chart  type="line" model="#{notificationController.lineModel}" style="height:300px; width: 1000px;"/>
+                            <p:chart  rendered="#{notificationController.barModel ne null}"   type="bar" model="#{notificationController.barModel}" style="height:900px; width: 1600px;"/>
                         </p:panelGrid>
                     </div>
 

@@ -11,7 +11,7 @@
         <ui:composition template="./../template.xhtml">
 
             <ui:define name="title">
-                RDHS Weekly Cumulative Line Chart
+                RDHS Weekly Cases Chart
             </ui:define>
 
             <ui:define name="body">
@@ -25,22 +25,23 @@
                             <h:outputLabel value="To"    ></h:outputLabel>    
                             <p:calendar  value="#{notificationController.toDate}"  pattern="dd MMMM yyyy" ></p:calendar>
                             <p:spacer height="0" width="1" ></p:spacer>
-                            <p:outputLabel value="RDHS"  ></p:outputLabel>
-                            <p:selectOneMenu value="#{notificationController.rdhsArea}"  >
-                                <f:selectItems value="#{areaController.rdhsAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
+                            <p:outputLabel value="MOH"  ></p:outputLabel>
+                            <p:selectOneMenu value="#{notificationController.mohArea}"  >
+                                <f:selectItems value="#{areaController.mohAreas}" var="m" itemLabel="#{m.name}" itemValue="#{m}" ></f:selectItems>
                             </p:selectOneMenu>
                             <p:spacer height="0" width="1" ></p:spacer>
                         </p:panelGrid>
                     </div>
                     <div class="ui-fluid" >
                         <p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank">
-                            <p:commandButton ajax="false" value="Process" action="#{notificationController.createRdhsCumulativeLineChart}" ></p:commandButton>
+                            <p:commandButton ajax="false" value="Process" action="#{notificationController.createMohCasesChart}" ></p:commandButton>
                             <p:commandButton ajax="false" value="Back" action="/index" ></p:commandButton>
                         </p:panelGrid>
                     </div>
                     <div class="ui-fluid" >
-                        <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
-                            <p:chart  type="line" model="#{notificationController.lineModel}" style="height:300px; width: 1000px;"/>
+                        <p:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1,ui-grid-col-1" layout="grid" styleClass="ui-panelgrid-blank">
+
+                            <p:chart rendered="#{notificationController.barModel ne null}"  type="bar" model="#{notificationController.barModel}" style="height:900px; width: 1600px;"/>
                         </p:panelGrid>
                     </div>
 
