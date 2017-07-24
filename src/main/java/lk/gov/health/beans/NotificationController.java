@@ -307,6 +307,8 @@ public class NotificationController implements Serializable {
             Calendar current = Calendar.getInstance();
             current.setTime(getFromDate());
 
+            Long cu=0l;
+            
             while (current.before(end)) {
 
                 System.out.println("current = " + current);
@@ -324,8 +326,9 @@ public class NotificationController implements Serializable {
                 m.put("td", current.getTime());
                 current.add(Calendar.DATE, 1);
                 Long l = getFacade().findLongByJpql(j, m, TemporalType.DATE);
+                cu+=l;
                 System.out.println("l = " + l);
-                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), l);
+                mohSeries.set(current.get(Calendar.WEEK_OF_YEAR), cu);
 
             }
 
