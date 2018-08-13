@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>lk.gov.health.thk</groupId>
-    <artifactId>Dengue</artifactId>
+    <artifactId>gis</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <name>Dengue</name>
+    <name>gis</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
