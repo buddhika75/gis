@@ -13,6 +13,7 @@ import lk.gov.health.beans.util.JsfUtil.PersistAction;
 import lk.gov.health.faces.AreaFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,9 +34,12 @@ import javax.inject.Named;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import lk.gov.health.dengue.AreaName;
+import lk.gov.health.dengue.AreaSummery;
 import lk.gov.health.faces.CoordinateFacade;
 import lk.gov.health.dengue.AreaType;
 import lk.gov.health.dengue.Coordinate;
+import lk.gov.health.dengue.Notification;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.event.map.OverlaySelectEvent;
@@ -55,7 +59,8 @@ public class AreaController implements Serializable {
     @EJB
     private lk.gov.health.faces.AreaFacade ejbFacade;
     @EJB
-    CoordinateFacade coordinateFacade;
+    private CoordinateFacade coordinateFacade;
+
     private List<Area> items = null;
     List<Area> mohAreas = null;
     List<Area> phiAreas = null;
@@ -63,10 +68,81 @@ public class AreaController implements Serializable {
     List<Area> pdhsAreas = null;
     private Area selected;
 
+    private Area mapArea;
+
+    private MapModel initialMap;
+
     @Inject
-    WebUserController webUserController;
+    private WebUserController webUserController;
+    @Inject
+    private AppController appController;
 
     private MapModel polygonModel;
+
+    private AreaName currentArea = AreaName.Southern_Province;
+
+    private boolean currentIsGalle;
+    private boolean currentIsMatara;
+    private boolean currentIsHambanthota;
+    private boolean currentIsSouthern;
+
+    public void prepareForSouthern() {
+        currentArea = AreaName.Southern_Province;
+        initialMap = new DefaultMapModel();
+        mapArea = getSouthernProvine();
+        createSouthernMap();
+    }
+
+    public void prepareForGalle() {
+        System.out.println("prepare for galle");
+        currentArea = AreaName.Galle;
+        initialMap = new DefaultMapModel();
+        mapArea = getGalle();
+        createGalleMap();
+    }
+
+    public void prepareForMatara() {
+        currentArea = AreaName.Matara;
+        initialMap = new DefaultMapModel();
+        mapArea = getMatara();
+        createMataraMap();
+    }
+
+    public void prepareForHambanthtota() {
+        currentArea = AreaName.Hambanthota;
+        initialMap = new DefaultMapModel();
+        mapArea = getHambatota();
+        createHambantotaMap();
+
+    }
+
+    public Area getSouthernProvine() {
+        String j = "Select a from Area a where a.areaName=:an order by a.id desc";
+        Map m = new HashMap();
+        m.put("an", AreaName.Southern_Province);
+        return getFacade().findFirstBySQL(j, m);
+    }
+
+    public Area getGalle() {
+        String j = "Select a from Area a where a.areaName=:an order by a.id desc";
+        Map m = new HashMap();
+        m.put("an", AreaName.Galle);
+        return getFacade().findFirstBySQL(j, m);
+    }
+
+    public Area getHambatota() {
+        String j = "Select a from Area a where a.areaName=:an order by a.id desc";
+        Map m = new HashMap();
+        m.put("an", AreaName.Hambanthota);
+        return getFacade().findFirstBySQL(j, m);
+    }
+
+    public Area getMatara() {
+        String j = "Select a from Area a where a.areaName=:an order by a.id desc";
+        Map m = new HashMap();
+        m.put("an", AreaName.Matara);
+        return getFacade().findFirstBySQL(j, m);
+    }
 
     public List<Area> getMohAreas() {
         if (mohAreas == null) {
@@ -964,6 +1040,137 @@ public class AreaController implements Serializable {
 
     public void onPolygonSelect(OverlaySelectEvent event) {
         JsfUtil.addSuccessMessage("Selected");
+    }
+
+    public AreaName getCurrentArea() {
+        return currentArea;
+    }
+
+    public void setCurrentArea(AreaName currentArea) {
+        this.currentArea = currentArea;
+    }
+
+    public boolean isCurrentIsGalle() {
+        currentIsGalle = currentArea == AreaName.Galle;
+        return currentIsGalle;
+    }
+
+    public void setCurrentIsGalle(boolean currentIsGalle) {
+        this.currentIsGalle = currentIsGalle;
+    }
+
+    public boolean isCurrentIsMatara() {
+        currentIsMatara = currentArea == AreaName.Matara;
+        return currentIsMatara;
+    }
+
+    public void setCurrentIsMatara(boolean currentIsMatara) {
+        this.currentIsMatara = currentIsMatara;
+    }
+
+    public boolean isCurrentIsHambanthota() {
+        currentIsHambanthota = currentArea == AreaName.Hambanthota;
+        return currentIsHambanthota;
+    }
+
+    public void setCurrentIsHambanthota(boolean currentIsHambanthota) {
+        this.currentIsHambanthota = currentIsHambanthota;
+    }
+
+    public boolean isCurrentIsSouthern() {
+        currentIsSouthern = currentArea == AreaName.Southern_Province;
+        return currentIsSouthern;
+    }
+
+    public void setCurrentIsSouthern(boolean currentIsSouthern) {
+        this.currentIsSouthern = currentIsSouthern;
+    }
+
+    public lk.gov.health.faces.AreaFacade getEjbFacade() {
+        return ejbFacade;
+    }
+
+    public void setEjbFacade(lk.gov.health.faces.AreaFacade ejbFacade) {
+        this.ejbFacade = ejbFacade;
+    }
+
+    private void createSouthernMap() {
+        List<Area> tas = new ArrayList<Area>();
+        tas.addAll(getAreas(AreaType.MOH, getGalle()));
+        tas.addAll(getAreas(AreaType.MOH, getMatara()));
+        tas.addAll(getAreas(AreaType.MOH, getHambatota()));
+        createMap(tas);
+    }
+
+    public void createMap(List<Area> tas) {
+        for (Area a : tas) {
+            System.out.println("a = " + a);
+            Polygon polygon = new Polygon();
+            LatLng cord = new LatLng(a.getCentreLatitude(), a.getCentreLongitude());
+            a.setG(255);
+            a.setB(255);
+            String j = "select c from Coordinate c where c.area=:a";
+            Map m = new HashMap();
+            m.put("a", a);
+            List<Coordinate> cs = coordinateFacade.findBySQL(j, m);
+            for (Coordinate c : cs) {
+                LatLng coord = new LatLng(c.getLatitude(), c.getLongitude());
+                polygon.getPaths().add(coord);
+            }
+            polygon.setStrokeColor("#FF9900");
+            polygon.setFillColor(a.getRgb());
+            polygon.setStrokeOpacity(1);
+            polygon.setFillOpacity(0.1);
+            polygon.setData(a.getId());
+            initialMap.addOverlay(polygon);
+        }
+    }
+
+    private void createGalleMap() {
+        List<Area> tas = getAreas(AreaType.MOH, getGalle());
+        createMap(tas);
+    }
+
+    private void createMataraMap() {
+        List<Area> tas = getAreas(AreaType.MOH, getMatara());
+        createMap(tas);
+    }
+
+    private void createHambantotaMap() {
+        List<Area> tas = getAreas(AreaType.MOH, getHambatota());
+        createMap(tas);
+    }
+
+    public MapModel getInitialMap() {
+        if (initialMap == null) {
+            initialMap = new DefaultMapModel();
+            createSouthernMap();
+        }
+        return initialMap;
+    }
+
+    public void setInitialMap(MapModel initialMap) {
+        this.initialMap = initialMap;
+    }
+
+    public CoordinateFacade getCoordinateFacade() {
+        return coordinateFacade;
+    }
+
+    public WebUserController getWebUserController() {
+        return webUserController;
+    }
+
+    public AppController getAppController() {
+        return appController;
+    }
+
+    public Area getMapArea() {
+        return mapArea;
+    }
+
+    public void setMapArea(Area mapArea) {
+        this.mapArea = mapArea;
     }
 
     @FacesConverter(forClass = Area.class)

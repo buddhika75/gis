@@ -20,7 +20,7 @@ import org.primefaces.model.map.MapModel;
 public class AppController {
 
     List<AreaSummery> allAreaSummerys;
-    private MapModel provincialDengueMap;
+    private MapModel initialMap;
     
     /**
      * Creates a new instance of AppController
@@ -38,16 +38,16 @@ public class AppController {
 
     
     
-    public MapModel getProvincialDengueMap() {
-        return provincialDengueMap;
+    public MapModel getInitialMap() {
+        return initialMap;
     }
 
-    public void setProvincialDengueMap(MapModel provincialDengueMap) {
-        this.provincialDengueMap = provincialDengueMap;
+    public void setInitialMap(MapModel initialMap) {
+        this.initialMap = initialMap;
     }
     
     public void resetProvincialDengueMap(){
-        provincialDengueMap = null;
+        initialMap = null;
         allAreaSummerys = null;
     }
     

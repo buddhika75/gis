@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -33,6 +34,10 @@ public class Area implements Serializable {
     String code;
     @ManyToOne
     Area parentArea;
+    @Enumerated
+    private AreaName areaName;
+    @ManyToOne
+    private Item institutionType;
 
     @ManyToOne
     WebUser creater;
@@ -60,6 +65,49 @@ public class Area implements Serializable {
     
     Long population;
     Double areaSqKm;
+    
+    
+    int r;
+    int b;
+    int g;
+    @Transient
+    String rgb;
+
+    public int getR() {
+        return r;
+    }
+
+    public void setR(int r) {
+        this.r = r;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+
+    public int getG() {
+        return g;
+    }
+
+    public void setG(int g) {
+        this.g = g;
+    }
+
+    public String getRgb() {
+        rgb = String.format("#%02x%02x%02x", r, g, b); 
+        return rgb;
+    }
+
+    public void setRgb(String rgb) {
+        this.rgb = rgb;
+    }
+    
+    
+    
 
     public Long getPopulation() {
         return population;
@@ -269,7 +317,28 @@ public class Area implements Serializable {
 
     @Override
     public String toString() {
-        return "lk.gov.health.schoolhealth.Area[ id=" + id + " ]";
+        return name;
     }
 
+    public AreaName getAreaName() {
+        if(areaName==null){
+            areaName = AreaName.Other;
+        }
+        return areaName;
+    }
+
+    public void setAreaName(AreaName areaName) {
+        this.areaName = areaName;
+    }
+
+    public Item getInstitutionType() {
+        return institutionType;
+    }
+
+    public void setInstitutionType(Item institutionType) {
+        this.institutionType = institutionType;
+    }
+
+    
+    
 }

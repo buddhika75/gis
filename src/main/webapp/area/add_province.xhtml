@@ -34,6 +34,11 @@
                                 <p:outputLabel id="type" value="#{areaController.selected.type}" title="Type" />
                                 <p:outputLabel value="Name:" for="name" />
                                 <p:inputText id="name" value="#{areaController.selected.name}" title="Name" />
+                                <p:outputLabel value="Area:" />
+                                <p:selectOneMenu value="#{areaController.selected.areaName}" >
+                                    <f:selectItems value="#{enumController.areaNames}" ></f:selectItems>
+                                </p:selectOneMenu>
+                                
                             </p:panelGrid>
                              <p:commandButton ajax="false" value="Save" action="#{areaController.saveNewProvince()}" ></p:commandButton>
                         </h:form>

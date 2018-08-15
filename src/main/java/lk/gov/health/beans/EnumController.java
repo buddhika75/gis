@@ -7,6 +7,7 @@ package lk.gov.health.beans;
 
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
+import lk.gov.health.dengue.AreaName;
 import lk.gov.health.dengue.AreaType;
 import lk.gov.health.dengue.InstitutionType;
 import lk.gov.health.dengue.ItemType;
@@ -38,6 +39,10 @@ public class EnumController {
 
     public AreaType[] getAreaTypes() {
         return AreaType.values();
+    }
+    
+    public AreaName[] getAreaNames() {
+        return AreaName.values();
     }
     
     

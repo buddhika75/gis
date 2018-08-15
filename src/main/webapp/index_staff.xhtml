@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+        <ui:composition template="./template.xhtml">
+            <ui:define name="body">
+                <script src="http://maps.google.com/maps/api/js?key=AIzaSyDnIF053oCwO1848mAvz6-N6eSeOeD8BaI" type="text/javascript" ></script> 
+
+                <h1>
+                    <p:outputLabel value="Last Thirty Days Dengue Status" ></p:outputLabel>
+                </h1>
+                <div class="ui-fluid" >
+
+                    <h:form>
+
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+
+                            <p:gmap center="6,80" style="height: 600px;width: 100%; " type="hybrid" zoom="10" fitBounds="true" model="#{notificationController.initialMap}" >
+                                <p:ajax event="overlaySelect" listener="#{notificationController.onPdPolygonSelect}" update="infoWindow" />
+                                <p:gmapInfoWindow id="infoWindow" >
+                                    <p:panel header="Data"  style="text-align: center; display: block; margin: auto">
+                                        <h:panelGroup rendered="#{notificationController.selectedAreaSummery ne null}" >
+                                            <h:panelGrid columns="2" >
+                                                <p:outputLabel value="Name" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.name}" ></p:outputLabel>
+                                                <p:outputLabel value="District" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.rdhsArea.name}" ></p:outputLabel>
+                                                <p:outputLabel value="Notified Cases" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.count}" ></p:outputLabel>
+                                                <p:outputLabel value="Population" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.population}" ></p:outputLabel>
+                                                <p:outputLabel value="Area (Sq. km .)" ></p:outputLabel>
+                                                <p:outputLabel value="#{notificationController.selectedAreaSummery.area.areaSqKm}" ></p:outputLabel>
+                                            </h:panelGrid>
+                                            <p:commandButton value="View GN Distribution" ajax="false" action="#{notificationController.listMohAreaSummeries()}" >
+                                                <f:setPropertyActionListener value="#{notificationController.selectedAreaSummery.area}" target="#{notificationController.mohArea}" ></f:setPropertyActionListener>
+                                            </p:commandButton>
+                                        </h:panelGroup>
+
+                                    </p:panel>
+                                </p:gmapInfoWindow>
+                            </p:gmap>
+
+
+                            <p:dataTable value="#{notificationController.allAreaSummerys}" var="item" rowKey="#{item.id}" rowIndexVar="n">
+                                <p:column sortBy="#{item.area.name}"  >
+                                    <f:facet name="header">
+                                        <h:outputText value="Area"/>
+                                    </f:facet>
+                                    <div style="background-color: #{item.rgb}; color: blueviolet;">
+                                        <h:outputText value="#{item.area.name}"/>
+                                    </div>
+                                </p:column>
+                                <p:column  sortBy="#{item.count}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Count"/>
+                                    </f:facet>
+                                    <div style="background-color: #{item.rgb}; color: blueviolet;" >
+                                        <h:outputText value="#{item.count}">
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </div>
+
+            </ui:define>
+        </ui:composition>
+
+
+
+    </body>
+
+
+
+
+
+
+
+</html>

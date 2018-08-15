@@ -17,8 +17,15 @@
                             <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
                         </p:selectOneMenu>
 
+
+                        <p:outputLabel value="Area" for="typeName" />
+                        <p:selectOneMenu id="typeName" value="#{areaController.selected.areaName}" > \
+                            <f:selectItems value="#{enumController.areaNames}" ></f:selectItems>
+                        </p:selectOneMenu>
+
                         <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="name" />
                         <p:inputText id="name" value="#{areaController.selected.name}" title="#{bundle.CreateAreaTitle_name}" />
+
                         <p:outputLabel value="#{bundle.CreateAreaLabel_code}" for="code" />
                         <p:inputText id="code" value="#{areaController.selected.code}" title="#{bundle.CreateAreaTitle_code}" />
 
@@ -57,6 +64,15 @@
                                            var="ph" itemLabel="#{ph.name}"
                                            itemValue="#{ph}"/>
                         </p:selectOneMenu>
+
+
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="r" />
+                        <p:inputText id="r" value="#{areaController.selected.r}" title="R" />
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="g" />
+                        <p:inputText id="g" value="#{areaController.selected.r}" title="g" />
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="b" />
+                        <p:inputText id="b" value="#{areaController.selected.r}" title="b" />
+
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{areaController.create}" value="#{bundle.Save}" update="display,:AreaListForm:datalist,:growl" oncomplete="handleSubmit(args,'AreaCreateDialog');"/>

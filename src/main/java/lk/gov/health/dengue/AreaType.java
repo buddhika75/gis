@@ -17,4 +17,5 @@ public enum AreaType {
     District,
     Province,
     National,
+    Institution,
 }

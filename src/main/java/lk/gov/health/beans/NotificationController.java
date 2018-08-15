@@ -102,7 +102,7 @@ public class NotificationController implements Serializable {
     String message = "";
     private TimelineModel model;
     private MapModel polygonModel;
-    private MapModel provincialDengueMap;
+    private MapModel initialMap;
 
     LineChartModel lineModel = new LineChartModel();
      private BarChartModel barModel;
@@ -137,16 +137,16 @@ public class NotificationController implements Serializable {
         this.allAreaNotifications = allAreaNotifications;
     }
 
-    public MapModel getProvincialDengueMap() {
-        if (appController.getProvincialDengueMap() == null) {
+    public MapModel getInitialMap() {
+        if (appController.getInitialMap() == null) {
             createProvincialDengueMap();
         }
-        provincialDengueMap = appController.getProvincialDengueMap();
-        return provincialDengueMap;
+        initialMap = appController.getInitialMap();
+        return initialMap;
     }
 
-    public void setProvincialDengueMap(MapModel provincialDengueMap) {
-        this.provincialDengueMap = provincialDengueMap;
+    public void setInitialMap(MapModel initialMap) {
+        this.initialMap = initialMap;
     }
 
     public void createProvincialDengueMap() {
@@ -611,7 +611,7 @@ public class NotificationController implements Serializable {
     }
 
     private void createProvincialMap() {
-        provincialDengueMap = new DefaultMapModel();
+        initialMap = new DefaultMapModel();
         int maxCount = 0;
         for (AreaSummery a : allAreaSummerys) {
             if (maxCount < a.getCount()) {
@@ -657,9 +657,9 @@ public class NotificationController implements Serializable {
             polygon.setStrokeOpacity(1);
             polygon.setFillOpacity(0.9);
             polygon.setData(a.getArea().getId());
-            provincialDengueMap.addOverlay(polygon);
+            initialMap.addOverlay(polygon);
         }
-        appController.setProvincialDengueMap(provincialDengueMap);
+        appController.setInitialMap(initialMap);
         appController.setAllAreaSummerys(allAreaSummerys);
     }
 

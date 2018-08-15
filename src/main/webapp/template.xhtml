@@ -6,7 +6,8 @@
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title><ui:insert name="title">MOH Return Analysis</ui:insert></title>
+         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <title><ui:insert name="title">GIS Data of Southern Province</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
         <h:outputStylesheet library="css" name="default.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
@@ -21,21 +22,18 @@
             <p:layoutUnit position="north"  >
                 <h:form id="menuForm">
                     <p:menubar >
-                        <p:menuitem value="Dengue Analysis System || " outcome="/index" />
+                        <p:menuitem value="GIS - PDHS,SP || " outcome="/index" />
                         <p:submenu label="Staff" rendered="#{webUserController.logged}">
                             <p:menuitem ajax="false" value="Upload Excel File" action="#{notificationController.toUploadExcelFile()}" />
                             <p:menuitem ajax="false" value="Edit my details" action="#{webUserController.toEditMyDetails()}" />
                             <p:menuitem ajax="false" value="Change my password" action="#{webUserController.toEditMyPassword()}" />
                         </p:submenu>
 
-                        <p:submenu label="Dengue Status" >
-                            <p:menuitem ajax="false" value="GN Area Analysis by MOH" action="#{notificationController.toAnalyzeGnByMoh}" />
-                            <p:menuitem ajax="false" value="Notifications by MOH" action="#{notificationController.toListNotificationsByMoh}" />
-                            <p:menuitem ajax="false" value="RDHS Cumulative Line Chart" action="#{notificationController.toCreateRdhsCumulativeLineChart() }" />
-                            <p:menuitem ajax="false" value="MOH Cumulative Line Chart" action="#{notificationController.toCreateMohCumulativeLineChart() }" />
-                            <p:menuitem ajax="false" value="RDHS Cases Chart" action="#{notificationController.toCreateRdhsCasesChart() }" />
-                            <p:menuitem ajax="false" value="MOH Cases Chart" action="#{notificationController.toCreateMohCasesChart() }" />
-
+                        <p:submenu label="GIS Data" >
+                            <p:menuitem ajax="false" value="Southern Province" action="#{notificationController.toAnalyzeGnByMoh}" />
+                            <p:menuitem ajax="false" value="Galle" action="#{notificationController.toListNotificationsByMoh}" />
+                            <p:menuitem ajax="false" value="Matara" action="#{notificationController.toCreateRdhsCumulativeLineChart() }" />
+                            <p:menuitem ajax="false" value="Hambanthota" action="#{notificationController.toCreateMohCumulativeLineChart() }" />
                         </p:submenu>
 
 

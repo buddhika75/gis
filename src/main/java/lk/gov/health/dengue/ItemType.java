@@ -10,6 +10,6 @@ package lk.gov.health.dengue;
  * @author User
  */
 public enum ItemType {
-    ReturnCategory,
-    ReturnFormatCategory,
+    InstitutionCategory,
+    Other,
 }

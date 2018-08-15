@@ -16,6 +16,13 @@
                         <p:selectOneMenu id="type" value="#{areaController.selected.type}" >
                             <f:selectItems value="#{enumController.areaTypes}" ></f:selectItems>
                         </p:selectOneMenu>
+
+
+                        <p:outputLabel value="Area" for="typeName" />
+                        <p:selectOneMenu id="typeName" value="#{areaController.selected.areaName}" > \
+                            <f:selectItems value="#{enumController.areaNames}" ></f:selectItems>
+                        </p:selectOneMenu>
+
                         <p:outputLabel value="#{bundle.EditAreaLabel_name}" for="name" />
                         <p:inputText id="name" value="#{areaController.selected.name}" title="#{bundle.EditAreaTitle_name}" />
                         <p:outputLabel value="#{bundle.EditAreaLabel_code}" for="code" />
@@ -66,6 +73,14 @@
                         <p:outputLabel value="Default Zoom"  />
                         <p:inputText value="#{areaController.selected.zoomLavel}" />
 
+
+
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="r" />
+                        <p:inputText id="r" value="#{areaController.selected.r}" title="R" />
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="g" />
+                        <p:inputText id="g" value="#{areaController.selected.r}" title="g" />
+                        <p:outputLabel value="#{bundle.CreateAreaLabel_name}" for="b" />
+                        <p:inputText id="b" value="#{areaController.selected.r}" title="b" />
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{areaController.update}" value="#{bundle.Save}" update="display,:AreaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'AreaEditDialog');"/>
